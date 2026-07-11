@@ -9,38 +9,441 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductsIdRouteImport } from './routes/products.$id'
+import { Route as PortalCustomerRouteImport } from './routes/portal.customer'
+import { Route as PortalArtisanRouteImport } from './routes/portal.artisan'
+import { Route as AuthSignupRouteImport } from './routes/auth.signup'
+import { Route as AuthRoleRouteImport } from './routes/auth.role'
+import { Route as AuthResetRouteImport } from './routes/auth.reset'
+import { Route as AuthOtpRouteImport } from './routes/auth.otp'
+import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
+import { Route as PortalCustomerIndexRouteImport } from './routes/portal.customer.index'
+import { Route as PortalArtisanIndexRouteImport } from './routes/portal.artisan.index'
+import { Route as PortalCustomerWishlistRouteImport } from './routes/portal.customer.wishlist'
+import { Route as PortalCustomerVoiceRouteImport } from './routes/portal.customer.voice'
+import { Route as PortalCustomerProfileRouteImport } from './routes/portal.customer.profile'
+import { Route as PortalCustomerOrdersRouteImport } from './routes/portal.customer.orders'
+import { Route as PortalCustomerNotificationsRouteImport } from './routes/portal.customer.notifications'
+import { Route as PortalCustomerMessagesRouteImport } from './routes/portal.customer.messages'
+import { Route as PortalCustomerGiftsRouteImport } from './routes/portal.customer.gifts'
+import { Route as PortalCustomerCartRouteImport } from './routes/portal.customer.cart'
+import { Route as PortalCustomerAddressesRouteImport } from './routes/portal.customer.addresses'
+import { Route as PortalArtisanUploadRouteImport } from './routes/portal.artisan.upload'
+import { Route as PortalArtisanTwinRouteImport } from './routes/portal.artisan.twin'
+import { Route as PortalArtisanTrainingRouteImport } from './routes/portal.artisan.training'
+import { Route as PortalArtisanSchemesRouteImport } from './routes/portal.artisan.schemes'
+import { Route as PortalArtisanProductsRouteImport } from './routes/portal.artisan.products'
+import { Route as PortalArtisanPaymentsRouteImport } from './routes/portal.artisan.payments'
+import { Route as PortalArtisanOrdersRouteImport } from './routes/portal.artisan.orders'
+import { Route as PortalArtisanExportRouteImport } from './routes/portal.artisan.export'
+import { Route as PortalArtisanCertificatesRouteImport } from './routes/portal.artisan.certificates'
+import { Route as PortalArtisanAnalyticsRouteImport } from './routes/portal.artisan.analytics'
+import { Route as PortalArtisanAiRouteImport } from './routes/portal.artisan.ai'
 
+const MarketplaceRoute = MarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsIdRoute = ProductsIdRouteImport.update({
+  id: '/products/$id',
+  path: '/products/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalCustomerRoute = PortalCustomerRouteImport.update({
+  id: '/portal/customer',
+  path: '/portal/customer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalArtisanRoute = PortalArtisanRouteImport.update({
+  id: '/portal/artisan',
+  path: '/portal/artisan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignupRoute = AuthSignupRouteImport.update({
+  id: '/auth/signup',
+  path: '/auth/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoleRoute = AuthRoleRouteImport.update({
+  id: '/auth/role',
+  path: '/auth/role',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthResetRoute = AuthResetRouteImport.update({
+  id: '/auth/reset',
+  path: '/auth/reset',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthOtpRoute = AuthOtpRouteImport.update({
+  id: '/auth/otp',
+  path: '/auth/otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthForgotRoute = AuthForgotRouteImport.update({
+  id: '/auth/forgot',
+  path: '/auth/forgot',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalCustomerIndexRoute = PortalCustomerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalArtisanIndexRoute = PortalArtisanIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalCustomerWishlistRoute = PortalCustomerWishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerVoiceRoute = PortalCustomerVoiceRouteImport.update({
+  id: '/voice',
+  path: '/voice',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerProfileRoute = PortalCustomerProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerOrdersRoute = PortalCustomerOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerNotificationsRoute =
+  PortalCustomerNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => PortalCustomerRoute,
+  } as any)
+const PortalCustomerMessagesRoute = PortalCustomerMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerGiftsRoute = PortalCustomerGiftsRouteImport.update({
+  id: '/gifts',
+  path: '/gifts',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerCartRoute = PortalCustomerCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerAddressesRoute = PortalCustomerAddressesRouteImport.update({
+  id: '/addresses',
+  path: '/addresses',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalArtisanUploadRoute = PortalArtisanUploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanTwinRoute = PortalArtisanTwinRouteImport.update({
+  id: '/twin',
+  path: '/twin',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanTrainingRoute = PortalArtisanTrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanSchemesRoute = PortalArtisanSchemesRouteImport.update({
+  id: '/schemes',
+  path: '/schemes',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanProductsRoute = PortalArtisanProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanPaymentsRoute = PortalArtisanPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanOrdersRoute = PortalArtisanOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanExportRoute = PortalArtisanExportRouteImport.update({
+  id: '/export',
+  path: '/export',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanCertificatesRoute =
+  PortalArtisanCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
+    getParentRoute: () => PortalArtisanRoute,
+  } as any)
+const PortalArtisanAnalyticsRoute = PortalArtisanAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanAiRoute = PortalArtisanAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/auth/forgot': typeof AuthForgotRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/otp': typeof AuthOtpRoute
+  '/auth/reset': typeof AuthResetRoute
+  '/auth/role': typeof AuthRoleRoute
+  '/auth/signup': typeof AuthSignupRoute
+  '/portal/artisan': typeof PortalArtisanRouteWithChildren
+  '/portal/customer': typeof PortalCustomerRouteWithChildren
+  '/products/$id': typeof ProductsIdRoute
+  '/portal/artisan/ai': typeof PortalArtisanAiRoute
+  '/portal/artisan/analytics': typeof PortalArtisanAnalyticsRoute
+  '/portal/artisan/certificates': typeof PortalArtisanCertificatesRoute
+  '/portal/artisan/export': typeof PortalArtisanExportRoute
+  '/portal/artisan/orders': typeof PortalArtisanOrdersRoute
+  '/portal/artisan/payments': typeof PortalArtisanPaymentsRoute
+  '/portal/artisan/products': typeof PortalArtisanProductsRoute
+  '/portal/artisan/schemes': typeof PortalArtisanSchemesRoute
+  '/portal/artisan/training': typeof PortalArtisanTrainingRoute
+  '/portal/artisan/twin': typeof PortalArtisanTwinRoute
+  '/portal/artisan/upload': typeof PortalArtisanUploadRoute
+  '/portal/customer/addresses': typeof PortalCustomerAddressesRoute
+  '/portal/customer/cart': typeof PortalCustomerCartRoute
+  '/portal/customer/gifts': typeof PortalCustomerGiftsRoute
+  '/portal/customer/messages': typeof PortalCustomerMessagesRoute
+  '/portal/customer/notifications': typeof PortalCustomerNotificationsRoute
+  '/portal/customer/orders': typeof PortalCustomerOrdersRoute
+  '/portal/customer/profile': typeof PortalCustomerProfileRoute
+  '/portal/customer/voice': typeof PortalCustomerVoiceRoute
+  '/portal/customer/wishlist': typeof PortalCustomerWishlistRoute
+  '/portal/artisan/': typeof PortalArtisanIndexRoute
+  '/portal/customer/': typeof PortalCustomerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/auth/forgot': typeof AuthForgotRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/otp': typeof AuthOtpRoute
+  '/auth/reset': typeof AuthResetRoute
+  '/auth/role': typeof AuthRoleRoute
+  '/auth/signup': typeof AuthSignupRoute
+  '/products/$id': typeof ProductsIdRoute
+  '/portal/artisan/ai': typeof PortalArtisanAiRoute
+  '/portal/artisan/analytics': typeof PortalArtisanAnalyticsRoute
+  '/portal/artisan/certificates': typeof PortalArtisanCertificatesRoute
+  '/portal/artisan/export': typeof PortalArtisanExportRoute
+  '/portal/artisan/orders': typeof PortalArtisanOrdersRoute
+  '/portal/artisan/payments': typeof PortalArtisanPaymentsRoute
+  '/portal/artisan/products': typeof PortalArtisanProductsRoute
+  '/portal/artisan/schemes': typeof PortalArtisanSchemesRoute
+  '/portal/artisan/training': typeof PortalArtisanTrainingRoute
+  '/portal/artisan/twin': typeof PortalArtisanTwinRoute
+  '/portal/artisan/upload': typeof PortalArtisanUploadRoute
+  '/portal/customer/addresses': typeof PortalCustomerAddressesRoute
+  '/portal/customer/cart': typeof PortalCustomerCartRoute
+  '/portal/customer/gifts': typeof PortalCustomerGiftsRoute
+  '/portal/customer/messages': typeof PortalCustomerMessagesRoute
+  '/portal/customer/notifications': typeof PortalCustomerNotificationsRoute
+  '/portal/customer/orders': typeof PortalCustomerOrdersRoute
+  '/portal/customer/profile': typeof PortalCustomerProfileRoute
+  '/portal/customer/voice': typeof PortalCustomerVoiceRoute
+  '/portal/customer/wishlist': typeof PortalCustomerWishlistRoute
+  '/portal/artisan': typeof PortalArtisanIndexRoute
+  '/portal/customer': typeof PortalCustomerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/auth/forgot': typeof AuthForgotRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/otp': typeof AuthOtpRoute
+  '/auth/reset': typeof AuthResetRoute
+  '/auth/role': typeof AuthRoleRoute
+  '/auth/signup': typeof AuthSignupRoute
+  '/portal/artisan': typeof PortalArtisanRouteWithChildren
+  '/portal/customer': typeof PortalCustomerRouteWithChildren
+  '/products/$id': typeof ProductsIdRoute
+  '/portal/artisan/ai': typeof PortalArtisanAiRoute
+  '/portal/artisan/analytics': typeof PortalArtisanAnalyticsRoute
+  '/portal/artisan/certificates': typeof PortalArtisanCertificatesRoute
+  '/portal/artisan/export': typeof PortalArtisanExportRoute
+  '/portal/artisan/orders': typeof PortalArtisanOrdersRoute
+  '/portal/artisan/payments': typeof PortalArtisanPaymentsRoute
+  '/portal/artisan/products': typeof PortalArtisanProductsRoute
+  '/portal/artisan/schemes': typeof PortalArtisanSchemesRoute
+  '/portal/artisan/training': typeof PortalArtisanTrainingRoute
+  '/portal/artisan/twin': typeof PortalArtisanTwinRoute
+  '/portal/artisan/upload': typeof PortalArtisanUploadRoute
+  '/portal/customer/addresses': typeof PortalCustomerAddressesRoute
+  '/portal/customer/cart': typeof PortalCustomerCartRoute
+  '/portal/customer/gifts': typeof PortalCustomerGiftsRoute
+  '/portal/customer/messages': typeof PortalCustomerMessagesRoute
+  '/portal/customer/notifications': typeof PortalCustomerNotificationsRoute
+  '/portal/customer/orders': typeof PortalCustomerOrdersRoute
+  '/portal/customer/profile': typeof PortalCustomerProfileRoute
+  '/portal/customer/voice': typeof PortalCustomerVoiceRoute
+  '/portal/customer/wishlist': typeof PortalCustomerWishlistRoute
+  '/portal/artisan/': typeof PortalArtisanIndexRoute
+  '/portal/customer/': typeof PortalCustomerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/marketplace'
+    | '/auth/forgot'
+    | '/auth/login'
+    | '/auth/otp'
+    | '/auth/reset'
+    | '/auth/role'
+    | '/auth/signup'
+    | '/portal/artisan'
+    | '/portal/customer'
+    | '/products/$id'
+    | '/portal/artisan/ai'
+    | '/portal/artisan/analytics'
+    | '/portal/artisan/certificates'
+    | '/portal/artisan/export'
+    | '/portal/artisan/orders'
+    | '/portal/artisan/payments'
+    | '/portal/artisan/products'
+    | '/portal/artisan/schemes'
+    | '/portal/artisan/training'
+    | '/portal/artisan/twin'
+    | '/portal/artisan/upload'
+    | '/portal/customer/addresses'
+    | '/portal/customer/cart'
+    | '/portal/customer/gifts'
+    | '/portal/customer/messages'
+    | '/portal/customer/notifications'
+    | '/portal/customer/orders'
+    | '/portal/customer/profile'
+    | '/portal/customer/voice'
+    | '/portal/customer/wishlist'
+    | '/portal/artisan/'
+    | '/portal/customer/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/marketplace'
+    | '/auth/forgot'
+    | '/auth/login'
+    | '/auth/otp'
+    | '/auth/reset'
+    | '/auth/role'
+    | '/auth/signup'
+    | '/products/$id'
+    | '/portal/artisan/ai'
+    | '/portal/artisan/analytics'
+    | '/portal/artisan/certificates'
+    | '/portal/artisan/export'
+    | '/portal/artisan/orders'
+    | '/portal/artisan/payments'
+    | '/portal/artisan/products'
+    | '/portal/artisan/schemes'
+    | '/portal/artisan/training'
+    | '/portal/artisan/twin'
+    | '/portal/artisan/upload'
+    | '/portal/customer/addresses'
+    | '/portal/customer/cart'
+    | '/portal/customer/gifts'
+    | '/portal/customer/messages'
+    | '/portal/customer/notifications'
+    | '/portal/customer/orders'
+    | '/portal/customer/profile'
+    | '/portal/customer/voice'
+    | '/portal/customer/wishlist'
+    | '/portal/artisan'
+    | '/portal/customer'
+  id:
+    | '__root__'
+    | '/'
+    | '/marketplace'
+    | '/auth/forgot'
+    | '/auth/login'
+    | '/auth/otp'
+    | '/auth/reset'
+    | '/auth/role'
+    | '/auth/signup'
+    | '/portal/artisan'
+    | '/portal/customer'
+    | '/products/$id'
+    | '/portal/artisan/ai'
+    | '/portal/artisan/analytics'
+    | '/portal/artisan/certificates'
+    | '/portal/artisan/export'
+    | '/portal/artisan/orders'
+    | '/portal/artisan/payments'
+    | '/portal/artisan/products'
+    | '/portal/artisan/schemes'
+    | '/portal/artisan/training'
+    | '/portal/artisan/twin'
+    | '/portal/artisan/upload'
+    | '/portal/customer/addresses'
+    | '/portal/customer/cart'
+    | '/portal/customer/gifts'
+    | '/portal/customer/messages'
+    | '/portal/customer/notifications'
+    | '/portal/customer/orders'
+    | '/portal/customer/profile'
+    | '/portal/customer/voice'
+    | '/portal/customer/wishlist'
+    | '/portal/artisan/'
+    | '/portal/customer/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MarketplaceRoute: typeof MarketplaceRoute
+  AuthForgotRoute: typeof AuthForgotRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthOtpRoute: typeof AuthOtpRoute
+  AuthResetRoute: typeof AuthResetRoute
+  AuthRoleRoute: typeof AuthRoleRoute
+  AuthSignupRoute: typeof AuthSignupRoute
+  PortalArtisanRoute: typeof PortalArtisanRouteWithChildren
+  PortalCustomerRoute: typeof PortalCustomerRouteWithChildren
+  ProductsIdRoute: typeof ProductsIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +451,303 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products/$id': {
+      id: '/products/$id'
+      path: '/products/$id'
+      fullPath: '/products/$id'
+      preLoaderRoute: typeof ProductsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/customer': {
+      id: '/portal/customer'
+      path: '/portal/customer'
+      fullPath: '/portal/customer'
+      preLoaderRoute: typeof PortalCustomerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/artisan': {
+      id: '/portal/artisan'
+      path: '/portal/artisan'
+      fullPath: '/portal/artisan'
+      preLoaderRoute: typeof PortalArtisanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/signup': {
+      id: '/auth/signup'
+      path: '/auth/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/role': {
+      id: '/auth/role'
+      path: '/auth/role'
+      fullPath: '/auth/role'
+      preLoaderRoute: typeof AuthRoleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/reset': {
+      id: '/auth/reset'
+      path: '/auth/reset'
+      fullPath: '/auth/reset'
+      preLoaderRoute: typeof AuthResetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/otp': {
+      id: '/auth/otp'
+      path: '/auth/otp'
+      fullPath: '/auth/otp'
+      preLoaderRoute: typeof AuthOtpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/forgot': {
+      id: '/auth/forgot'
+      path: '/auth/forgot'
+      fullPath: '/auth/forgot'
+      preLoaderRoute: typeof AuthForgotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/customer/': {
+      id: '/portal/customer/'
+      path: '/'
+      fullPath: '/portal/customer/'
+      preLoaderRoute: typeof PortalCustomerIndexRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/artisan/': {
+      id: '/portal/artisan/'
+      path: '/'
+      fullPath: '/portal/artisan/'
+      preLoaderRoute: typeof PortalArtisanIndexRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/customer/wishlist': {
+      id: '/portal/customer/wishlist'
+      path: '/wishlist'
+      fullPath: '/portal/customer/wishlist'
+      preLoaderRoute: typeof PortalCustomerWishlistRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/voice': {
+      id: '/portal/customer/voice'
+      path: '/voice'
+      fullPath: '/portal/customer/voice'
+      preLoaderRoute: typeof PortalCustomerVoiceRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/profile': {
+      id: '/portal/customer/profile'
+      path: '/profile'
+      fullPath: '/portal/customer/profile'
+      preLoaderRoute: typeof PortalCustomerProfileRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/orders': {
+      id: '/portal/customer/orders'
+      path: '/orders'
+      fullPath: '/portal/customer/orders'
+      preLoaderRoute: typeof PortalCustomerOrdersRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/notifications': {
+      id: '/portal/customer/notifications'
+      path: '/notifications'
+      fullPath: '/portal/customer/notifications'
+      preLoaderRoute: typeof PortalCustomerNotificationsRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/messages': {
+      id: '/portal/customer/messages'
+      path: '/messages'
+      fullPath: '/portal/customer/messages'
+      preLoaderRoute: typeof PortalCustomerMessagesRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/gifts': {
+      id: '/portal/customer/gifts'
+      path: '/gifts'
+      fullPath: '/portal/customer/gifts'
+      preLoaderRoute: typeof PortalCustomerGiftsRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/cart': {
+      id: '/portal/customer/cart'
+      path: '/cart'
+      fullPath: '/portal/customer/cart'
+      preLoaderRoute: typeof PortalCustomerCartRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/addresses': {
+      id: '/portal/customer/addresses'
+      path: '/addresses'
+      fullPath: '/portal/customer/addresses'
+      preLoaderRoute: typeof PortalCustomerAddressesRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/artisan/upload': {
+      id: '/portal/artisan/upload'
+      path: '/upload'
+      fullPath: '/portal/artisan/upload'
+      preLoaderRoute: typeof PortalArtisanUploadRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/twin': {
+      id: '/portal/artisan/twin'
+      path: '/twin'
+      fullPath: '/portal/artisan/twin'
+      preLoaderRoute: typeof PortalArtisanTwinRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/training': {
+      id: '/portal/artisan/training'
+      path: '/training'
+      fullPath: '/portal/artisan/training'
+      preLoaderRoute: typeof PortalArtisanTrainingRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/schemes': {
+      id: '/portal/artisan/schemes'
+      path: '/schemes'
+      fullPath: '/portal/artisan/schemes'
+      preLoaderRoute: typeof PortalArtisanSchemesRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/products': {
+      id: '/portal/artisan/products'
+      path: '/products'
+      fullPath: '/portal/artisan/products'
+      preLoaderRoute: typeof PortalArtisanProductsRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/payments': {
+      id: '/portal/artisan/payments'
+      path: '/payments'
+      fullPath: '/portal/artisan/payments'
+      preLoaderRoute: typeof PortalArtisanPaymentsRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/orders': {
+      id: '/portal/artisan/orders'
+      path: '/orders'
+      fullPath: '/portal/artisan/orders'
+      preLoaderRoute: typeof PortalArtisanOrdersRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/export': {
+      id: '/portal/artisan/export'
+      path: '/export'
+      fullPath: '/portal/artisan/export'
+      preLoaderRoute: typeof PortalArtisanExportRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/certificates': {
+      id: '/portal/artisan/certificates'
+      path: '/certificates'
+      fullPath: '/portal/artisan/certificates'
+      preLoaderRoute: typeof PortalArtisanCertificatesRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/analytics': {
+      id: '/portal/artisan/analytics'
+      path: '/analytics'
+      fullPath: '/portal/artisan/analytics'
+      preLoaderRoute: typeof PortalArtisanAnalyticsRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/ai': {
+      id: '/portal/artisan/ai'
+      path: '/ai'
+      fullPath: '/portal/artisan/ai'
+      preLoaderRoute: typeof PortalArtisanAiRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
   }
 }
 
+interface PortalArtisanRouteChildren {
+  PortalArtisanAiRoute: typeof PortalArtisanAiRoute
+  PortalArtisanAnalyticsRoute: typeof PortalArtisanAnalyticsRoute
+  PortalArtisanCertificatesRoute: typeof PortalArtisanCertificatesRoute
+  PortalArtisanExportRoute: typeof PortalArtisanExportRoute
+  PortalArtisanOrdersRoute: typeof PortalArtisanOrdersRoute
+  PortalArtisanPaymentsRoute: typeof PortalArtisanPaymentsRoute
+  PortalArtisanProductsRoute: typeof PortalArtisanProductsRoute
+  PortalArtisanSchemesRoute: typeof PortalArtisanSchemesRoute
+  PortalArtisanTrainingRoute: typeof PortalArtisanTrainingRoute
+  PortalArtisanTwinRoute: typeof PortalArtisanTwinRoute
+  PortalArtisanUploadRoute: typeof PortalArtisanUploadRoute
+  PortalArtisanIndexRoute: typeof PortalArtisanIndexRoute
+}
+
+const PortalArtisanRouteChildren: PortalArtisanRouteChildren = {
+  PortalArtisanAiRoute: PortalArtisanAiRoute,
+  PortalArtisanAnalyticsRoute: PortalArtisanAnalyticsRoute,
+  PortalArtisanCertificatesRoute: PortalArtisanCertificatesRoute,
+  PortalArtisanExportRoute: PortalArtisanExportRoute,
+  PortalArtisanOrdersRoute: PortalArtisanOrdersRoute,
+  PortalArtisanPaymentsRoute: PortalArtisanPaymentsRoute,
+  PortalArtisanProductsRoute: PortalArtisanProductsRoute,
+  PortalArtisanSchemesRoute: PortalArtisanSchemesRoute,
+  PortalArtisanTrainingRoute: PortalArtisanTrainingRoute,
+  PortalArtisanTwinRoute: PortalArtisanTwinRoute,
+  PortalArtisanUploadRoute: PortalArtisanUploadRoute,
+  PortalArtisanIndexRoute: PortalArtisanIndexRoute,
+}
+
+const PortalArtisanRouteWithChildren = PortalArtisanRoute._addFileChildren(
+  PortalArtisanRouteChildren,
+)
+
+interface PortalCustomerRouteChildren {
+  PortalCustomerAddressesRoute: typeof PortalCustomerAddressesRoute
+  PortalCustomerCartRoute: typeof PortalCustomerCartRoute
+  PortalCustomerGiftsRoute: typeof PortalCustomerGiftsRoute
+  PortalCustomerMessagesRoute: typeof PortalCustomerMessagesRoute
+  PortalCustomerNotificationsRoute: typeof PortalCustomerNotificationsRoute
+  PortalCustomerOrdersRoute: typeof PortalCustomerOrdersRoute
+  PortalCustomerProfileRoute: typeof PortalCustomerProfileRoute
+  PortalCustomerVoiceRoute: typeof PortalCustomerVoiceRoute
+  PortalCustomerWishlistRoute: typeof PortalCustomerWishlistRoute
+  PortalCustomerIndexRoute: typeof PortalCustomerIndexRoute
+}
+
+const PortalCustomerRouteChildren: PortalCustomerRouteChildren = {
+  PortalCustomerAddressesRoute: PortalCustomerAddressesRoute,
+  PortalCustomerCartRoute: PortalCustomerCartRoute,
+  PortalCustomerGiftsRoute: PortalCustomerGiftsRoute,
+  PortalCustomerMessagesRoute: PortalCustomerMessagesRoute,
+  PortalCustomerNotificationsRoute: PortalCustomerNotificationsRoute,
+  PortalCustomerOrdersRoute: PortalCustomerOrdersRoute,
+  PortalCustomerProfileRoute: PortalCustomerProfileRoute,
+  PortalCustomerVoiceRoute: PortalCustomerVoiceRoute,
+  PortalCustomerWishlistRoute: PortalCustomerWishlistRoute,
+  PortalCustomerIndexRoute: PortalCustomerIndexRoute,
+}
+
+const PortalCustomerRouteWithChildren = PortalCustomerRoute._addFileChildren(
+  PortalCustomerRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MarketplaceRoute: MarketplaceRoute,
+  AuthForgotRoute: AuthForgotRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthOtpRoute: AuthOtpRoute,
+  AuthResetRoute: AuthResetRoute,
+  AuthRoleRoute: AuthRoleRoute,
+  AuthSignupRoute: AuthSignupRoute,
+  PortalArtisanRoute: PortalArtisanRouteWithChildren,
+  PortalCustomerRoute: PortalCustomerRouteWithChildren,
+  ProductsIdRoute: ProductsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
