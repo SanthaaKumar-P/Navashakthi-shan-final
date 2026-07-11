@@ -9,7 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TeamRouteImport } from './routes/team'
+import { Route as SchemesRouteImport } from './routes/schemes'
+import { Route as ReverseMarketplaceRouteImport } from './routes/reverse-marketplace'
+import { Route as ResearchRouteImport } from './routes/research'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as KioskRouteImport } from './routes/kiosk'
+import { Route as IndiaPostRouteImport } from './routes/india-post'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as DigitalTwinRouteImport } from './routes/digital-twin'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AiFeaturesRouteImport } from './routes/ai-features'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
 import { Route as PortalCustomerRouteImport } from './routes/portal.customer'
@@ -43,9 +57,79 @@ import { Route as PortalArtisanCertificatesRouteImport } from './routes/portal.a
 import { Route as PortalArtisanAnalyticsRouteImport } from './routes/portal.artisan.analytics'
 import { Route as PortalArtisanAiRouteImport } from './routes/portal.artisan.ai'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SchemesRoute = SchemesRouteImport.update({
+  id: '/schemes',
+  path: '/schemes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReverseMarketplaceRoute = ReverseMarketplaceRouteImport.update({
+  id: '/reverse-marketplace',
+  path: '/reverse-marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResearchRoute = ResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KioskRoute = KioskRouteImport.update({
+  id: '/kiosk',
+  path: '/kiosk',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndiaPostRoute = IndiaPostRouteImport.update({
+  id: '/india-post',
+  path: '/india-post',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DigitalTwinRoute = DigitalTwinRouteImport.update({
+  id: '/digital-twin',
+  path: '/digital-twin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiFeaturesRoute = AiFeaturesRouteImport.update({
+  id: '/ai-features',
+  path: '/ai-features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -213,7 +297,21 @@ const PortalArtisanAiRoute = PortalArtisanAiRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ai-features': typeof AiFeaturesRoute
+  '/contact': typeof ContactRoute
+  '/digital-twin': typeof DigitalTwinRoute
+  '/faq': typeof FaqRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/india-post': typeof IndiaPostRoute
+  '/kiosk': typeof KioskRoute
   '/marketplace': typeof MarketplaceRoute
+  '/privacy': typeof PrivacyRoute
+  '/research': typeof ResearchRoute
+  '/reverse-marketplace': typeof ReverseMarketplaceRoute
+  '/schemes': typeof SchemesRoute
+  '/team': typeof TeamRoute
+  '/terms': typeof TermsRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/otp': typeof AuthOtpRoute
@@ -248,7 +346,21 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ai-features': typeof AiFeaturesRoute
+  '/contact': typeof ContactRoute
+  '/digital-twin': typeof DigitalTwinRoute
+  '/faq': typeof FaqRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/india-post': typeof IndiaPostRoute
+  '/kiosk': typeof KioskRoute
   '/marketplace': typeof MarketplaceRoute
+  '/privacy': typeof PrivacyRoute
+  '/research': typeof ResearchRoute
+  '/reverse-marketplace': typeof ReverseMarketplaceRoute
+  '/schemes': typeof SchemesRoute
+  '/team': typeof TeamRoute
+  '/terms': typeof TermsRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/otp': typeof AuthOtpRoute
@@ -282,7 +394,21 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ai-features': typeof AiFeaturesRoute
+  '/contact': typeof ContactRoute
+  '/digital-twin': typeof DigitalTwinRoute
+  '/faq': typeof FaqRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/india-post': typeof IndiaPostRoute
+  '/kiosk': typeof KioskRoute
   '/marketplace': typeof MarketplaceRoute
+  '/privacy': typeof PrivacyRoute
+  '/research': typeof ResearchRoute
+  '/reverse-marketplace': typeof ReverseMarketplaceRoute
+  '/schemes': typeof SchemesRoute
+  '/team': typeof TeamRoute
+  '/terms': typeof TermsRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/otp': typeof AuthOtpRoute
@@ -319,7 +445,21 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
+    | '/ai-features'
+    | '/contact'
+    | '/digital-twin'
+    | '/faq'
+    | '/how-it-works'
+    | '/india-post'
+    | '/kiosk'
     | '/marketplace'
+    | '/privacy'
+    | '/research'
+    | '/reverse-marketplace'
+    | '/schemes'
+    | '/team'
+    | '/terms'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/otp'
@@ -354,7 +494,21 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
+    | '/ai-features'
+    | '/contact'
+    | '/digital-twin'
+    | '/faq'
+    | '/how-it-works'
+    | '/india-post'
+    | '/kiosk'
     | '/marketplace'
+    | '/privacy'
+    | '/research'
+    | '/reverse-marketplace'
+    | '/schemes'
+    | '/team'
+    | '/terms'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/otp'
@@ -387,7 +541,21 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
+    | '/ai-features'
+    | '/contact'
+    | '/digital-twin'
+    | '/faq'
+    | '/how-it-works'
+    | '/india-post'
+    | '/kiosk'
     | '/marketplace'
+    | '/privacy'
+    | '/research'
+    | '/reverse-marketplace'
+    | '/schemes'
+    | '/team'
+    | '/terms'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/otp'
@@ -423,7 +591,21 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AiFeaturesRoute: typeof AiFeaturesRoute
+  ContactRoute: typeof ContactRoute
+  DigitalTwinRoute: typeof DigitalTwinRoute
+  FaqRoute: typeof FaqRoute
+  HowItWorksRoute: typeof HowItWorksRoute
+  IndiaPostRoute: typeof IndiaPostRoute
+  KioskRoute: typeof KioskRoute
   MarketplaceRoute: typeof MarketplaceRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ResearchRoute: typeof ResearchRoute
+  ReverseMarketplaceRoute: typeof ReverseMarketplaceRoute
+  SchemesRoute: typeof SchemesRoute
+  TeamRoute: typeof TeamRoute
+  TermsRoute: typeof TermsRoute
   AuthForgotRoute: typeof AuthForgotRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthOtpRoute: typeof AuthOtpRoute
@@ -437,11 +619,109 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schemes': {
+      id: '/schemes'
+      path: '/schemes'
+      fullPath: '/schemes'
+      preLoaderRoute: typeof SchemesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reverse-marketplace': {
+      id: '/reverse-marketplace'
+      path: '/reverse-marketplace'
+      fullPath: '/reverse-marketplace'
+      preLoaderRoute: typeof ReverseMarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/research': {
+      id: '/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof ResearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/marketplace': {
       id: '/marketplace'
       path: '/marketplace'
       fullPath: '/marketplace'
       preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kiosk': {
+      id: '/kiosk'
+      path: '/kiosk'
+      fullPath: '/kiosk'
+      preLoaderRoute: typeof KioskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/india-post': {
+      id: '/india-post'
+      path: '/india-post'
+      fullPath: '/india-post'
+      preLoaderRoute: typeof IndiaPostRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/digital-twin': {
+      id: '/digital-twin'
+      path: '/digital-twin'
+      fullPath: '/digital-twin'
+      preLoaderRoute: typeof DigitalTwinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-features': {
+      id: '/ai-features'
+      path: '/ai-features'
+      fullPath: '/ai-features'
+      preLoaderRoute: typeof AiFeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -737,7 +1017,21 @@ const PortalCustomerRouteWithChildren = PortalCustomerRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AiFeaturesRoute: AiFeaturesRoute,
+  ContactRoute: ContactRoute,
+  DigitalTwinRoute: DigitalTwinRoute,
+  FaqRoute: FaqRoute,
+  HowItWorksRoute: HowItWorksRoute,
+  IndiaPostRoute: IndiaPostRoute,
+  KioskRoute: KioskRoute,
   MarketplaceRoute: MarketplaceRoute,
+  PrivacyRoute: PrivacyRoute,
+  ResearchRoute: ResearchRoute,
+  ReverseMarketplaceRoute: ReverseMarketplaceRoute,
+  SchemesRoute: SchemesRoute,
+  TeamRoute: TeamRoute,
+  TermsRoute: TermsRoute,
   AuthForgotRoute: AuthForgotRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthOtpRoute: AuthOtpRoute,
