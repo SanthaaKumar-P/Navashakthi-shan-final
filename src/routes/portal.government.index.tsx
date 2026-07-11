@@ -5,8 +5,7 @@ import { BarChart, Bar, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGri
 const data = [{s:"TN",v:12400},{s:"GJ",v:9800},{s:"KA",v:7200},{s:"RJ",v:11200},{s:"AS",v:5400},{s:"MH",v:8100},{s:"WB",v:6800}];
 export const Route = createFileRoute("/portal/government/")({
   component: () => (
-    <>
-      <GenericSection title="Namaste, Ministry of Textiles." subtitle="Real-time view of artisan livelihoods, scheme uptake, and cluster health." />
+    <GenericSection title="Namaste, Ministry of Textiles." subtitle="Real-time view of artisan livelihoods, scheme uptake, and cluster health.">
       <InfoTiles tiles={[
         { label: "Registered artisans", value: "72,480", hint: "+1,240 this week" },
         { label: "Active schemes", value: "18", hint: "Central + State" },
@@ -21,6 +20,6 @@ export const Route = createFileRoute("/portal/government/")({
           </ResponsiveContainer></div>
         </div>
       </Reveal>
-    </>
+    </GenericSection>
   ),
 });

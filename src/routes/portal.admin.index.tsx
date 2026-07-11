@@ -4,8 +4,7 @@ import { AreaChart, Area, ResponsiveContainer, Tooltip, XAxis, YAxis } from "rec
 const data = Array.from({ length: 24 }, (_, i) => ({ h: `${i}:00`, v: 40 + Math.round(Math.sin(i / 2) * 20 + Math.random() * 15) }));
 export const Route = createFileRoute("/portal/admin/")({
   component: () => (
-    <>
-      <GenericSection title="Command centre" subtitle="Everything happening across NAVSHAKTHI, right now." />
+    <GenericSection title="Command centre" subtitle="Everything happening across NAVSHAKTHI, right now.">
       <InfoTiles tiles={[
         { label: "Active users (24h)", value: "18,420" },
         { label: "New listings (24h)", value: "412" },
@@ -22,6 +21,6 @@ export const Route = createFileRoute("/portal/admin/")({
           </AreaChart>
         </ResponsiveContainer></div>
       </div>
-    </>
+    </GenericSection>
   ),
 });
