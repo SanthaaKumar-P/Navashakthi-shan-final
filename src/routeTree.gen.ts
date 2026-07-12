@@ -35,6 +35,8 @@ import { Route as AiAnalyticsRouteImport } from './routes/ai-analytics'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
+import { Route as PortalTrainerRouteImport } from './routes/portal.trainer'
+import { Route as PortalKioskRouteImport } from './routes/portal.kiosk'
 import { Route as PortalGovernmentRouteImport } from './routes/portal.government'
 import { Route as PortalCustomerRouteImport } from './routes/portal.customer'
 import { Route as PortalArtisanRouteImport } from './routes/portal.artisan'
@@ -45,10 +47,18 @@ import { Route as AuthResetRouteImport } from './routes/auth.reset'
 import { Route as AuthOtpRouteImport } from './routes/auth.otp'
 import { Route as AuthLoginRouteImport } from './routes/auth.login'
 import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
+import { Route as PortalTrainerIndexRouteImport } from './routes/portal.trainer.index'
+import { Route as PortalKioskIndexRouteImport } from './routes/portal.kiosk.index'
 import { Route as PortalGovernmentIndexRouteImport } from './routes/portal.government.index'
 import { Route as PortalCustomerIndexRouteImport } from './routes/portal.customer.index'
 import { Route as PortalArtisanIndexRouteImport } from './routes/portal.artisan.index'
 import { Route as PortalAdminIndexRouteImport } from './routes/portal.admin.index'
+import { Route as PortalTrainerSlotsRouteImport } from './routes/portal.trainer.slots'
+import { Route as PortalTrainerCoursesRouteImport } from './routes/portal.trainer.courses'
+import { Route as PortalTrainerCertificatesRouteImport } from './routes/portal.trainer.certificates'
+import { Route as PortalKioskServicesRouteImport } from './routes/portal.kiosk.services'
+import { Route as PortalKioskArtisansRouteImport } from './routes/portal.kiosk.artisans'
+import { Route as PortalKioskAppointmentsRouteImport } from './routes/portal.kiosk.appointments'
 import { Route as PortalGovernmentTrainingRouteImport } from './routes/portal.government.training'
 import { Route as PortalGovernmentSchemesRouteImport } from './routes/portal.government.schemes'
 import { Route as PortalGovernmentOfficersRouteImport } from './routes/portal.government.officers'
@@ -217,6 +227,16 @@ const ProductsIdRoute = ProductsIdRouteImport.update({
   path: '/products/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalTrainerRoute = PortalTrainerRouteImport.update({
+  id: '/portal/trainer',
+  path: '/portal/trainer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalKioskRoute = PortalKioskRouteImport.update({
+  id: '/portal/kiosk',
+  path: '/portal/kiosk',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PortalGovernmentRoute = PortalGovernmentRouteImport.update({
   id: '/portal/government',
   path: '/portal/government',
@@ -267,6 +287,16 @@ const AuthForgotRoute = AuthForgotRouteImport.update({
   path: '/auth/forgot',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalTrainerIndexRoute = PortalTrainerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalTrainerRoute,
+} as any)
+const PortalKioskIndexRoute = PortalKioskIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalKioskRoute,
+} as any)
 const PortalGovernmentIndexRoute = PortalGovernmentIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -286,6 +316,37 @@ const PortalAdminIndexRoute = PortalAdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PortalAdminRoute,
+} as any)
+const PortalTrainerSlotsRoute = PortalTrainerSlotsRouteImport.update({
+  id: '/slots',
+  path: '/slots',
+  getParentRoute: () => PortalTrainerRoute,
+} as any)
+const PortalTrainerCoursesRoute = PortalTrainerCoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => PortalTrainerRoute,
+} as any)
+const PortalTrainerCertificatesRoute =
+  PortalTrainerCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
+    getParentRoute: () => PortalTrainerRoute,
+  } as any)
+const PortalKioskServicesRoute = PortalKioskServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => PortalKioskRoute,
+} as any)
+const PortalKioskArtisansRoute = PortalKioskArtisansRouteImport.update({
+  id: '/artisans',
+  path: '/artisans',
+  getParentRoute: () => PortalKioskRoute,
+} as any)
+const PortalKioskAppointmentsRoute = PortalKioskAppointmentsRouteImport.update({
+  id: '/appointments',
+  path: '/appointments',
+  getParentRoute: () => PortalKioskRoute,
 } as any)
 const PortalGovernmentTrainingRoute =
   PortalGovernmentTrainingRouteImport.update({
@@ -517,6 +578,8 @@ export interface FileRoutesByFullPath {
   '/portal/artisan': typeof PortalArtisanRouteWithChildren
   '/portal/customer': typeof PortalCustomerRouteWithChildren
   '/portal/government': typeof PortalGovernmentRouteWithChildren
+  '/portal/kiosk': typeof PortalKioskRouteWithChildren
+  '/portal/trainer': typeof PortalTrainerRouteWithChildren
   '/products/$id': typeof ProductsIdRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
   '/portal/admin/logs': typeof PortalAdminLogsRoute
@@ -555,10 +618,18 @@ export interface FileRoutesByFullPath {
   '/portal/government/officers': typeof PortalGovernmentOfficersRoute
   '/portal/government/schemes': typeof PortalGovernmentSchemesRoute
   '/portal/government/training': typeof PortalGovernmentTrainingRoute
+  '/portal/kiosk/appointments': typeof PortalKioskAppointmentsRoute
+  '/portal/kiosk/artisans': typeof PortalKioskArtisansRoute
+  '/portal/kiosk/services': typeof PortalKioskServicesRoute
+  '/portal/trainer/certificates': typeof PortalTrainerCertificatesRoute
+  '/portal/trainer/courses': typeof PortalTrainerCoursesRoute
+  '/portal/trainer/slots': typeof PortalTrainerSlotsRoute
   '/portal/admin/': typeof PortalAdminIndexRoute
   '/portal/artisan/': typeof PortalArtisanIndexRoute
   '/portal/customer/': typeof PortalCustomerIndexRoute
   '/portal/government/': typeof PortalGovernmentIndexRoute
+  '/portal/kiosk/': typeof PortalKioskIndexRoute
+  '/portal/trainer/': typeof PortalTrainerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -630,10 +701,18 @@ export interface FileRoutesByTo {
   '/portal/government/officers': typeof PortalGovernmentOfficersRoute
   '/portal/government/schemes': typeof PortalGovernmentSchemesRoute
   '/portal/government/training': typeof PortalGovernmentTrainingRoute
+  '/portal/kiosk/appointments': typeof PortalKioskAppointmentsRoute
+  '/portal/kiosk/artisans': typeof PortalKioskArtisansRoute
+  '/portal/kiosk/services': typeof PortalKioskServicesRoute
+  '/portal/trainer/certificates': typeof PortalTrainerCertificatesRoute
+  '/portal/trainer/courses': typeof PortalTrainerCoursesRoute
+  '/portal/trainer/slots': typeof PortalTrainerSlotsRoute
   '/portal/admin': typeof PortalAdminIndexRoute
   '/portal/artisan': typeof PortalArtisanIndexRoute
   '/portal/customer': typeof PortalCustomerIndexRoute
   '/portal/government': typeof PortalGovernmentIndexRoute
+  '/portal/kiosk': typeof PortalKioskIndexRoute
+  '/portal/trainer': typeof PortalTrainerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -672,6 +751,8 @@ export interface FileRoutesById {
   '/portal/artisan': typeof PortalArtisanRouteWithChildren
   '/portal/customer': typeof PortalCustomerRouteWithChildren
   '/portal/government': typeof PortalGovernmentRouteWithChildren
+  '/portal/kiosk': typeof PortalKioskRouteWithChildren
+  '/portal/trainer': typeof PortalTrainerRouteWithChildren
   '/products/$id': typeof ProductsIdRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
   '/portal/admin/logs': typeof PortalAdminLogsRoute
@@ -710,10 +791,18 @@ export interface FileRoutesById {
   '/portal/government/officers': typeof PortalGovernmentOfficersRoute
   '/portal/government/schemes': typeof PortalGovernmentSchemesRoute
   '/portal/government/training': typeof PortalGovernmentTrainingRoute
+  '/portal/kiosk/appointments': typeof PortalKioskAppointmentsRoute
+  '/portal/kiosk/artisans': typeof PortalKioskArtisansRoute
+  '/portal/kiosk/services': typeof PortalKioskServicesRoute
+  '/portal/trainer/certificates': typeof PortalTrainerCertificatesRoute
+  '/portal/trainer/courses': typeof PortalTrainerCoursesRoute
+  '/portal/trainer/slots': typeof PortalTrainerSlotsRoute
   '/portal/admin/': typeof PortalAdminIndexRoute
   '/portal/artisan/': typeof PortalArtisanIndexRoute
   '/portal/customer/': typeof PortalCustomerIndexRoute
   '/portal/government/': typeof PortalGovernmentIndexRoute
+  '/portal/kiosk/': typeof PortalKioskIndexRoute
+  '/portal/trainer/': typeof PortalTrainerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -753,6 +842,8 @@ export interface FileRouteTypes {
     | '/portal/artisan'
     | '/portal/customer'
     | '/portal/government'
+    | '/portal/kiosk'
+    | '/portal/trainer'
     | '/products/$id'
     | '/portal/admin/catalog'
     | '/portal/admin/logs'
@@ -791,10 +882,18 @@ export interface FileRouteTypes {
     | '/portal/government/officers'
     | '/portal/government/schemes'
     | '/portal/government/training'
+    | '/portal/kiosk/appointments'
+    | '/portal/kiosk/artisans'
+    | '/portal/kiosk/services'
+    | '/portal/trainer/certificates'
+    | '/portal/trainer/courses'
+    | '/portal/trainer/slots'
     | '/portal/admin/'
     | '/portal/artisan/'
     | '/portal/customer/'
     | '/portal/government/'
+    | '/portal/kiosk/'
+    | '/portal/trainer/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -866,10 +965,18 @@ export interface FileRouteTypes {
     | '/portal/government/officers'
     | '/portal/government/schemes'
     | '/portal/government/training'
+    | '/portal/kiosk/appointments'
+    | '/portal/kiosk/artisans'
+    | '/portal/kiosk/services'
+    | '/portal/trainer/certificates'
+    | '/portal/trainer/courses'
+    | '/portal/trainer/slots'
     | '/portal/admin'
     | '/portal/artisan'
     | '/portal/customer'
     | '/portal/government'
+    | '/portal/kiosk'
+    | '/portal/trainer'
   id:
     | '__root__'
     | '/'
@@ -907,6 +1014,8 @@ export interface FileRouteTypes {
     | '/portal/artisan'
     | '/portal/customer'
     | '/portal/government'
+    | '/portal/kiosk'
+    | '/portal/trainer'
     | '/products/$id'
     | '/portal/admin/catalog'
     | '/portal/admin/logs'
@@ -945,10 +1054,18 @@ export interface FileRouteTypes {
     | '/portal/government/officers'
     | '/portal/government/schemes'
     | '/portal/government/training'
+    | '/portal/kiosk/appointments'
+    | '/portal/kiosk/artisans'
+    | '/portal/kiosk/services'
+    | '/portal/trainer/certificates'
+    | '/portal/trainer/courses'
+    | '/portal/trainer/slots'
     | '/portal/admin/'
     | '/portal/artisan/'
     | '/portal/customer/'
     | '/portal/government/'
+    | '/portal/kiosk/'
+    | '/portal/trainer/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -987,6 +1104,8 @@ export interface RootRouteChildren {
   PortalArtisanRoute: typeof PortalArtisanRouteWithChildren
   PortalCustomerRoute: typeof PortalCustomerRouteWithChildren
   PortalGovernmentRoute: typeof PortalGovernmentRouteWithChildren
+  PortalKioskRoute: typeof PortalKioskRouteWithChildren
+  PortalTrainerRoute: typeof PortalTrainerRouteWithChildren
   ProductsIdRoute: typeof ProductsIdRoute
 }
 
@@ -1174,6 +1293,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal/trainer': {
+      id: '/portal/trainer'
+      path: '/portal/trainer'
+      fullPath: '/portal/trainer'
+      preLoaderRoute: typeof PortalTrainerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/kiosk': {
+      id: '/portal/kiosk'
+      path: '/portal/kiosk'
+      fullPath: '/portal/kiosk'
+      preLoaderRoute: typeof PortalKioskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/portal/government': {
       id: '/portal/government'
       path: '/portal/government'
@@ -1244,6 +1377,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal/trainer/': {
+      id: '/portal/trainer/'
+      path: '/'
+      fullPath: '/portal/trainer/'
+      preLoaderRoute: typeof PortalTrainerIndexRouteImport
+      parentRoute: typeof PortalTrainerRoute
+    }
+    '/portal/kiosk/': {
+      id: '/portal/kiosk/'
+      path: '/'
+      fullPath: '/portal/kiosk/'
+      preLoaderRoute: typeof PortalKioskIndexRouteImport
+      parentRoute: typeof PortalKioskRoute
+    }
     '/portal/government/': {
       id: '/portal/government/'
       path: '/'
@@ -1271,6 +1418,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/portal/admin/'
       preLoaderRoute: typeof PortalAdminIndexRouteImport
       parentRoute: typeof PortalAdminRoute
+    }
+    '/portal/trainer/slots': {
+      id: '/portal/trainer/slots'
+      path: '/slots'
+      fullPath: '/portal/trainer/slots'
+      preLoaderRoute: typeof PortalTrainerSlotsRouteImport
+      parentRoute: typeof PortalTrainerRoute
+    }
+    '/portal/trainer/courses': {
+      id: '/portal/trainer/courses'
+      path: '/courses'
+      fullPath: '/portal/trainer/courses'
+      preLoaderRoute: typeof PortalTrainerCoursesRouteImport
+      parentRoute: typeof PortalTrainerRoute
+    }
+    '/portal/trainer/certificates': {
+      id: '/portal/trainer/certificates'
+      path: '/certificates'
+      fullPath: '/portal/trainer/certificates'
+      preLoaderRoute: typeof PortalTrainerCertificatesRouteImport
+      parentRoute: typeof PortalTrainerRoute
+    }
+    '/portal/kiosk/services': {
+      id: '/portal/kiosk/services'
+      path: '/services'
+      fullPath: '/portal/kiosk/services'
+      preLoaderRoute: typeof PortalKioskServicesRouteImport
+      parentRoute: typeof PortalKioskRoute
+    }
+    '/portal/kiosk/artisans': {
+      id: '/portal/kiosk/artisans'
+      path: '/artisans'
+      fullPath: '/portal/kiosk/artisans'
+      preLoaderRoute: typeof PortalKioskArtisansRouteImport
+      parentRoute: typeof PortalKioskRoute
+    }
+    '/portal/kiosk/appointments': {
+      id: '/portal/kiosk/appointments'
+      path: '/appointments'
+      fullPath: '/portal/kiosk/appointments'
+      preLoaderRoute: typeof PortalKioskAppointmentsRouteImport
+      parentRoute: typeof PortalKioskRoute
     }
     '/portal/government/training': {
       id: '/portal/government/training'
@@ -1655,6 +1844,42 @@ const PortalGovernmentRouteChildren: PortalGovernmentRouteChildren = {
 const PortalGovernmentRouteWithChildren =
   PortalGovernmentRoute._addFileChildren(PortalGovernmentRouteChildren)
 
+interface PortalKioskRouteChildren {
+  PortalKioskAppointmentsRoute: typeof PortalKioskAppointmentsRoute
+  PortalKioskArtisansRoute: typeof PortalKioskArtisansRoute
+  PortalKioskServicesRoute: typeof PortalKioskServicesRoute
+  PortalKioskIndexRoute: typeof PortalKioskIndexRoute
+}
+
+const PortalKioskRouteChildren: PortalKioskRouteChildren = {
+  PortalKioskAppointmentsRoute: PortalKioskAppointmentsRoute,
+  PortalKioskArtisansRoute: PortalKioskArtisansRoute,
+  PortalKioskServicesRoute: PortalKioskServicesRoute,
+  PortalKioskIndexRoute: PortalKioskIndexRoute,
+}
+
+const PortalKioskRouteWithChildren = PortalKioskRoute._addFileChildren(
+  PortalKioskRouteChildren,
+)
+
+interface PortalTrainerRouteChildren {
+  PortalTrainerCertificatesRoute: typeof PortalTrainerCertificatesRoute
+  PortalTrainerCoursesRoute: typeof PortalTrainerCoursesRoute
+  PortalTrainerSlotsRoute: typeof PortalTrainerSlotsRoute
+  PortalTrainerIndexRoute: typeof PortalTrainerIndexRoute
+}
+
+const PortalTrainerRouteChildren: PortalTrainerRouteChildren = {
+  PortalTrainerCertificatesRoute: PortalTrainerCertificatesRoute,
+  PortalTrainerCoursesRoute: PortalTrainerCoursesRoute,
+  PortalTrainerSlotsRoute: PortalTrainerSlotsRoute,
+  PortalTrainerIndexRoute: PortalTrainerIndexRoute,
+}
+
+const PortalTrainerRouteWithChildren = PortalTrainerRoute._addFileChildren(
+  PortalTrainerRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -1691,6 +1916,8 @@ const rootRouteChildren: RootRouteChildren = {
   PortalArtisanRoute: PortalArtisanRouteWithChildren,
   PortalCustomerRoute: PortalCustomerRouteWithChildren,
   PortalGovernmentRoute: PortalGovernmentRouteWithChildren,
+  PortalKioskRoute: PortalKioskRouteWithChildren,
+  PortalTrainerRoute: PortalTrainerRouteWithChildren,
   ProductsIdRoute: ProductsIdRoute,
 }
 export const routeTree = rootRouteImport
