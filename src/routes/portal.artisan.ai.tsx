@@ -57,13 +57,17 @@ const POOL: Omit<Suggestion, "id" | "status">[] = [
 
 const uid = () => Math.random().toString(36).slice(2, 9);
 
-function seed(count = 6): Suggestion[] {
-  const shuffled = [...POOL].sort(() => Math.random() - 0.5).slice(0, count);
-  return shuffled.map((s) => ({ ...s, id: uid(), status: "new" }));
+// Deterministic initial slice — same on server + client — prevents hydration mismatch.
+function initial(count = 6): Suggestion[] {
+  return POOL.slice(0, count).map((s, i) => ({ ...s, id: `s-${i}`, status: "new" }));
+}
+function shuffle(count = 6): Suggestion[] {
+  const arr = [...POOL].sort(() => Math.random() - 0.5).slice(0, count);
+  return arr.map((s) => ({ ...s, id: uid(), status: "new" }));
 }
 
 function Component() {
-  const [items, setItems] = useState<Suggestion[]>(() => seed(6));
+  const [items, setItems] = useState<Suggestion[]>(() => initial(6));
   const [filter, setFilter] = useState<"all" | Category>("all");
   const [refreshing, setRefreshing] = useState(false);
   const [thinking, setThinking] = useState<string | null>(null);
