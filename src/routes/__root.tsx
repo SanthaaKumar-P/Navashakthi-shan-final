@@ -116,6 +116,7 @@ function RootComponent() {
         <CartProvider>
           <Outlet />
           <Toaster position="top-right" richColors />
+          <ChatAssistant />
         </CartProvider>
       </AuthProvider>
     </QueryClientProvider>
