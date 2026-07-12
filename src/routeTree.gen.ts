@@ -9,23 +9,34 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkshopBookingRouteImport } from './routes/workshop-booking'
+import { Route as TrainingPortalRouteImport } from './routes/training-portal'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
+import { Route as SmartKioskPortalRouteImport } from './routes/smart-kiosk-portal'
 import { Route as SchemesRouteImport } from './routes/schemes'
 import { Route as ReverseMarketplaceRouteImport } from './routes/reverse-marketplace'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as KioskAppointmentRouteImport } from './routes/kiosk-appointment'
 import { Route as KioskRouteImport } from './routes/kiosk'
 import { Route as IndiaPostRouteImport } from './routes/india-post'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DigitalTwinRouteImport } from './routes/digital-twin'
+import { Route as CraftPassportRouteImport } from './routes/craft-passport'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CertificationCentreRouteImport } from './routes/certification-centre'
+import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AiFeaturesRouteImport } from './routes/ai-features'
+import { Route as AiAuthenticationRouteImport } from './routes/ai-authentication'
+import { Route as AiAnalyticsRouteImport } from './routes/ai-analytics'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
+import { Route as PortalTrainerRouteImport } from './routes/portal.trainer'
+import { Route as PortalKioskRouteImport } from './routes/portal.kiosk'
 import { Route as PortalGovernmentRouteImport } from './routes/portal.government'
 import { Route as PortalCustomerRouteImport } from './routes/portal.customer'
 import { Route as PortalArtisanRouteImport } from './routes/portal.artisan'
@@ -36,15 +47,25 @@ import { Route as AuthResetRouteImport } from './routes/auth.reset'
 import { Route as AuthOtpRouteImport } from './routes/auth.otp'
 import { Route as AuthLoginRouteImport } from './routes/auth.login'
 import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
+import { Route as PortalTrainerIndexRouteImport } from './routes/portal.trainer.index'
+import { Route as PortalKioskIndexRouteImport } from './routes/portal.kiosk.index'
 import { Route as PortalGovernmentIndexRouteImport } from './routes/portal.government.index'
 import { Route as PortalCustomerIndexRouteImport } from './routes/portal.customer.index'
 import { Route as PortalArtisanIndexRouteImport } from './routes/portal.artisan.index'
 import { Route as PortalAdminIndexRouteImport } from './routes/portal.admin.index'
+import { Route as PortalTrainerSlotsRouteImport } from './routes/portal.trainer.slots'
+import { Route as PortalTrainerCoursesRouteImport } from './routes/portal.trainer.courses'
+import { Route as PortalTrainerCertificatesRouteImport } from './routes/portal.trainer.certificates'
+import { Route as PortalKioskServicesRouteImport } from './routes/portal.kiosk.services'
+import { Route as PortalKioskArtisansRouteImport } from './routes/portal.kiosk.artisans'
+import { Route as PortalKioskAppointmentsRouteImport } from './routes/portal.kiosk.appointments'
 import { Route as PortalGovernmentTrainingRouteImport } from './routes/portal.government.training'
 import { Route as PortalGovernmentSchemesRouteImport } from './routes/portal.government.schemes'
+import { Route as PortalGovernmentOfficersRouteImport } from './routes/portal.government.officers'
 import { Route as PortalGovernmentImpactRouteImport } from './routes/portal.government.impact'
 import { Route as PortalGovernmentGiRouteImport } from './routes/portal.government.gi'
 import { Route as PortalGovernmentClustersRouteImport } from './routes/portal.government.clusters'
+import { Route as PortalGovernmentCertificationRouteImport } from './routes/portal.government.certification'
 import { Route as PortalGovernmentArtisansRouteImport } from './routes/portal.government.artisans'
 import { Route as PortalCustomerWishlistRouteImport } from './routes/portal.customer.wishlist'
 import { Route as PortalCustomerVoiceRouteImport } from './routes/portal.customer.voice'
@@ -61,9 +82,12 @@ import { Route as PortalArtisanTrainingRouteImport } from './routes/portal.artis
 import { Route as PortalArtisanSchemesRouteImport } from './routes/portal.artisan.schemes'
 import { Route as PortalArtisanProductsRouteImport } from './routes/portal.artisan.products'
 import { Route as PortalArtisanPaymentsRouteImport } from './routes/portal.artisan.payments'
+import { Route as PortalArtisanPassportRouteImport } from './routes/portal.artisan.passport'
 import { Route as PortalArtisanOrdersRouteImport } from './routes/portal.artisan.orders'
+import { Route as PortalArtisanNfcRouteImport } from './routes/portal.artisan.nfc'
 import { Route as PortalArtisanExportRouteImport } from './routes/portal.artisan.export'
 import { Route as PortalArtisanCertificatesRouteImport } from './routes/portal.artisan.certificates'
+import { Route as PortalArtisanAuthenticationRouteImport } from './routes/portal.artisan.authentication'
 import { Route as PortalArtisanAnalyticsRouteImport } from './routes/portal.artisan.analytics'
 import { Route as PortalArtisanAiRouteImport } from './routes/portal.artisan.ai'
 import { Route as PortalAdminUsersRouteImport } from './routes/portal.admin.users'
@@ -73,6 +97,16 @@ import { Route as PortalAdminModerationRouteImport } from './routes/portal.admin
 import { Route as PortalAdminLogsRouteImport } from './routes/portal.admin.logs'
 import { Route as PortalAdminCatalogRouteImport } from './routes/portal.admin.catalog'
 
+const WorkshopBookingRoute = WorkshopBookingRouteImport.update({
+  id: '/workshop-booking',
+  path: '/workshop-booking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrainingPortalRoute = TrainingPortalRouteImport.update({
+  id: '/training-portal',
+  path: '/training-portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -81,6 +115,11 @@ const TermsRoute = TermsRouteImport.update({
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
   path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmartKioskPortalRoute = SmartKioskPortalRouteImport.update({
+  id: '/smart-kiosk-portal',
+  path: '/smart-kiosk-portal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchemesRoute = SchemesRouteImport.update({
@@ -108,6 +147,11 @@ const MarketplaceRoute = MarketplaceRouteImport.update({
   path: '/marketplace',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KioskAppointmentRoute = KioskAppointmentRouteImport.update({
+  id: '/kiosk-appointment',
+  path: '/kiosk-appointment',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KioskRoute = KioskRouteImport.update({
   id: '/kiosk',
   path: '/kiosk',
@@ -133,14 +177,39 @@ const DigitalTwinRoute = DigitalTwinRouteImport.update({
   path: '/digital-twin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CraftPassportRoute = CraftPassportRouteImport.update({
+  id: '/craft-passport',
+  path: '/craft-passport',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CertificationCentreRoute = CertificationCentreRouteImport.update({
+  id: '/certification-centre',
+  path: '/certification-centre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CertificatesRoute = CertificatesRouteImport.update({
+  id: '/certificates',
+  path: '/certificates',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AiFeaturesRoute = AiFeaturesRouteImport.update({
   id: '/ai-features',
   path: '/ai-features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiAuthenticationRoute = AiAuthenticationRouteImport.update({
+  id: '/ai-authentication',
+  path: '/ai-authentication',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiAnalyticsRoute = AiAnalyticsRouteImport.update({
+  id: '/ai-analytics',
+  path: '/ai-analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -156,6 +225,16 @@ const IndexRoute = IndexRouteImport.update({
 const ProductsIdRoute = ProductsIdRouteImport.update({
   id: '/products/$id',
   path: '/products/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalTrainerRoute = PortalTrainerRouteImport.update({
+  id: '/portal/trainer',
+  path: '/portal/trainer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalKioskRoute = PortalKioskRouteImport.update({
+  id: '/portal/kiosk',
+  path: '/portal/kiosk',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortalGovernmentRoute = PortalGovernmentRouteImport.update({
@@ -208,6 +287,16 @@ const AuthForgotRoute = AuthForgotRouteImport.update({
   path: '/auth/forgot',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalTrainerIndexRoute = PortalTrainerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalTrainerRoute,
+} as any)
+const PortalKioskIndexRoute = PortalKioskIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalKioskRoute,
+} as any)
 const PortalGovernmentIndexRoute = PortalGovernmentIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -228,6 +317,37 @@ const PortalAdminIndexRoute = PortalAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PortalAdminRoute,
 } as any)
+const PortalTrainerSlotsRoute = PortalTrainerSlotsRouteImport.update({
+  id: '/slots',
+  path: '/slots',
+  getParentRoute: () => PortalTrainerRoute,
+} as any)
+const PortalTrainerCoursesRoute = PortalTrainerCoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => PortalTrainerRoute,
+} as any)
+const PortalTrainerCertificatesRoute =
+  PortalTrainerCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
+    getParentRoute: () => PortalTrainerRoute,
+  } as any)
+const PortalKioskServicesRoute = PortalKioskServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => PortalKioskRoute,
+} as any)
+const PortalKioskArtisansRoute = PortalKioskArtisansRouteImport.update({
+  id: '/artisans',
+  path: '/artisans',
+  getParentRoute: () => PortalKioskRoute,
+} as any)
+const PortalKioskAppointmentsRoute = PortalKioskAppointmentsRouteImport.update({
+  id: '/appointments',
+  path: '/appointments',
+  getParentRoute: () => PortalKioskRoute,
+} as any)
 const PortalGovernmentTrainingRoute =
   PortalGovernmentTrainingRouteImport.update({
     id: '/training',
@@ -239,6 +359,12 @@ const PortalGovernmentSchemesRoute = PortalGovernmentSchemesRouteImport.update({
   path: '/schemes',
   getParentRoute: () => PortalGovernmentRoute,
 } as any)
+const PortalGovernmentOfficersRoute =
+  PortalGovernmentOfficersRouteImport.update({
+    id: '/officers',
+    path: '/officers',
+    getParentRoute: () => PortalGovernmentRoute,
+  } as any)
 const PortalGovernmentImpactRoute = PortalGovernmentImpactRouteImport.update({
   id: '/impact',
   path: '/impact',
@@ -253,6 +379,12 @@ const PortalGovernmentClustersRoute =
   PortalGovernmentClustersRouteImport.update({
     id: '/clusters',
     path: '/clusters',
+    getParentRoute: () => PortalGovernmentRoute,
+  } as any)
+const PortalGovernmentCertificationRoute =
+  PortalGovernmentCertificationRouteImport.update({
+    id: '/certification',
+    path: '/certification',
     getParentRoute: () => PortalGovernmentRoute,
   } as any)
 const PortalGovernmentArtisansRoute =
@@ -337,9 +469,19 @@ const PortalArtisanPaymentsRoute = PortalArtisanPaymentsRouteImport.update({
   path: '/payments',
   getParentRoute: () => PortalArtisanRoute,
 } as any)
+const PortalArtisanPassportRoute = PortalArtisanPassportRouteImport.update({
+  id: '/passport',
+  path: '/passport',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
 const PortalArtisanOrdersRoute = PortalArtisanOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanNfcRoute = PortalArtisanNfcRouteImport.update({
+  id: '/nfc',
+  path: '/nfc',
   getParentRoute: () => PortalArtisanRoute,
 } as any)
 const PortalArtisanExportRoute = PortalArtisanExportRouteImport.update({
@@ -351,6 +493,12 @@ const PortalArtisanCertificatesRoute =
   PortalArtisanCertificatesRouteImport.update({
     id: '/certificates',
     path: '/certificates',
+    getParentRoute: () => PortalArtisanRoute,
+  } as any)
+const PortalArtisanAuthenticationRoute =
+  PortalArtisanAuthenticationRouteImport.update({
+    id: '/authentication',
+    path: '/authentication',
     getParentRoute: () => PortalArtisanRoute,
   } as any)
 const PortalArtisanAnalyticsRoute = PortalArtisanAnalyticsRouteImport.update({
@@ -397,20 +545,29 @@ const PortalAdminCatalogRoute = PortalAdminCatalogRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai-analytics': typeof AiAnalyticsRoute
+  '/ai-authentication': typeof AiAuthenticationRoute
   '/ai-features': typeof AiFeaturesRoute
+  '/certificates': typeof CertificatesRoute
+  '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
   '/faq': typeof FaqRoute
   '/how-it-works': typeof HowItWorksRoute
   '/india-post': typeof IndiaPostRoute
   '/kiosk': typeof KioskRoute
+  '/kiosk-appointment': typeof KioskAppointmentRoute
   '/marketplace': typeof MarketplaceRoute
   '/privacy': typeof PrivacyRoute
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-kiosk-portal': typeof SmartKioskPortalRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
+  '/training-portal': typeof TrainingPortalRoute
+  '/workshop-booking': typeof WorkshopBookingRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/otp': typeof AuthOtpRoute
@@ -421,6 +578,8 @@ export interface FileRoutesByFullPath {
   '/portal/artisan': typeof PortalArtisanRouteWithChildren
   '/portal/customer': typeof PortalCustomerRouteWithChildren
   '/portal/government': typeof PortalGovernmentRouteWithChildren
+  '/portal/kiosk': typeof PortalKioskRouteWithChildren
+  '/portal/trainer': typeof PortalTrainerRouteWithChildren
   '/products/$id': typeof ProductsIdRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
   '/portal/admin/logs': typeof PortalAdminLogsRoute
@@ -430,9 +589,12 @@ export interface FileRoutesByFullPath {
   '/portal/admin/users': typeof PortalAdminUsersRoute
   '/portal/artisan/ai': typeof PortalArtisanAiRoute
   '/portal/artisan/analytics': typeof PortalArtisanAnalyticsRoute
+  '/portal/artisan/authentication': typeof PortalArtisanAuthenticationRoute
   '/portal/artisan/certificates': typeof PortalArtisanCertificatesRoute
   '/portal/artisan/export': typeof PortalArtisanExportRoute
+  '/portal/artisan/nfc': typeof PortalArtisanNfcRoute
   '/portal/artisan/orders': typeof PortalArtisanOrdersRoute
+  '/portal/artisan/passport': typeof PortalArtisanPassportRoute
   '/portal/artisan/payments': typeof PortalArtisanPaymentsRoute
   '/portal/artisan/products': typeof PortalArtisanProductsRoute
   '/portal/artisan/schemes': typeof PortalArtisanSchemesRoute
@@ -449,33 +611,52 @@ export interface FileRoutesByFullPath {
   '/portal/customer/voice': typeof PortalCustomerVoiceRoute
   '/portal/customer/wishlist': typeof PortalCustomerWishlistRoute
   '/portal/government/artisans': typeof PortalGovernmentArtisansRoute
+  '/portal/government/certification': typeof PortalGovernmentCertificationRoute
   '/portal/government/clusters': typeof PortalGovernmentClustersRoute
   '/portal/government/gi': typeof PortalGovernmentGiRoute
   '/portal/government/impact': typeof PortalGovernmentImpactRoute
+  '/portal/government/officers': typeof PortalGovernmentOfficersRoute
   '/portal/government/schemes': typeof PortalGovernmentSchemesRoute
   '/portal/government/training': typeof PortalGovernmentTrainingRoute
+  '/portal/kiosk/appointments': typeof PortalKioskAppointmentsRoute
+  '/portal/kiosk/artisans': typeof PortalKioskArtisansRoute
+  '/portal/kiosk/services': typeof PortalKioskServicesRoute
+  '/portal/trainer/certificates': typeof PortalTrainerCertificatesRoute
+  '/portal/trainer/courses': typeof PortalTrainerCoursesRoute
+  '/portal/trainer/slots': typeof PortalTrainerSlotsRoute
   '/portal/admin/': typeof PortalAdminIndexRoute
   '/portal/artisan/': typeof PortalArtisanIndexRoute
   '/portal/customer/': typeof PortalCustomerIndexRoute
   '/portal/government/': typeof PortalGovernmentIndexRoute
+  '/portal/kiosk/': typeof PortalKioskIndexRoute
+  '/portal/trainer/': typeof PortalTrainerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai-analytics': typeof AiAnalyticsRoute
+  '/ai-authentication': typeof AiAuthenticationRoute
   '/ai-features': typeof AiFeaturesRoute
+  '/certificates': typeof CertificatesRoute
+  '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
   '/faq': typeof FaqRoute
   '/how-it-works': typeof HowItWorksRoute
   '/india-post': typeof IndiaPostRoute
   '/kiosk': typeof KioskRoute
+  '/kiosk-appointment': typeof KioskAppointmentRoute
   '/marketplace': typeof MarketplaceRoute
   '/privacy': typeof PrivacyRoute
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-kiosk-portal': typeof SmartKioskPortalRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
+  '/training-portal': typeof TrainingPortalRoute
+  '/workshop-booking': typeof WorkshopBookingRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/otp': typeof AuthOtpRoute
@@ -491,9 +672,12 @@ export interface FileRoutesByTo {
   '/portal/admin/users': typeof PortalAdminUsersRoute
   '/portal/artisan/ai': typeof PortalArtisanAiRoute
   '/portal/artisan/analytics': typeof PortalArtisanAnalyticsRoute
+  '/portal/artisan/authentication': typeof PortalArtisanAuthenticationRoute
   '/portal/artisan/certificates': typeof PortalArtisanCertificatesRoute
   '/portal/artisan/export': typeof PortalArtisanExportRoute
+  '/portal/artisan/nfc': typeof PortalArtisanNfcRoute
   '/portal/artisan/orders': typeof PortalArtisanOrdersRoute
+  '/portal/artisan/passport': typeof PortalArtisanPassportRoute
   '/portal/artisan/payments': typeof PortalArtisanPaymentsRoute
   '/portal/artisan/products': typeof PortalArtisanProductsRoute
   '/portal/artisan/schemes': typeof PortalArtisanSchemesRoute
@@ -510,34 +694,53 @@ export interface FileRoutesByTo {
   '/portal/customer/voice': typeof PortalCustomerVoiceRoute
   '/portal/customer/wishlist': typeof PortalCustomerWishlistRoute
   '/portal/government/artisans': typeof PortalGovernmentArtisansRoute
+  '/portal/government/certification': typeof PortalGovernmentCertificationRoute
   '/portal/government/clusters': typeof PortalGovernmentClustersRoute
   '/portal/government/gi': typeof PortalGovernmentGiRoute
   '/portal/government/impact': typeof PortalGovernmentImpactRoute
+  '/portal/government/officers': typeof PortalGovernmentOfficersRoute
   '/portal/government/schemes': typeof PortalGovernmentSchemesRoute
   '/portal/government/training': typeof PortalGovernmentTrainingRoute
+  '/portal/kiosk/appointments': typeof PortalKioskAppointmentsRoute
+  '/portal/kiosk/artisans': typeof PortalKioskArtisansRoute
+  '/portal/kiosk/services': typeof PortalKioskServicesRoute
+  '/portal/trainer/certificates': typeof PortalTrainerCertificatesRoute
+  '/portal/trainer/courses': typeof PortalTrainerCoursesRoute
+  '/portal/trainer/slots': typeof PortalTrainerSlotsRoute
   '/portal/admin': typeof PortalAdminIndexRoute
   '/portal/artisan': typeof PortalArtisanIndexRoute
   '/portal/customer': typeof PortalCustomerIndexRoute
   '/portal/government': typeof PortalGovernmentIndexRoute
+  '/portal/kiosk': typeof PortalKioskIndexRoute
+  '/portal/trainer': typeof PortalTrainerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai-analytics': typeof AiAnalyticsRoute
+  '/ai-authentication': typeof AiAuthenticationRoute
   '/ai-features': typeof AiFeaturesRoute
+  '/certificates': typeof CertificatesRoute
+  '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
   '/faq': typeof FaqRoute
   '/how-it-works': typeof HowItWorksRoute
   '/india-post': typeof IndiaPostRoute
   '/kiosk': typeof KioskRoute
+  '/kiosk-appointment': typeof KioskAppointmentRoute
   '/marketplace': typeof MarketplaceRoute
   '/privacy': typeof PrivacyRoute
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-kiosk-portal': typeof SmartKioskPortalRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
+  '/training-portal': typeof TrainingPortalRoute
+  '/workshop-booking': typeof WorkshopBookingRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/otp': typeof AuthOtpRoute
@@ -548,6 +751,8 @@ export interface FileRoutesById {
   '/portal/artisan': typeof PortalArtisanRouteWithChildren
   '/portal/customer': typeof PortalCustomerRouteWithChildren
   '/portal/government': typeof PortalGovernmentRouteWithChildren
+  '/portal/kiosk': typeof PortalKioskRouteWithChildren
+  '/portal/trainer': typeof PortalTrainerRouteWithChildren
   '/products/$id': typeof ProductsIdRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
   '/portal/admin/logs': typeof PortalAdminLogsRoute
@@ -557,9 +762,12 @@ export interface FileRoutesById {
   '/portal/admin/users': typeof PortalAdminUsersRoute
   '/portal/artisan/ai': typeof PortalArtisanAiRoute
   '/portal/artisan/analytics': typeof PortalArtisanAnalyticsRoute
+  '/portal/artisan/authentication': typeof PortalArtisanAuthenticationRoute
   '/portal/artisan/certificates': typeof PortalArtisanCertificatesRoute
   '/portal/artisan/export': typeof PortalArtisanExportRoute
+  '/portal/artisan/nfc': typeof PortalArtisanNfcRoute
   '/portal/artisan/orders': typeof PortalArtisanOrdersRoute
+  '/portal/artisan/passport': typeof PortalArtisanPassportRoute
   '/portal/artisan/payments': typeof PortalArtisanPaymentsRoute
   '/portal/artisan/products': typeof PortalArtisanProductsRoute
   '/portal/artisan/schemes': typeof PortalArtisanSchemesRoute
@@ -576,35 +784,54 @@ export interface FileRoutesById {
   '/portal/customer/voice': typeof PortalCustomerVoiceRoute
   '/portal/customer/wishlist': typeof PortalCustomerWishlistRoute
   '/portal/government/artisans': typeof PortalGovernmentArtisansRoute
+  '/portal/government/certification': typeof PortalGovernmentCertificationRoute
   '/portal/government/clusters': typeof PortalGovernmentClustersRoute
   '/portal/government/gi': typeof PortalGovernmentGiRoute
   '/portal/government/impact': typeof PortalGovernmentImpactRoute
+  '/portal/government/officers': typeof PortalGovernmentOfficersRoute
   '/portal/government/schemes': typeof PortalGovernmentSchemesRoute
   '/portal/government/training': typeof PortalGovernmentTrainingRoute
+  '/portal/kiosk/appointments': typeof PortalKioskAppointmentsRoute
+  '/portal/kiosk/artisans': typeof PortalKioskArtisansRoute
+  '/portal/kiosk/services': typeof PortalKioskServicesRoute
+  '/portal/trainer/certificates': typeof PortalTrainerCertificatesRoute
+  '/portal/trainer/courses': typeof PortalTrainerCoursesRoute
+  '/portal/trainer/slots': typeof PortalTrainerSlotsRoute
   '/portal/admin/': typeof PortalAdminIndexRoute
   '/portal/artisan/': typeof PortalArtisanIndexRoute
   '/portal/customer/': typeof PortalCustomerIndexRoute
   '/portal/government/': typeof PortalGovernmentIndexRoute
+  '/portal/kiosk/': typeof PortalKioskIndexRoute
+  '/portal/trainer/': typeof PortalTrainerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/about'
+    | '/ai-analytics'
+    | '/ai-authentication'
     | '/ai-features'
+    | '/certificates'
+    | '/certification-centre'
     | '/contact'
+    | '/craft-passport'
     | '/digital-twin'
     | '/faq'
     | '/how-it-works'
     | '/india-post'
     | '/kiosk'
+    | '/kiosk-appointment'
     | '/marketplace'
     | '/privacy'
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-kiosk-portal'
     | '/team'
     | '/terms'
+    | '/training-portal'
+    | '/workshop-booking'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/otp'
@@ -615,6 +842,8 @@ export interface FileRouteTypes {
     | '/portal/artisan'
     | '/portal/customer'
     | '/portal/government'
+    | '/portal/kiosk'
+    | '/portal/trainer'
     | '/products/$id'
     | '/portal/admin/catalog'
     | '/portal/admin/logs'
@@ -624,9 +853,12 @@ export interface FileRouteTypes {
     | '/portal/admin/users'
     | '/portal/artisan/ai'
     | '/portal/artisan/analytics'
+    | '/portal/artisan/authentication'
     | '/portal/artisan/certificates'
     | '/portal/artisan/export'
+    | '/portal/artisan/nfc'
     | '/portal/artisan/orders'
+    | '/portal/artisan/passport'
     | '/portal/artisan/payments'
     | '/portal/artisan/products'
     | '/portal/artisan/schemes'
@@ -643,33 +875,52 @@ export interface FileRouteTypes {
     | '/portal/customer/voice'
     | '/portal/customer/wishlist'
     | '/portal/government/artisans'
+    | '/portal/government/certification'
     | '/portal/government/clusters'
     | '/portal/government/gi'
     | '/portal/government/impact'
+    | '/portal/government/officers'
     | '/portal/government/schemes'
     | '/portal/government/training'
+    | '/portal/kiosk/appointments'
+    | '/portal/kiosk/artisans'
+    | '/portal/kiosk/services'
+    | '/portal/trainer/certificates'
+    | '/portal/trainer/courses'
+    | '/portal/trainer/slots'
     | '/portal/admin/'
     | '/portal/artisan/'
     | '/portal/customer/'
     | '/portal/government/'
+    | '/portal/kiosk/'
+    | '/portal/trainer/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/ai-analytics'
+    | '/ai-authentication'
     | '/ai-features'
+    | '/certificates'
+    | '/certification-centre'
     | '/contact'
+    | '/craft-passport'
     | '/digital-twin'
     | '/faq'
     | '/how-it-works'
     | '/india-post'
     | '/kiosk'
+    | '/kiosk-appointment'
     | '/marketplace'
     | '/privacy'
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-kiosk-portal'
     | '/team'
     | '/terms'
+    | '/training-portal'
+    | '/workshop-booking'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/otp'
@@ -685,9 +936,12 @@ export interface FileRouteTypes {
     | '/portal/admin/users'
     | '/portal/artisan/ai'
     | '/portal/artisan/analytics'
+    | '/portal/artisan/authentication'
     | '/portal/artisan/certificates'
     | '/portal/artisan/export'
+    | '/portal/artisan/nfc'
     | '/portal/artisan/orders'
+    | '/portal/artisan/passport'
     | '/portal/artisan/payments'
     | '/portal/artisan/products'
     | '/portal/artisan/schemes'
@@ -704,33 +958,52 @@ export interface FileRouteTypes {
     | '/portal/customer/voice'
     | '/portal/customer/wishlist'
     | '/portal/government/artisans'
+    | '/portal/government/certification'
     | '/portal/government/clusters'
     | '/portal/government/gi'
     | '/portal/government/impact'
+    | '/portal/government/officers'
     | '/portal/government/schemes'
     | '/portal/government/training'
+    | '/portal/kiosk/appointments'
+    | '/portal/kiosk/artisans'
+    | '/portal/kiosk/services'
+    | '/portal/trainer/certificates'
+    | '/portal/trainer/courses'
+    | '/portal/trainer/slots'
     | '/portal/admin'
     | '/portal/artisan'
     | '/portal/customer'
     | '/portal/government'
+    | '/portal/kiosk'
+    | '/portal/trainer'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/ai-analytics'
+    | '/ai-authentication'
     | '/ai-features'
+    | '/certificates'
+    | '/certification-centre'
     | '/contact'
+    | '/craft-passport'
     | '/digital-twin'
     | '/faq'
     | '/how-it-works'
     | '/india-post'
     | '/kiosk'
+    | '/kiosk-appointment'
     | '/marketplace'
     | '/privacy'
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-kiosk-portal'
     | '/team'
     | '/terms'
+    | '/training-portal'
+    | '/workshop-booking'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/otp'
@@ -741,6 +1014,8 @@ export interface FileRouteTypes {
     | '/portal/artisan'
     | '/portal/customer'
     | '/portal/government'
+    | '/portal/kiosk'
+    | '/portal/trainer'
     | '/products/$id'
     | '/portal/admin/catalog'
     | '/portal/admin/logs'
@@ -750,9 +1025,12 @@ export interface FileRouteTypes {
     | '/portal/admin/users'
     | '/portal/artisan/ai'
     | '/portal/artisan/analytics'
+    | '/portal/artisan/authentication'
     | '/portal/artisan/certificates'
     | '/portal/artisan/export'
+    | '/portal/artisan/nfc'
     | '/portal/artisan/orders'
+    | '/portal/artisan/passport'
     | '/portal/artisan/payments'
     | '/portal/artisan/products'
     | '/portal/artisan/schemes'
@@ -769,34 +1047,53 @@ export interface FileRouteTypes {
     | '/portal/customer/voice'
     | '/portal/customer/wishlist'
     | '/portal/government/artisans'
+    | '/portal/government/certification'
     | '/portal/government/clusters'
     | '/portal/government/gi'
     | '/portal/government/impact'
+    | '/portal/government/officers'
     | '/portal/government/schemes'
     | '/portal/government/training'
+    | '/portal/kiosk/appointments'
+    | '/portal/kiosk/artisans'
+    | '/portal/kiosk/services'
+    | '/portal/trainer/certificates'
+    | '/portal/trainer/courses'
+    | '/portal/trainer/slots'
     | '/portal/admin/'
     | '/portal/artisan/'
     | '/portal/customer/'
     | '/portal/government/'
+    | '/portal/kiosk/'
+    | '/portal/trainer/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AiAnalyticsRoute: typeof AiAnalyticsRoute
+  AiAuthenticationRoute: typeof AiAuthenticationRoute
   AiFeaturesRoute: typeof AiFeaturesRoute
+  CertificatesRoute: typeof CertificatesRoute
+  CertificationCentreRoute: typeof CertificationCentreRoute
   ContactRoute: typeof ContactRoute
+  CraftPassportRoute: typeof CraftPassportRoute
   DigitalTwinRoute: typeof DigitalTwinRoute
   FaqRoute: typeof FaqRoute
   HowItWorksRoute: typeof HowItWorksRoute
   IndiaPostRoute: typeof IndiaPostRoute
   KioskRoute: typeof KioskRoute
+  KioskAppointmentRoute: typeof KioskAppointmentRoute
   MarketplaceRoute: typeof MarketplaceRoute
   PrivacyRoute: typeof PrivacyRoute
   ResearchRoute: typeof ResearchRoute
   ReverseMarketplaceRoute: typeof ReverseMarketplaceRoute
   SchemesRoute: typeof SchemesRoute
+  SmartKioskPortalRoute: typeof SmartKioskPortalRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
+  TrainingPortalRoute: typeof TrainingPortalRoute
+  WorkshopBookingRoute: typeof WorkshopBookingRoute
   AuthForgotRoute: typeof AuthForgotRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthOtpRoute: typeof AuthOtpRoute
@@ -807,11 +1104,27 @@ export interface RootRouteChildren {
   PortalArtisanRoute: typeof PortalArtisanRouteWithChildren
   PortalCustomerRoute: typeof PortalCustomerRouteWithChildren
   PortalGovernmentRoute: typeof PortalGovernmentRouteWithChildren
+  PortalKioskRoute: typeof PortalKioskRouteWithChildren
+  PortalTrainerRoute: typeof PortalTrainerRouteWithChildren
   ProductsIdRoute: typeof ProductsIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/workshop-booking': {
+      id: '/workshop-booking'
+      path: '/workshop-booking'
+      fullPath: '/workshop-booking'
+      preLoaderRoute: typeof WorkshopBookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/training-portal': {
+      id: '/training-portal'
+      path: '/training-portal'
+      fullPath: '/training-portal'
+      preLoaderRoute: typeof TrainingPortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -824,6 +1137,13 @@ declare module '@tanstack/react-router' {
       path: '/team'
       fullPath: '/team'
       preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/smart-kiosk-portal': {
+      id: '/smart-kiosk-portal'
+      path: '/smart-kiosk-portal'
+      fullPath: '/smart-kiosk-portal'
+      preLoaderRoute: typeof SmartKioskPortalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schemes': {
@@ -861,6 +1181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketplaceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kiosk-appointment': {
+      id: '/kiosk-appointment'
+      path: '/kiosk-appointment'
+      fullPath: '/kiosk-appointment'
+      preLoaderRoute: typeof KioskAppointmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/kiosk': {
       id: '/kiosk'
       path: '/kiosk'
@@ -896,6 +1223,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DigitalTwinRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/craft-passport': {
+      id: '/craft-passport'
+      path: '/craft-passport'
+      fullPath: '/craft-passport'
+      preLoaderRoute: typeof CraftPassportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -903,11 +1237,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/certification-centre': {
+      id: '/certification-centre'
+      path: '/certification-centre'
+      fullPath: '/certification-centre'
+      preLoaderRoute: typeof CertificationCentreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certificates': {
+      id: '/certificates'
+      path: '/certificates'
+      fullPath: '/certificates'
+      preLoaderRoute: typeof CertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ai-features': {
       id: '/ai-features'
       path: '/ai-features'
       fullPath: '/ai-features'
       preLoaderRoute: typeof AiFeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-authentication': {
+      id: '/ai-authentication'
+      path: '/ai-authentication'
+      fullPath: '/ai-authentication'
+      preLoaderRoute: typeof AiAuthenticationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-analytics': {
+      id: '/ai-analytics'
+      path: '/ai-analytics'
+      fullPath: '/ai-analytics'
+      preLoaderRoute: typeof AiAnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -929,6 +1291,20 @@ declare module '@tanstack/react-router' {
       path: '/products/$id'
       fullPath: '/products/$id'
       preLoaderRoute: typeof ProductsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/trainer': {
+      id: '/portal/trainer'
+      path: '/portal/trainer'
+      fullPath: '/portal/trainer'
+      preLoaderRoute: typeof PortalTrainerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/kiosk': {
+      id: '/portal/kiosk'
+      path: '/portal/kiosk'
+      fullPath: '/portal/kiosk'
+      preLoaderRoute: typeof PortalKioskRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portal/government': {
@@ -1001,6 +1377,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal/trainer/': {
+      id: '/portal/trainer/'
+      path: '/'
+      fullPath: '/portal/trainer/'
+      preLoaderRoute: typeof PortalTrainerIndexRouteImport
+      parentRoute: typeof PortalTrainerRoute
+    }
+    '/portal/kiosk/': {
+      id: '/portal/kiosk/'
+      path: '/'
+      fullPath: '/portal/kiosk/'
+      preLoaderRoute: typeof PortalKioskIndexRouteImport
+      parentRoute: typeof PortalKioskRoute
+    }
     '/portal/government/': {
       id: '/portal/government/'
       path: '/'
@@ -1029,6 +1419,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalAdminIndexRouteImport
       parentRoute: typeof PortalAdminRoute
     }
+    '/portal/trainer/slots': {
+      id: '/portal/trainer/slots'
+      path: '/slots'
+      fullPath: '/portal/trainer/slots'
+      preLoaderRoute: typeof PortalTrainerSlotsRouteImport
+      parentRoute: typeof PortalTrainerRoute
+    }
+    '/portal/trainer/courses': {
+      id: '/portal/trainer/courses'
+      path: '/courses'
+      fullPath: '/portal/trainer/courses'
+      preLoaderRoute: typeof PortalTrainerCoursesRouteImport
+      parentRoute: typeof PortalTrainerRoute
+    }
+    '/portal/trainer/certificates': {
+      id: '/portal/trainer/certificates'
+      path: '/certificates'
+      fullPath: '/portal/trainer/certificates'
+      preLoaderRoute: typeof PortalTrainerCertificatesRouteImport
+      parentRoute: typeof PortalTrainerRoute
+    }
+    '/portal/kiosk/services': {
+      id: '/portal/kiosk/services'
+      path: '/services'
+      fullPath: '/portal/kiosk/services'
+      preLoaderRoute: typeof PortalKioskServicesRouteImport
+      parentRoute: typeof PortalKioskRoute
+    }
+    '/portal/kiosk/artisans': {
+      id: '/portal/kiosk/artisans'
+      path: '/artisans'
+      fullPath: '/portal/kiosk/artisans'
+      preLoaderRoute: typeof PortalKioskArtisansRouteImport
+      parentRoute: typeof PortalKioskRoute
+    }
+    '/portal/kiosk/appointments': {
+      id: '/portal/kiosk/appointments'
+      path: '/appointments'
+      fullPath: '/portal/kiosk/appointments'
+      preLoaderRoute: typeof PortalKioskAppointmentsRouteImport
+      parentRoute: typeof PortalKioskRoute
+    }
     '/portal/government/training': {
       id: '/portal/government/training'
       path: '/training'
@@ -1041,6 +1473,13 @@ declare module '@tanstack/react-router' {
       path: '/schemes'
       fullPath: '/portal/government/schemes'
       preLoaderRoute: typeof PortalGovernmentSchemesRouteImport
+      parentRoute: typeof PortalGovernmentRoute
+    }
+    '/portal/government/officers': {
+      id: '/portal/government/officers'
+      path: '/officers'
+      fullPath: '/portal/government/officers'
+      preLoaderRoute: typeof PortalGovernmentOfficersRouteImport
       parentRoute: typeof PortalGovernmentRoute
     }
     '/portal/government/impact': {
@@ -1062,6 +1501,13 @@ declare module '@tanstack/react-router' {
       path: '/clusters'
       fullPath: '/portal/government/clusters'
       preLoaderRoute: typeof PortalGovernmentClustersRouteImport
+      parentRoute: typeof PortalGovernmentRoute
+    }
+    '/portal/government/certification': {
+      id: '/portal/government/certification'
+      path: '/certification'
+      fullPath: '/portal/government/certification'
+      preLoaderRoute: typeof PortalGovernmentCertificationRouteImport
       parentRoute: typeof PortalGovernmentRoute
     }
     '/portal/government/artisans': {
@@ -1176,11 +1622,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalArtisanPaymentsRouteImport
       parentRoute: typeof PortalArtisanRoute
     }
+    '/portal/artisan/passport': {
+      id: '/portal/artisan/passport'
+      path: '/passport'
+      fullPath: '/portal/artisan/passport'
+      preLoaderRoute: typeof PortalArtisanPassportRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
     '/portal/artisan/orders': {
       id: '/portal/artisan/orders'
       path: '/orders'
       fullPath: '/portal/artisan/orders'
       preLoaderRoute: typeof PortalArtisanOrdersRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/nfc': {
+      id: '/portal/artisan/nfc'
+      path: '/nfc'
+      fullPath: '/portal/artisan/nfc'
+      preLoaderRoute: typeof PortalArtisanNfcRouteImport
       parentRoute: typeof PortalArtisanRoute
     }
     '/portal/artisan/export': {
@@ -1195,6 +1655,13 @@ declare module '@tanstack/react-router' {
       path: '/certificates'
       fullPath: '/portal/artisan/certificates'
       preLoaderRoute: typeof PortalArtisanCertificatesRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/authentication': {
+      id: '/portal/artisan/authentication'
+      path: '/authentication'
+      fullPath: '/portal/artisan/authentication'
+      preLoaderRoute: typeof PortalArtisanAuthenticationRouteImport
       parentRoute: typeof PortalArtisanRoute
     }
     '/portal/artisan/analytics': {
@@ -1283,9 +1750,12 @@ const PortalAdminRouteWithChildren = PortalAdminRoute._addFileChildren(
 interface PortalArtisanRouteChildren {
   PortalArtisanAiRoute: typeof PortalArtisanAiRoute
   PortalArtisanAnalyticsRoute: typeof PortalArtisanAnalyticsRoute
+  PortalArtisanAuthenticationRoute: typeof PortalArtisanAuthenticationRoute
   PortalArtisanCertificatesRoute: typeof PortalArtisanCertificatesRoute
   PortalArtisanExportRoute: typeof PortalArtisanExportRoute
+  PortalArtisanNfcRoute: typeof PortalArtisanNfcRoute
   PortalArtisanOrdersRoute: typeof PortalArtisanOrdersRoute
+  PortalArtisanPassportRoute: typeof PortalArtisanPassportRoute
   PortalArtisanPaymentsRoute: typeof PortalArtisanPaymentsRoute
   PortalArtisanProductsRoute: typeof PortalArtisanProductsRoute
   PortalArtisanSchemesRoute: typeof PortalArtisanSchemesRoute
@@ -1298,9 +1768,12 @@ interface PortalArtisanRouteChildren {
 const PortalArtisanRouteChildren: PortalArtisanRouteChildren = {
   PortalArtisanAiRoute: PortalArtisanAiRoute,
   PortalArtisanAnalyticsRoute: PortalArtisanAnalyticsRoute,
+  PortalArtisanAuthenticationRoute: PortalArtisanAuthenticationRoute,
   PortalArtisanCertificatesRoute: PortalArtisanCertificatesRoute,
   PortalArtisanExportRoute: PortalArtisanExportRoute,
+  PortalArtisanNfcRoute: PortalArtisanNfcRoute,
   PortalArtisanOrdersRoute: PortalArtisanOrdersRoute,
+  PortalArtisanPassportRoute: PortalArtisanPassportRoute,
   PortalArtisanPaymentsRoute: PortalArtisanPaymentsRoute,
   PortalArtisanProductsRoute: PortalArtisanProductsRoute,
   PortalArtisanSchemesRoute: PortalArtisanSchemesRoute,
@@ -1346,9 +1819,11 @@ const PortalCustomerRouteWithChildren = PortalCustomerRoute._addFileChildren(
 
 interface PortalGovernmentRouteChildren {
   PortalGovernmentArtisansRoute: typeof PortalGovernmentArtisansRoute
+  PortalGovernmentCertificationRoute: typeof PortalGovernmentCertificationRoute
   PortalGovernmentClustersRoute: typeof PortalGovernmentClustersRoute
   PortalGovernmentGiRoute: typeof PortalGovernmentGiRoute
   PortalGovernmentImpactRoute: typeof PortalGovernmentImpactRoute
+  PortalGovernmentOfficersRoute: typeof PortalGovernmentOfficersRoute
   PortalGovernmentSchemesRoute: typeof PortalGovernmentSchemesRoute
   PortalGovernmentTrainingRoute: typeof PortalGovernmentTrainingRoute
   PortalGovernmentIndexRoute: typeof PortalGovernmentIndexRoute
@@ -1356,9 +1831,11 @@ interface PortalGovernmentRouteChildren {
 
 const PortalGovernmentRouteChildren: PortalGovernmentRouteChildren = {
   PortalGovernmentArtisansRoute: PortalGovernmentArtisansRoute,
+  PortalGovernmentCertificationRoute: PortalGovernmentCertificationRoute,
   PortalGovernmentClustersRoute: PortalGovernmentClustersRoute,
   PortalGovernmentGiRoute: PortalGovernmentGiRoute,
   PortalGovernmentImpactRoute: PortalGovernmentImpactRoute,
+  PortalGovernmentOfficersRoute: PortalGovernmentOfficersRoute,
   PortalGovernmentSchemesRoute: PortalGovernmentSchemesRoute,
   PortalGovernmentTrainingRoute: PortalGovernmentTrainingRoute,
   PortalGovernmentIndexRoute: PortalGovernmentIndexRoute,
@@ -1367,23 +1844,68 @@ const PortalGovernmentRouteChildren: PortalGovernmentRouteChildren = {
 const PortalGovernmentRouteWithChildren =
   PortalGovernmentRoute._addFileChildren(PortalGovernmentRouteChildren)
 
+interface PortalKioskRouteChildren {
+  PortalKioskAppointmentsRoute: typeof PortalKioskAppointmentsRoute
+  PortalKioskArtisansRoute: typeof PortalKioskArtisansRoute
+  PortalKioskServicesRoute: typeof PortalKioskServicesRoute
+  PortalKioskIndexRoute: typeof PortalKioskIndexRoute
+}
+
+const PortalKioskRouteChildren: PortalKioskRouteChildren = {
+  PortalKioskAppointmentsRoute: PortalKioskAppointmentsRoute,
+  PortalKioskArtisansRoute: PortalKioskArtisansRoute,
+  PortalKioskServicesRoute: PortalKioskServicesRoute,
+  PortalKioskIndexRoute: PortalKioskIndexRoute,
+}
+
+const PortalKioskRouteWithChildren = PortalKioskRoute._addFileChildren(
+  PortalKioskRouteChildren,
+)
+
+interface PortalTrainerRouteChildren {
+  PortalTrainerCertificatesRoute: typeof PortalTrainerCertificatesRoute
+  PortalTrainerCoursesRoute: typeof PortalTrainerCoursesRoute
+  PortalTrainerSlotsRoute: typeof PortalTrainerSlotsRoute
+  PortalTrainerIndexRoute: typeof PortalTrainerIndexRoute
+}
+
+const PortalTrainerRouteChildren: PortalTrainerRouteChildren = {
+  PortalTrainerCertificatesRoute: PortalTrainerCertificatesRoute,
+  PortalTrainerCoursesRoute: PortalTrainerCoursesRoute,
+  PortalTrainerSlotsRoute: PortalTrainerSlotsRoute,
+  PortalTrainerIndexRoute: PortalTrainerIndexRoute,
+}
+
+const PortalTrainerRouteWithChildren = PortalTrainerRoute._addFileChildren(
+  PortalTrainerRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AiAnalyticsRoute: AiAnalyticsRoute,
+  AiAuthenticationRoute: AiAuthenticationRoute,
   AiFeaturesRoute: AiFeaturesRoute,
+  CertificatesRoute: CertificatesRoute,
+  CertificationCentreRoute: CertificationCentreRoute,
   ContactRoute: ContactRoute,
+  CraftPassportRoute: CraftPassportRoute,
   DigitalTwinRoute: DigitalTwinRoute,
   FaqRoute: FaqRoute,
   HowItWorksRoute: HowItWorksRoute,
   IndiaPostRoute: IndiaPostRoute,
   KioskRoute: KioskRoute,
+  KioskAppointmentRoute: KioskAppointmentRoute,
   MarketplaceRoute: MarketplaceRoute,
   PrivacyRoute: PrivacyRoute,
   ResearchRoute: ResearchRoute,
   ReverseMarketplaceRoute: ReverseMarketplaceRoute,
   SchemesRoute: SchemesRoute,
+  SmartKioskPortalRoute: SmartKioskPortalRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
+  TrainingPortalRoute: TrainingPortalRoute,
+  WorkshopBookingRoute: WorkshopBookingRoute,
   AuthForgotRoute: AuthForgotRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthOtpRoute: AuthOtpRoute,
@@ -1394,6 +1916,8 @@ const rootRouteChildren: RootRouteChildren = {
   PortalArtisanRoute: PortalArtisanRouteWithChildren,
   PortalCustomerRoute: PortalCustomerRouteWithChildren,
   PortalGovernmentRoute: PortalGovernmentRouteWithChildren,
+  PortalKioskRoute: PortalKioskRouteWithChildren,
+  PortalTrainerRoute: PortalTrainerRouteWithChildren,
   ProductsIdRoute: ProductsIdRoute,
 }
 export const routeTree = rootRouteImport

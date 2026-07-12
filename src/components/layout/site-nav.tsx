@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/marketplace", label: "Marketplace" },
-  { to: "/how-it-works", label: "How it Works" },
-  { to: "/digital-twin", label: "Digital Twin" },
+  { to: "/ai-authentication", label: "AI Verify" },
+  { to: "/smart-kiosk-portal", label: "Smart Kiosk" },
+  { to: "/training-portal", label: "Training" },
   { to: "/schemes", label: "Schemes" },
-  { to: "/research", label: "Research" },
   { to: "/about", label: "About" },
 ];
 

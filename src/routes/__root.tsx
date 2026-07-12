@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/lib/auth-context";
 import { CartProvider } from "@/lib/cart-context";
 import { Toaster } from "@/components/ui/sonner";
+import { ChatAssistant } from "@/components/ai/ChatAssistant";
 
 function NotFoundComponent() {
   return (
@@ -115,6 +116,7 @@ function RootComponent() {
         <CartProvider>
           <Outlet />
           <Toaster position="top-right" richColors />
+          <ChatAssistant />
         </CartProvider>
       </AuthProvider>
     </QueryClientProvider>
