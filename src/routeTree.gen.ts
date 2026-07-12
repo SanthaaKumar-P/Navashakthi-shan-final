@@ -9,20 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkshopBookingRouteImport } from './routes/workshop-booking'
+import { Route as TrainingPortalRouteImport } from './routes/training-portal'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
+import { Route as SmartKioskPortalRouteImport } from './routes/smart-kiosk-portal'
 import { Route as SchemesRouteImport } from './routes/schemes'
 import { Route as ReverseMarketplaceRouteImport } from './routes/reverse-marketplace'
 import { Route as ResearchRouteImport } from './routes/research'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as KioskAppointmentRouteImport } from './routes/kiosk-appointment'
 import { Route as KioskRouteImport } from './routes/kiosk'
 import { Route as IndiaPostRouteImport } from './routes/india-post'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DigitalTwinRouteImport } from './routes/digital-twin'
+import { Route as CraftPassportRouteImport } from './routes/craft-passport'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CertificationCentreRouteImport } from './routes/certification-centre'
+import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AiFeaturesRouteImport } from './routes/ai-features'
+import { Route as AiAuthenticationRouteImport } from './routes/ai-authentication'
+import { Route as AiAnalyticsRouteImport } from './routes/ai-analytics'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
@@ -73,6 +82,16 @@ import { Route as PortalAdminModerationRouteImport } from './routes/portal.admin
 import { Route as PortalAdminLogsRouteImport } from './routes/portal.admin.logs'
 import { Route as PortalAdminCatalogRouteImport } from './routes/portal.admin.catalog'
 
+const WorkshopBookingRoute = WorkshopBookingRouteImport.update({
+  id: '/workshop-booking',
+  path: '/workshop-booking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrainingPortalRoute = TrainingPortalRouteImport.update({
+  id: '/training-portal',
+  path: '/training-portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -81,6 +100,11 @@ const TermsRoute = TermsRouteImport.update({
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
   path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmartKioskPortalRoute = SmartKioskPortalRouteImport.update({
+  id: '/smart-kiosk-portal',
+  path: '/smart-kiosk-portal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchemesRoute = SchemesRouteImport.update({
@@ -108,6 +132,11 @@ const MarketplaceRoute = MarketplaceRouteImport.update({
   path: '/marketplace',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KioskAppointmentRoute = KioskAppointmentRouteImport.update({
+  id: '/kiosk-appointment',
+  path: '/kiosk-appointment',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KioskRoute = KioskRouteImport.update({
   id: '/kiosk',
   path: '/kiosk',
@@ -133,14 +162,39 @@ const DigitalTwinRoute = DigitalTwinRouteImport.update({
   path: '/digital-twin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CraftPassportRoute = CraftPassportRouteImport.update({
+  id: '/craft-passport',
+  path: '/craft-passport',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CertificationCentreRoute = CertificationCentreRouteImport.update({
+  id: '/certification-centre',
+  path: '/certification-centre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CertificatesRoute = CertificatesRouteImport.update({
+  id: '/certificates',
+  path: '/certificates',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AiFeaturesRoute = AiFeaturesRouteImport.update({
   id: '/ai-features',
   path: '/ai-features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiAuthenticationRoute = AiAuthenticationRouteImport.update({
+  id: '/ai-authentication',
+  path: '/ai-authentication',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiAnalyticsRoute = AiAnalyticsRouteImport.update({
+  id: '/ai-analytics',
+  path: '/ai-analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -397,20 +451,29 @@ const PortalAdminCatalogRoute = PortalAdminCatalogRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai-analytics': typeof AiAnalyticsRoute
+  '/ai-authentication': typeof AiAuthenticationRoute
   '/ai-features': typeof AiFeaturesRoute
+  '/certificates': typeof CertificatesRoute
+  '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
   '/faq': typeof FaqRoute
   '/how-it-works': typeof HowItWorksRoute
   '/india-post': typeof IndiaPostRoute
   '/kiosk': typeof KioskRoute
+  '/kiosk-appointment': typeof KioskAppointmentRoute
   '/marketplace': typeof MarketplaceRoute
   '/privacy': typeof PrivacyRoute
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-kiosk-portal': typeof SmartKioskPortalRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
+  '/training-portal': typeof TrainingPortalRoute
+  '/workshop-booking': typeof WorkshopBookingRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/otp': typeof AuthOtpRoute
@@ -462,20 +525,29 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai-analytics': typeof AiAnalyticsRoute
+  '/ai-authentication': typeof AiAuthenticationRoute
   '/ai-features': typeof AiFeaturesRoute
+  '/certificates': typeof CertificatesRoute
+  '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
   '/faq': typeof FaqRoute
   '/how-it-works': typeof HowItWorksRoute
   '/india-post': typeof IndiaPostRoute
   '/kiosk': typeof KioskRoute
+  '/kiosk-appointment': typeof KioskAppointmentRoute
   '/marketplace': typeof MarketplaceRoute
   '/privacy': typeof PrivacyRoute
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-kiosk-portal': typeof SmartKioskPortalRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
+  '/training-portal': typeof TrainingPortalRoute
+  '/workshop-booking': typeof WorkshopBookingRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/otp': typeof AuthOtpRoute
@@ -524,20 +596,29 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/ai-analytics': typeof AiAnalyticsRoute
+  '/ai-authentication': typeof AiAuthenticationRoute
   '/ai-features': typeof AiFeaturesRoute
+  '/certificates': typeof CertificatesRoute
+  '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
   '/faq': typeof FaqRoute
   '/how-it-works': typeof HowItWorksRoute
   '/india-post': typeof IndiaPostRoute
   '/kiosk': typeof KioskRoute
+  '/kiosk-appointment': typeof KioskAppointmentRoute
   '/marketplace': typeof MarketplaceRoute
   '/privacy': typeof PrivacyRoute
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-kiosk-portal': typeof SmartKioskPortalRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
+  '/training-portal': typeof TrainingPortalRoute
+  '/workshop-booking': typeof WorkshopBookingRoute
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/otp': typeof AuthOtpRoute
@@ -591,20 +672,29 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/ai-analytics'
+    | '/ai-authentication'
     | '/ai-features'
+    | '/certificates'
+    | '/certification-centre'
     | '/contact'
+    | '/craft-passport'
     | '/digital-twin'
     | '/faq'
     | '/how-it-works'
     | '/india-post'
     | '/kiosk'
+    | '/kiosk-appointment'
     | '/marketplace'
     | '/privacy'
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-kiosk-portal'
     | '/team'
     | '/terms'
+    | '/training-portal'
+    | '/workshop-booking'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/otp'
@@ -656,20 +746,29 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/ai-analytics'
+    | '/ai-authentication'
     | '/ai-features'
+    | '/certificates'
+    | '/certification-centre'
     | '/contact'
+    | '/craft-passport'
     | '/digital-twin'
     | '/faq'
     | '/how-it-works'
     | '/india-post'
     | '/kiosk'
+    | '/kiosk-appointment'
     | '/marketplace'
     | '/privacy'
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-kiosk-portal'
     | '/team'
     | '/terms'
+    | '/training-portal'
+    | '/workshop-booking'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/otp'
@@ -717,20 +816,29 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/ai-analytics'
+    | '/ai-authentication'
     | '/ai-features'
+    | '/certificates'
+    | '/certification-centre'
     | '/contact'
+    | '/craft-passport'
     | '/digital-twin'
     | '/faq'
     | '/how-it-works'
     | '/india-post'
     | '/kiosk'
+    | '/kiosk-appointment'
     | '/marketplace'
     | '/privacy'
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-kiosk-portal'
     | '/team'
     | '/terms'
+    | '/training-portal'
+    | '/workshop-booking'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/otp'
@@ -783,20 +891,29 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AiAnalyticsRoute: typeof AiAnalyticsRoute
+  AiAuthenticationRoute: typeof AiAuthenticationRoute
   AiFeaturesRoute: typeof AiFeaturesRoute
+  CertificatesRoute: typeof CertificatesRoute
+  CertificationCentreRoute: typeof CertificationCentreRoute
   ContactRoute: typeof ContactRoute
+  CraftPassportRoute: typeof CraftPassportRoute
   DigitalTwinRoute: typeof DigitalTwinRoute
   FaqRoute: typeof FaqRoute
   HowItWorksRoute: typeof HowItWorksRoute
   IndiaPostRoute: typeof IndiaPostRoute
   KioskRoute: typeof KioskRoute
+  KioskAppointmentRoute: typeof KioskAppointmentRoute
   MarketplaceRoute: typeof MarketplaceRoute
   PrivacyRoute: typeof PrivacyRoute
   ResearchRoute: typeof ResearchRoute
   ReverseMarketplaceRoute: typeof ReverseMarketplaceRoute
   SchemesRoute: typeof SchemesRoute
+  SmartKioskPortalRoute: typeof SmartKioskPortalRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
+  TrainingPortalRoute: typeof TrainingPortalRoute
+  WorkshopBookingRoute: typeof WorkshopBookingRoute
   AuthForgotRoute: typeof AuthForgotRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthOtpRoute: typeof AuthOtpRoute
@@ -812,6 +929,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/workshop-booking': {
+      id: '/workshop-booking'
+      path: '/workshop-booking'
+      fullPath: '/workshop-booking'
+      preLoaderRoute: typeof WorkshopBookingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/training-portal': {
+      id: '/training-portal'
+      path: '/training-portal'
+      fullPath: '/training-portal'
+      preLoaderRoute: typeof TrainingPortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -824,6 +955,13 @@ declare module '@tanstack/react-router' {
       path: '/team'
       fullPath: '/team'
       preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/smart-kiosk-portal': {
+      id: '/smart-kiosk-portal'
+      path: '/smart-kiosk-portal'
+      fullPath: '/smart-kiosk-portal'
+      preLoaderRoute: typeof SmartKioskPortalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schemes': {
@@ -861,6 +999,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketplaceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kiosk-appointment': {
+      id: '/kiosk-appointment'
+      path: '/kiosk-appointment'
+      fullPath: '/kiosk-appointment'
+      preLoaderRoute: typeof KioskAppointmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/kiosk': {
       id: '/kiosk'
       path: '/kiosk'
@@ -896,6 +1041,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DigitalTwinRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/craft-passport': {
+      id: '/craft-passport'
+      path: '/craft-passport'
+      fullPath: '/craft-passport'
+      preLoaderRoute: typeof CraftPassportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -903,11 +1055,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/certification-centre': {
+      id: '/certification-centre'
+      path: '/certification-centre'
+      fullPath: '/certification-centre'
+      preLoaderRoute: typeof CertificationCentreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certificates': {
+      id: '/certificates'
+      path: '/certificates'
+      fullPath: '/certificates'
+      preLoaderRoute: typeof CertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ai-features': {
       id: '/ai-features'
       path: '/ai-features'
       fullPath: '/ai-features'
       preLoaderRoute: typeof AiFeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-authentication': {
+      id: '/ai-authentication'
+      path: '/ai-authentication'
+      fullPath: '/ai-authentication'
+      preLoaderRoute: typeof AiAuthenticationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-analytics': {
+      id: '/ai-analytics'
+      path: '/ai-analytics'
+      fullPath: '/ai-analytics'
+      preLoaderRoute: typeof AiAnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -1370,20 +1550,29 @@ const PortalGovernmentRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AiAnalyticsRoute: AiAnalyticsRoute,
+  AiAuthenticationRoute: AiAuthenticationRoute,
   AiFeaturesRoute: AiFeaturesRoute,
+  CertificatesRoute: CertificatesRoute,
+  CertificationCentreRoute: CertificationCentreRoute,
   ContactRoute: ContactRoute,
+  CraftPassportRoute: CraftPassportRoute,
   DigitalTwinRoute: DigitalTwinRoute,
   FaqRoute: FaqRoute,
   HowItWorksRoute: HowItWorksRoute,
   IndiaPostRoute: IndiaPostRoute,
   KioskRoute: KioskRoute,
+  KioskAppointmentRoute: KioskAppointmentRoute,
   MarketplaceRoute: MarketplaceRoute,
   PrivacyRoute: PrivacyRoute,
   ResearchRoute: ResearchRoute,
   ReverseMarketplaceRoute: ReverseMarketplaceRoute,
   SchemesRoute: SchemesRoute,
+  SmartKioskPortalRoute: SmartKioskPortalRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
+  TrainingPortalRoute: TrainingPortalRoute,
+  WorkshopBookingRoute: WorkshopBookingRoute,
   AuthForgotRoute: AuthForgotRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthOtpRoute: AuthOtpRoute,
