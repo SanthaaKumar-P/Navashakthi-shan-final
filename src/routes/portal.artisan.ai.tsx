@@ -114,7 +114,7 @@ function Component() {
     setTimeout(() => {
       setItems((prev) => {
         const keepActed = prev.filter((i) => i.status === "acted");
-        const fresh = seed(6).filter((f) => !keepActed.some((k) => k.title === f.title));
+        const fresh = shuffle(6).filter((f) => !keepActed.some((k) => k.title === f.title));
         return [...keepActed, ...fresh];
       });
       setRefreshing(false);
