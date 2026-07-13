@@ -1,10 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/portal-shell";
 import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/portal/customer/profile")({
   component: () => {
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
+    const handleSignOut = () => {
+      logout();
+      toast.success("Signed out successfully");
+      navigate({ to: "/" });
+    };
     return (
       <>
         <PageHeader title="Profile" subtitle="Manage your NAVSHAKTHI identity." />
@@ -15,7 +22,7 @@ export const Route = createFileRoute("/portal/customer/profile")({
             </div>
             <div className="mt-4 font-display text-xl">{user?.name ?? "Guest"}</div>
             <div className="text-xs text-muted-foreground">{user?.email}</div>
-            <button onClick={logout} className="mt-6 w-full rounded-full border border-border py-2 text-sm">Sign out</button>
+            <button onClick={handleSignOut} className="mt-6 w-full rounded-full border border-border py-2 text-sm hover:bg-muted transition">Sign out</button>
           </div>
           <div className="rounded-2xl border border-border/60 bg-card p-6">
             <div className="grid gap-4 sm:grid-cols-2">
