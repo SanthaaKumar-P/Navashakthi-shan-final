@@ -112,6 +112,3 @@ export function KioskMap({ onSelect, selected }: { onSelect?: (k: Kiosk) => void
   );
 }
 
-// Keep the icon import used elsewhere
-export { MapPin };
-export const _cn = cn;
