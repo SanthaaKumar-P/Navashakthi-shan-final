@@ -1,5 +1,5 @@
-import { MapPin } from "lucide-react";
-import { cn } from "@/lib/utils";
+// India map with kiosk markers
+
 
 export interface Kiosk { id: string; name: string; state: string; x: number; y: number; live: boolean }
 
