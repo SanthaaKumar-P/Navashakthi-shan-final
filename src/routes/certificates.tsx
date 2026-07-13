@@ -4,6 +4,7 @@ import { PublicPage, PageHero } from "@/components/public-page";
 import { Reveal } from "@/components/section";
 import { CertificateSheet } from "@/components/certificates/CertificateSheet";
 import { certificateTypes } from "@/lib/enterprise-data";
+import { downloadCertificatePdf } from "@/lib/download-pdf";
 import { Download } from "lucide-react";
 
 function Page() {
