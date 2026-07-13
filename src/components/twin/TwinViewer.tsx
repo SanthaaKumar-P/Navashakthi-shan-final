@@ -55,7 +55,7 @@ export function TwinViewer({ src, alt, twinId }: { src: string; alt: string; twi
         style={{ perspective: 1200 }}
       >
         {/* stage lights */}
-        <div className="pointer-events-none absolute inset-8 rounded-full bg-gradient-radial from-gold/25 via-transparent to-transparent blur-2xl" />
+        <div className="pointer-events-none absolute inset-8 rounded-full blur-2xl" style={{ background: "radial-gradient(circle, rgba(212,175,55,0.28), transparent 65%)" }} />
 
         <motion.div
           onPointerDown={(e) => {
