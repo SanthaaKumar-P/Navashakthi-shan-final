@@ -61,7 +61,7 @@ export function PortalShell({
               <div className="truncate text-sm font-semibold">{user?.name ?? "Guest"}</div>
               <div className="truncate text-[11px] text-muted-foreground">{user?.email ?? roleLabel}</div>
             </div>
-            <button onClick={logout} title="Sign out" className="grid h-8 w-8 place-items-center rounded-full hover:bg-muted">
+            <button onClick={handleLogout} title="Sign out" className="grid h-8 w-8 place-items-center rounded-full hover:bg-muted">
               <LogOut className="h-4 w-4" />
             </button>
           </div>
