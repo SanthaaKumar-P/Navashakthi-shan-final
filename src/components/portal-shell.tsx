@@ -1,6 +1,7 @@
-import { Link, Outlet, redirect, useRouterState } from "@tanstack/react-router";
+import { Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, type ComponentType, type ReactNode } from "react";
 import { Bell, ChevronRight, LogOut, Settings } from "lucide-react";
+import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 import { useAuth, type Role } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
@@ -13,8 +14,14 @@ export function PortalShell({
   role: Role; roleLabel: string; nav: NavItem[]; accent?: "primary" | "clay" | "gold"; children?: ReactNode;
 }) {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const accentBg = accent === "clay" ? "bg-accent" : accent === "gold" ? "bg-gold" : "bg-primary";
+  const handleLogout = () => {
+    logout();
+    toast.success("Signed out successfully");
+    navigate({ to: "/" });
+  };
 
   return (
     <div className="min-h-screen bg-muted/40">
