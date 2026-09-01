@@ -41,7 +41,7 @@ export function ScanPipeline({
   return (
     <div className="rounded-3xl border border-border/60 bg-card p-6">
       <div className="mb-4 flex items-center justify-between">
-        <div className="font-display text-lg">AI Authenticity Pipeline</div>
+        <div className="font-display text-lg">{title}</div>
         <div className="text-xs font-semibold text-muted-foreground">
           {running ? `Step ${Math.min(i + 1, SCAN_STEPS.length)}/${SCAN_STEPS.length}` : "Ready"}
         </div>
