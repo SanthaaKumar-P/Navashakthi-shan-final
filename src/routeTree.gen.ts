@@ -13,7 +13,9 @@ import { Route as WorkshopBookingRouteImport } from './routes/workshop-booking'
 import { Route as TrainingPortalRouteImport } from './routes/training-portal'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
+import { Route as SmartPricingRouteImport } from './routes/smart-pricing'
 import { Route as SmartKioskPortalRouteImport } from './routes/smart-kiosk-portal'
+import { Route as SmartCatalogerRouteImport } from './routes/smart-cataloger'
 import { Route as SchemesRouteImport } from './routes/schemes'
 import { Route as ReverseMarketplaceRouteImport } from './routes/reverse-marketplace'
 import { Route as ResearchRouteImport } from './routes/research'
@@ -29,6 +31,7 @@ import { Route as CraftPassportRouteImport } from './routes/craft-passport'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CertificationCentreRouteImport } from './routes/certification-centre'
 import { Route as CertificatesRouteImport } from './routes/certificates'
+import { Route as AiImageStudioRouteImport } from './routes/ai-image-studio'
 import { Route as AiFeaturesRouteImport } from './routes/ai-features'
 import { Route as AiAuthenticationRouteImport } from './routes/ai-authentication'
 import { Route as AiAnalyticsRouteImport } from './routes/ai-analytics'
@@ -117,9 +120,19 @@ const TeamRoute = TeamRouteImport.update({
   path: '/team',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SmartPricingRoute = SmartPricingRouteImport.update({
+  id: '/smart-pricing',
+  path: '/smart-pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SmartKioskPortalRoute = SmartKioskPortalRouteImport.update({
   id: '/smart-kiosk-portal',
   path: '/smart-kiosk-portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmartCatalogerRoute = SmartCatalogerRouteImport.update({
+  id: '/smart-cataloger',
+  path: '/smart-cataloger',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchemesRoute = SchemesRouteImport.update({
@@ -195,6 +208,11 @@ const CertificationCentreRoute = CertificationCentreRouteImport.update({
 const CertificatesRoute = CertificatesRouteImport.update({
   id: '/certificates',
   path: '/certificates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiImageStudioRoute = AiImageStudioRouteImport.update({
+  id: '/ai-image-studio',
+  path: '/ai-image-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AiFeaturesRoute = AiFeaturesRouteImport.update({
@@ -548,6 +566,7 @@ export interface FileRoutesByFullPath {
   '/ai-analytics': typeof AiAnalyticsRoute
   '/ai-authentication': typeof AiAuthenticationRoute
   '/ai-features': typeof AiFeaturesRoute
+  '/ai-image-studio': typeof AiImageStudioRoute
   '/certificates': typeof CertificatesRoute
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
@@ -563,7 +582,9 @@ export interface FileRoutesByFullPath {
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-cataloger': typeof SmartCatalogerRoute
   '/smart-kiosk-portal': typeof SmartKioskPortalRoute
+  '/smart-pricing': typeof SmartPricingRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/training-portal': typeof TrainingPortalRoute
@@ -637,6 +658,7 @@ export interface FileRoutesByTo {
   '/ai-analytics': typeof AiAnalyticsRoute
   '/ai-authentication': typeof AiAuthenticationRoute
   '/ai-features': typeof AiFeaturesRoute
+  '/ai-image-studio': typeof AiImageStudioRoute
   '/certificates': typeof CertificatesRoute
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
@@ -652,7 +674,9 @@ export interface FileRoutesByTo {
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-cataloger': typeof SmartCatalogerRoute
   '/smart-kiosk-portal': typeof SmartKioskPortalRoute
+  '/smart-pricing': typeof SmartPricingRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/training-portal': typeof TrainingPortalRoute
@@ -721,6 +745,7 @@ export interface FileRoutesById {
   '/ai-analytics': typeof AiAnalyticsRoute
   '/ai-authentication': typeof AiAuthenticationRoute
   '/ai-features': typeof AiFeaturesRoute
+  '/ai-image-studio': typeof AiImageStudioRoute
   '/certificates': typeof CertificatesRoute
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
@@ -736,7 +761,9 @@ export interface FileRoutesById {
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-cataloger': typeof SmartCatalogerRoute
   '/smart-kiosk-portal': typeof SmartKioskPortalRoute
+  '/smart-pricing': typeof SmartPricingRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/training-portal': typeof TrainingPortalRoute
@@ -812,6 +839,7 @@ export interface FileRouteTypes {
     | '/ai-analytics'
     | '/ai-authentication'
     | '/ai-features'
+    | '/ai-image-studio'
     | '/certificates'
     | '/certification-centre'
     | '/contact'
@@ -827,7 +855,9 @@ export interface FileRouteTypes {
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-cataloger'
     | '/smart-kiosk-portal'
+    | '/smart-pricing'
     | '/team'
     | '/terms'
     | '/training-portal'
@@ -901,6 +931,7 @@ export interface FileRouteTypes {
     | '/ai-analytics'
     | '/ai-authentication'
     | '/ai-features'
+    | '/ai-image-studio'
     | '/certificates'
     | '/certification-centre'
     | '/contact'
@@ -916,7 +947,9 @@ export interface FileRouteTypes {
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-cataloger'
     | '/smart-kiosk-portal'
+    | '/smart-pricing'
     | '/team'
     | '/terms'
     | '/training-portal'
@@ -984,6 +1017,7 @@ export interface FileRouteTypes {
     | '/ai-analytics'
     | '/ai-authentication'
     | '/ai-features'
+    | '/ai-image-studio'
     | '/certificates'
     | '/certification-centre'
     | '/contact'
@@ -999,7 +1033,9 @@ export interface FileRouteTypes {
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-cataloger'
     | '/smart-kiosk-portal'
+    | '/smart-pricing'
     | '/team'
     | '/terms'
     | '/training-portal'
@@ -1074,6 +1110,7 @@ export interface RootRouteChildren {
   AiAnalyticsRoute: typeof AiAnalyticsRoute
   AiAuthenticationRoute: typeof AiAuthenticationRoute
   AiFeaturesRoute: typeof AiFeaturesRoute
+  AiImageStudioRoute: typeof AiImageStudioRoute
   CertificatesRoute: typeof CertificatesRoute
   CertificationCentreRoute: typeof CertificationCentreRoute
   ContactRoute: typeof ContactRoute
@@ -1089,7 +1126,9 @@ export interface RootRouteChildren {
   ResearchRoute: typeof ResearchRoute
   ReverseMarketplaceRoute: typeof ReverseMarketplaceRoute
   SchemesRoute: typeof SchemesRoute
+  SmartCatalogerRoute: typeof SmartCatalogerRoute
   SmartKioskPortalRoute: typeof SmartKioskPortalRoute
+  SmartPricingRoute: typeof SmartPricingRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
   TrainingPortalRoute: typeof TrainingPortalRoute
@@ -1139,11 +1178,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeamRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/smart-pricing': {
+      id: '/smart-pricing'
+      path: '/smart-pricing'
+      fullPath: '/smart-pricing'
+      preLoaderRoute: typeof SmartPricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/smart-kiosk-portal': {
       id: '/smart-kiosk-portal'
       path: '/smart-kiosk-portal'
       fullPath: '/smart-kiosk-portal'
       preLoaderRoute: typeof SmartKioskPortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/smart-cataloger': {
+      id: '/smart-cataloger'
+      path: '/smart-cataloger'
+      fullPath: '/smart-cataloger'
+      preLoaderRoute: typeof SmartCatalogerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schemes': {
@@ -1249,6 +1302,13 @@ declare module '@tanstack/react-router' {
       path: '/certificates'
       fullPath: '/certificates'
       preLoaderRoute: typeof CertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-image-studio': {
+      id: '/ai-image-studio'
+      path: '/ai-image-studio'
+      fullPath: '/ai-image-studio'
+      preLoaderRoute: typeof AiImageStudioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ai-features': {
@@ -1886,6 +1946,7 @@ const rootRouteChildren: RootRouteChildren = {
   AiAnalyticsRoute: AiAnalyticsRoute,
   AiAuthenticationRoute: AiAuthenticationRoute,
   AiFeaturesRoute: AiFeaturesRoute,
+  AiImageStudioRoute: AiImageStudioRoute,
   CertificatesRoute: CertificatesRoute,
   CertificationCentreRoute: CertificationCentreRoute,
   ContactRoute: ContactRoute,
@@ -1901,7 +1962,9 @@ const rootRouteChildren: RootRouteChildren = {
   ResearchRoute: ResearchRoute,
   ReverseMarketplaceRoute: ReverseMarketplaceRoute,
   SchemesRoute: SchemesRoute,
+  SmartCatalogerRoute: SmartCatalogerRoute,
   SmartKioskPortalRoute: SmartKioskPortalRoute,
+  SmartPricingRoute: SmartPricingRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
   TrainingPortalRoute: TrainingPortalRoute,
@@ -1923,3 +1986,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
