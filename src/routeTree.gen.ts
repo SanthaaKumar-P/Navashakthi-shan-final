@@ -13,6 +13,7 @@ import { Route as WorkshopBookingRouteImport } from './routes/workshop-booking'
 import { Route as TrainingPortalRouteImport } from './routes/training-portal'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
+import { Route as SmartPricingRouteImport } from './routes/smart-pricing'
 import { Route as SmartKioskPortalRouteImport } from './routes/smart-kiosk-portal'
 import { Route as SmartCatalogerRouteImport } from './routes/smart-cataloger'
 import { Route as SchemesRouteImport } from './routes/schemes'
@@ -117,6 +118,11 @@ const TermsRoute = TermsRouteImport.update({
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
   path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmartPricingRoute = SmartPricingRouteImport.update({
+  id: '/smart-pricing',
+  path: '/smart-pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SmartKioskPortalRoute = SmartKioskPortalRouteImport.update({
@@ -578,6 +584,7 @@ export interface FileRoutesByFullPath {
   '/schemes': typeof SchemesRoute
   '/smart-cataloger': typeof SmartCatalogerRoute
   '/smart-kiosk-portal': typeof SmartKioskPortalRoute
+  '/smart-pricing': typeof SmartPricingRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/training-portal': typeof TrainingPortalRoute
@@ -669,6 +676,7 @@ export interface FileRoutesByTo {
   '/schemes': typeof SchemesRoute
   '/smart-cataloger': typeof SmartCatalogerRoute
   '/smart-kiosk-portal': typeof SmartKioskPortalRoute
+  '/smart-pricing': typeof SmartPricingRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/training-portal': typeof TrainingPortalRoute
@@ -755,6 +763,7 @@ export interface FileRoutesById {
   '/schemes': typeof SchemesRoute
   '/smart-cataloger': typeof SmartCatalogerRoute
   '/smart-kiosk-portal': typeof SmartKioskPortalRoute
+  '/smart-pricing': typeof SmartPricingRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/training-portal': typeof TrainingPortalRoute
@@ -848,6 +857,7 @@ export interface FileRouteTypes {
     | '/schemes'
     | '/smart-cataloger'
     | '/smart-kiosk-portal'
+    | '/smart-pricing'
     | '/team'
     | '/terms'
     | '/training-portal'
@@ -939,6 +949,7 @@ export interface FileRouteTypes {
     | '/schemes'
     | '/smart-cataloger'
     | '/smart-kiosk-portal'
+    | '/smart-pricing'
     | '/team'
     | '/terms'
     | '/training-portal'
@@ -1024,6 +1035,7 @@ export interface FileRouteTypes {
     | '/schemes'
     | '/smart-cataloger'
     | '/smart-kiosk-portal'
+    | '/smart-pricing'
     | '/team'
     | '/terms'
     | '/training-portal'
@@ -1116,6 +1128,7 @@ export interface RootRouteChildren {
   SchemesRoute: typeof SchemesRoute
   SmartCatalogerRoute: typeof SmartCatalogerRoute
   SmartKioskPortalRoute: typeof SmartKioskPortalRoute
+  SmartPricingRoute: typeof SmartPricingRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
   TrainingPortalRoute: typeof TrainingPortalRoute
@@ -1163,6 +1176,13 @@ declare module '@tanstack/react-router' {
       path: '/team'
       fullPath: '/team'
       preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/smart-pricing': {
+      id: '/smart-pricing'
+      path: '/smart-pricing'
+      fullPath: '/smart-pricing'
+      preLoaderRoute: typeof SmartPricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/smart-kiosk-portal': {
@@ -1944,6 +1964,7 @@ const rootRouteChildren: RootRouteChildren = {
   SchemesRoute: SchemesRoute,
   SmartCatalogerRoute: SmartCatalogerRoute,
   SmartKioskPortalRoute: SmartKioskPortalRoute,
+  SmartPricingRoute: SmartPricingRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
   TrainingPortalRoute: TrainingPortalRoute,
