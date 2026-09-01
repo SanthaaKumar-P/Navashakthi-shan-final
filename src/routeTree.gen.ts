@@ -14,6 +14,7 @@ import { Route as TrainingPortalRouteImport } from './routes/training-portal'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as SmartKioskPortalRouteImport } from './routes/smart-kiosk-portal'
+import { Route as SmartCatalogerRouteImport } from './routes/smart-cataloger'
 import { Route as SchemesRouteImport } from './routes/schemes'
 import { Route as ReverseMarketplaceRouteImport } from './routes/reverse-marketplace'
 import { Route as ResearchRouteImport } from './routes/research'
@@ -121,6 +122,11 @@ const TeamRoute = TeamRouteImport.update({
 const SmartKioskPortalRoute = SmartKioskPortalRouteImport.update({
   id: '/smart-kiosk-portal',
   path: '/smart-kiosk-portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmartCatalogerRoute = SmartCatalogerRouteImport.update({
+  id: '/smart-cataloger',
+  path: '/smart-cataloger',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchemesRoute = SchemesRouteImport.update({
@@ -570,6 +576,7 @@ export interface FileRoutesByFullPath {
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-cataloger': typeof SmartCatalogerRoute
   '/smart-kiosk-portal': typeof SmartKioskPortalRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
@@ -660,6 +667,7 @@ export interface FileRoutesByTo {
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-cataloger': typeof SmartCatalogerRoute
   '/smart-kiosk-portal': typeof SmartKioskPortalRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
@@ -745,6 +753,7 @@ export interface FileRoutesById {
   '/research': typeof ResearchRoute
   '/reverse-marketplace': typeof ReverseMarketplaceRoute
   '/schemes': typeof SchemesRoute
+  '/smart-cataloger': typeof SmartCatalogerRoute
   '/smart-kiosk-portal': typeof SmartKioskPortalRoute
   '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
@@ -837,6 +846,7 @@ export interface FileRouteTypes {
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-cataloger'
     | '/smart-kiosk-portal'
     | '/team'
     | '/terms'
@@ -927,6 +937,7 @@ export interface FileRouteTypes {
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-cataloger'
     | '/smart-kiosk-portal'
     | '/team'
     | '/terms'
@@ -1011,6 +1022,7 @@ export interface FileRouteTypes {
     | '/research'
     | '/reverse-marketplace'
     | '/schemes'
+    | '/smart-cataloger'
     | '/smart-kiosk-portal'
     | '/team'
     | '/terms'
@@ -1102,6 +1114,7 @@ export interface RootRouteChildren {
   ResearchRoute: typeof ResearchRoute
   ReverseMarketplaceRoute: typeof ReverseMarketplaceRoute
   SchemesRoute: typeof SchemesRoute
+  SmartCatalogerRoute: typeof SmartCatalogerRoute
   SmartKioskPortalRoute: typeof SmartKioskPortalRoute
   TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
@@ -1157,6 +1170,13 @@ declare module '@tanstack/react-router' {
       path: '/smart-kiosk-portal'
       fullPath: '/smart-kiosk-portal'
       preLoaderRoute: typeof SmartKioskPortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/smart-cataloger': {
+      id: '/smart-cataloger'
+      path: '/smart-cataloger'
+      fullPath: '/smart-cataloger'
+      preLoaderRoute: typeof SmartCatalogerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schemes': {
@@ -1922,6 +1942,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResearchRoute: ResearchRoute,
   ReverseMarketplaceRoute: ReverseMarketplaceRoute,
   SchemesRoute: SchemesRoute,
+  SmartCatalogerRoute: SmartCatalogerRoute,
   SmartKioskPortalRoute: SmartKioskPortalRoute,
   TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
