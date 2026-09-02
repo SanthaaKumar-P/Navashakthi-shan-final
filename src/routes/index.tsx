@@ -252,6 +252,9 @@ function PlatformFeatures() {
     { icon: Landmark, title: "Scheme enrolment", desc: "One-click matching to PM Vishwakarma, MSME, Mudra and 8 more schemes." },
     { icon: Truck, title: "India Post logistics", desc: "Doorstep pickup from the village, tracked delivery worldwide." },
     { icon: Award, title: "Reverse marketplace", desc: "Buyers post briefs. Artisans bid. AI matches the perfect maker." },
+    { icon: Wand2, title: "AI Image Studio", desc: "Background removal, lighting correction and catalog-ready formatting for every craft photo." },
+    { icon: Languages, title: "Multilingual auto-cataloger", desc: "Speak in your language — AI writes SEO listings in English and Hindi." },
+    { icon: IndianRupee, title: "Dynamic pricing assistant", desc: "ML price guidance from material cost, labour hours and live market trends." },
   ];
   return (
     <section className="py-24">
