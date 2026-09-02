@@ -5,6 +5,7 @@ import { PublicLayout } from "@/components/layout/public-layout";
 import { ProductCard } from "@/components/product-card";
 import { categories, products } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/marketplace")({
   head: () => ({
@@ -23,10 +24,49 @@ function Marketplace() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [max, setMax] = useState(50000);
 
+  const runSearch = () => {
+    const term = q.trim();
+    document.getElementById("results")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!term) {
+      toast.info("Showing all crafts", { description: "Type a craft, artisan, village or state to narrow the search." });
+      return;
+    }
+    const n = products.filter((p) =>
+      [p.name, p.village, p.artisan, p.state, p.category, p.story]
+        .filter(Boolean)
+        .some((f) => String(f).toLowerCase().includes(term.toLowerCase()))
+    ).length;
+    if (n === 0) toast.error(`No crafts match “${term}”`, { description: "Try a village, craft type or artisan name." });
+    else toast.success(`${n} craft${n > 1 ? "s" : ""} matched “${term}”`, { description: "AI ranked results by authenticity and relevance." });
+  };
+
+  const voiceSearch = () => {
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SR) {
+      toast.error("Voice search not supported in this browser", { description: "Try Chrome, or type your search instead." });
+      return;
+    }
+    const rec = new SR();
+    rec.lang = "en-IN";
+    rec.interimResults = false;
+    toast.loading("Listening…", { id: "voice" });
+    rec.onresult = (e: any) => {
+      const text = e.results[0][0].transcript;
+      setQ(text);
+      toast.success(`Heard “${text}”`, { id: "voice" });
+    };
+    rec.onerror = () => toast.error("Could not hear you", { id: "voice" });
+    rec.onend = () => toast.dismiss("voice");
+    rec.start();
+  };
+
   const filtered = useMemo(() => {
     let list = products.filter((p) =>
       (cat === "all" || p.category === cat) &&
-      (q === "" || p.name.toLowerCase().includes(q.toLowerCase()) || p.village.toLowerCase().includes(q.toLowerCase())) &&
+      (q.trim() === "" ||
+        [p.name, p.village, p.artisan, p.state, p.category, p.story]
+          .filter(Boolean)
+          .some((f) => String(f).toLowerCase().includes(q.trim().toLowerCase()))) &&
       p.price <= max
     );
     if (sort === "price-asc") list = [...list].sort((a, b) => a.price - b.price);
@@ -56,20 +96,21 @@ function Marketplace() {
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search crafts, artisans, villages…"
+                onKeyDown={(e) => e.key === "Enter" && runSearch()}
                 className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
               />
-              <button className="grid h-8 w-8 place-items-center rounded-full bg-clay/10 text-clay" aria-label="Voice search">
+              <button onClick={voiceSearch} className="grid h-8 w-8 place-items-center rounded-full bg-clay/10 text-clay transition hover:bg-clay/20" aria-label="Voice search">
                 <Mic className="h-4 w-4" />
               </button>
             </div>
-            <button className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground">
+            <button onClick={runSearch} className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">
               <Sparkles className="h-4 w-4" /> AI Search
             </button>
           </div>
         </div>
       </section>
 
-      <section className="container-x py-16">
+      <section id="results" className="container-x py-16">
         <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
           {/* Filters */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
