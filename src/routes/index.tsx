@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { ArrowRight, ShieldCheck, Sparkles, Cpu, Landmark, Truck, MapPin, Award } from "lucide-react";
+import { ArrowRight, ShieldCheck, Sparkles, Cpu, Landmark, Truck, MapPin, Award, Wand2, Languages, IndianRupee } from "lucide-react";
 import { PublicLayout } from "@/components/layout/public-layout";
 import { Reveal, Counter, SectionHeading, SectionEyebrow } from "@/components/section";
 import { ProductCard } from "@/components/product-card";
@@ -263,7 +263,7 @@ function PlatformFeatures() {
           <SectionHeading
             align="center"
             eyebrow="What powers NAVSHAKTHI"
-            title="Six systems, one continuum."
+            title="Nine systems, one continuum."
             subtitle="An operating layer for the rural craft economy — from discovery to dispatch."
           />
         </Reveal>
