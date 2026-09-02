@@ -1,19 +1,30 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X, ShoppingBag, Search, Heart, User } from "lucide-react";
+import { Menu, X, ShoppingBag, Search, Heart, User, ChevronDown } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/lib/auth-context";
 import { useCart } from "@/lib/cart-context";
 import { cn } from "@/lib/utils";
 
-const nav = [
+const navBefore = [
   { to: "/marketplace", label: "Marketplace" },
   { to: "/ai-authentication", label: "AI Verify" },
+];
+
+const studio = [
+  { to: "/ai-image-studio", label: "Image Studio" },
+  { to: "/smart-cataloger", label: "Smart Cataloger" },
+  { to: "/smart-pricing", label: "Smart Pricing" },
+];
+
+const navAfter = [
   { to: "/smart-kiosk-portal", label: "Smart Kiosk" },
   { to: "/training-portal", label: "Training" },
   { to: "/schemes", label: "Schemes" },
   { to: "/about", label: "About" },
 ];
+
+const nav = [...navBefore, ...studio, ...navAfter];
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
@@ -48,7 +59,46 @@ export function SiteNav() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
-          {nav.map((n) => (
+          {navBefore.map((n) => (
+            <Link
+              key={n.to}
+              to={n.to}
+              className="relative rounded-full px-4 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
+              activeProps={{ className: "text-primary" }}
+            >
+              {n.label}
+            </Link>
+          ))}
+
+          <div className="relative group">
+            <button
+              type="button"
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:text-primary",
+                studio.some((s) => pathname.startsWith(s.to)) ? "text-primary" : "text-foreground/80"
+              )}
+              aria-haspopup="true"
+            >
+              AI Studio
+              <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
+            </button>
+            <div className="invisible absolute left-1/2 top-full z-50 w-56 -translate-x-1/2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="overflow-hidden rounded-2xl border border-border/60 bg-background/95 p-1.5 shadow-elegant backdrop-blur">
+                {studio.map((s) => (
+                  <Link
+                    key={s.to}
+                    to={s.to}
+                    className="block rounded-xl px-3 py-2.5 text-sm font-medium text-foreground/80 transition-colors hover:bg-muted hover:text-primary"
+                    activeProps={{ className: "text-primary bg-muted" }}
+                  >
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {navAfter.map((n) => (
             <Link
               key={n.to}
               to={n.to}
