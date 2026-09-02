@@ -6,14 +6,25 @@ import { useAuth } from "@/lib/auth-context";
 import { useCart } from "@/lib/cart-context";
 import { cn } from "@/lib/utils";
 
-const nav = [
+const navBefore = [
   { to: "/marketplace", label: "Marketplace" },
   { to: "/ai-authentication", label: "AI Verify" },
+];
+
+const studio = [
+  { to: "/ai-image-studio", label: "Image Studio" },
+  { to: "/smart-cataloger", label: "Smart Cataloger" },
+  { to: "/smart-pricing", label: "Smart Pricing" },
+];
+
+const navAfter = [
   { to: "/smart-kiosk-portal", label: "Smart Kiosk" },
   { to: "/training-portal", label: "Training" },
   { to: "/schemes", label: "Schemes" },
   { to: "/about", label: "About" },
 ];
+
+const nav = [...navBefore, ...studio, ...navAfter];
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
