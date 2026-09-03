@@ -1,14 +1,27 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { PublicPage, PageHero } from "@/components/public-page";
 import { Reveal } from "@/components/section";
 import { ScanPipeline } from "@/components/ai/ScanPipeline";
 import { FeatureCta } from "./ai-image-studio";
-import { ClipboardList, ScanSearch, TrendingUp, IndianRupee } from "lucide-react";
+import { ClipboardList, ScanSearch, TrendingUp, IndianRupee, Copy, Check, Sparkles } from "lucide-react";
 
-const CATEGORIES = ["Pottery", "Textiles", "Wood", "Metal", "Jewellery", "Bamboo"];
+const CATEGORIES = [
+  { name: "Pottery", benchmark: 1.9, demand: 12, hourly: 42 },
+  { name: "Textiles", benchmark: 2.4, demand: 18, hourly: 55 },
+  { name: "Wood", benchmark: 2.1, demand: 7, hourly: 48 },
+  { name: "Metal", benchmark: 2.6, demand: 9, hourly: 60 },
+  { name: "Jewellery", benchmark: 3.1, demand: 22, hourly: 70 },
+  { name: "Bamboo", benchmark: 1.7, demand: 5, hourly: 38 },
+];
 const SIZES = ["Small", "Medium", "Large"] as const;
+const FINISH = ["Everyday", "Premium", "Collector"] as const;
+const CHANNELS = [
+  { name: "Marketplace", fee: 0.08, uplift: 1 },
+  { name: "Export", fee: 0.14, uplift: 1.42 },
+  { name: "Direct / Mela", fee: 0.02, uplift: 0.82 },
+];
 
 const STEPS = [
   "Analyzing product image quality",
@@ -32,18 +45,46 @@ const TECH = [
   { name: "Comparable listings engine", desc: "Cross-referencing similar verified crafts" },
 ];
 
+const rupee = (n: number) => `₹${Math.round(n).toLocaleString("en-IN")}`;
+
 function Page() {
-  const [category, setCategory] = useState("Pottery");
+  const [category, setCategory] = useState(CATEGORIES[0].name);
   const [cost, setCost] = useState("450");
   const [hours, setHours] = useState("18");
   const [size, setSize] = useState<(typeof SIZES)[number]>("Medium");
+  const [finish, setFinish] = useState<(typeof FINISH)[number]>("Premium");
+  const [channel, setChannel] = useState(CHANNELS[0].name);
+  const [gi, setGi] = useState(true);
+  const [margin, setMargin] = useState(35);
+  const [volume, setVolume] = useState(12);
   const [running, setRunning] = useState(false);
   const [done, setDone] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  const mult = size === "Small" ? 0.75 : size === "Large" ? 1.35 : 1;
-  const base = Math.round(((Number(cost) || 0) * 1.6 + (Number(hours) || 0) * 45) * mult);
-  const low = Math.max(base, 100);
-  const high = Math.round(low * 1.14);
+  const model = useMemo(() => {
+    const cat = CATEGORIES.find((c) => c.name === category)!;
+    const ch = CHANNELS.find((c) => c.name === channel)!;
+    const sizeMult = size === "Small" ? 0.78 : size === "Large" ? 1.34 : 1;
+    const finishMult = finish === "Everyday" ? 0.9 : finish === "Collector" ? 1.45 : 1.12;
+    const material = Number(cost) || 0;
+    const labor = (Number(hours) || 0) * cat.hourly;
+    const overhead = (material + labor) * 0.12;
+    const giPremium = gi ? (material + labor) * 0.18 : 0;
+    const base = (material + labor + overhead + giPremium) * sizeMult * finishMult * ch.uplift;
+    const withMargin = base * (1 + margin / 100);
+    const fee = withMargin * ch.fee;
+    const suggested = withMargin + fee;
+    const low = suggested * 0.94;
+    const high = suggested * 1.12;
+    const mela = suggested * 0.62;
+    const retail = suggested * 1.48;
+    const artisanTakeHome = suggested - fee - material;
+    const confidence = Math.min(96, 68 + (gi ? 8 : 0) + (finish === "Collector" ? 6 : 3) + Math.min(10, Number(hours) / 3));
+    const trend = [0.82, 0.86, 0.9, 0.88, 0.95, 1].map((v) => v * (1 + cat.demand / 100));
+    return { cat, ch, material, labor, overhead, giPremium, fee, suggested, low, high, mela, retail, artisanTakeHome, confidence, trend };
+  }, [category, channel, cost, hours, size, finish, gi, margin]);
+
+  const barMax = model.retail * 1.05;
 
   return (
     <PublicPage>
@@ -58,12 +99,17 @@ function Page() {
           <Reveal>
             <div className="rounded-3xl border border-border/60 bg-card p-6">
               <div className="font-display text-2xl">Try the pricing assistant</div>
-              <p className="mt-1 text-sm text-muted-foreground">Enter basic details and see an instant price suggestion.</p>
+              <p className="mt-1 text-sm text-muted-foreground">Tune the inputs — the fair-price model recalculates live.</p>
 
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <Field label="Craft category">
                   <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full rounded-xl border border-border/60 bg-background px-3 py-2.5 text-sm">
-                    {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+                    {CATEGORIES.map((c) => <option key={c.name}>{c.name}</option>)}
+                  </select>
+                </Field>
+                <Field label="Selling channel">
+                  <select value={channel} onChange={(e) => setChannel(e.target.value)} className="w-full rounded-xl border border-border/60 bg-background px-3 py-2.5 text-sm">
+                    {CHANNELS.map((c) => <option key={c.name}>{c.name}</option>)}
                   </select>
                 </Field>
                 <Field label="Material cost (₹)">
@@ -73,18 +119,26 @@ function Page() {
                   <input type="number" min={0} value={hours} onChange={(e) => setHours(e.target.value)} className="w-full rounded-xl border border-border/60 bg-background px-3 py-2.5 text-sm" />
                 </Field>
                 <Field label="Size">
-                  <div className="flex gap-2">
-                    {SIZES.map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={() => setSize(s)}
-                        className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${size === s ? "border-primary bg-primary text-primary-foreground" : "border-border/60"}`}
-                      >{s}</button>
-                    ))}
-                  </div>
+                  <Pills options={SIZES} value={size} onChange={setSize} />
+                </Field>
+                <Field label="Finish level">
+                  <Pills options={FINISH} value={finish} onChange={setFinish} />
                 </Field>
               </div>
+
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <Field label={`Artisan margin · ${margin}%`}>
+                  <input type="range" min={10} max={80} value={margin} onChange={(e) => setMargin(Number(e.target.value))} className="w-full" />
+                </Field>
+                <Field label={`Pieces per month · ${volume}`}>
+                  <input type="range" min={1} max={60} value={volume} onChange={(e) => setVolume(Number(e.target.value))} className="w-full" />
+                </Field>
+              </div>
+
+              <label className="mt-4 flex items-center gap-3 rounded-xl border border-border/60 bg-muted/30 p-3 text-sm">
+                <input type="checkbox" checked={gi} onChange={(e) => setGi(e.target.checked)} className="h-4 w-4 accent-current text-primary" />
+                <span><span className="font-semibold">GI-tagged / Craftmark verified</span> — adds an authenticity premium</span>
+              </label>
 
               <button
                 onClick={() => { setDone(false); setRunning(true); toast("Analyzing market data…"); }}
@@ -95,25 +149,54 @@ function Page() {
               </button>
 
               {done && (
-                <div className="mt-6 rounded-2xl border border-border/60 bg-primary/5 p-5">
-                  <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Suggested price range</div>
-                  <div className="mt-1 font-display text-3xl text-primary">₹{low.toLocaleString("en-IN")} – ₹{high.toLocaleString("en-IN")}</div>
-
-                  <div className="mt-5">
-                    <div className="relative h-3 rounded-full bg-muted">
-                      <div className="absolute inset-y-0 left-[38%] right-[26%] rounded-full bg-gradient-to-r from-primary via-gold to-clay" />
-                      <span className="absolute -top-1 left-[18%] h-5 w-0.5 bg-clay" />
-                      <span className="absolute -top-1 left-[82%] h-5 w-0.5 bg-earth" />
+                <div className="mt-6 space-y-5 rounded-2xl border border-border/60 bg-primary/5 p-5">
+                  <div className="flex flex-wrap items-end justify-between gap-3">
+                    <div>
+                      <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Suggested price range</div>
+                      <div className="mt-1 font-display text-3xl text-primary">{rupee(model.low)} – {rupee(model.high)}</div>
                     </div>
-                    <div className="mt-2 flex justify-between text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-                      <span>Average mela price</span>
-                      <span className="text-primary">Suggested</span>
-                      <span>Online retail</span>
-                    </div>
+                    <button
+                      onClick={() => { void navigator.clipboard?.writeText(`${rupee(model.low)} – ${rupee(model.high)}`); setCopied(true); toast.success("Price copied"); setTimeout(() => setCopied(false), 1600); }}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-semibold"
+                    >
+                      {copied ? <Check className="h-3 w-3 text-primary" /> : <Copy className="h-3 w-3" />} Copy
+                    </button>
                   </div>
 
-                  <p className="mt-4 text-sm text-muted-foreground">
-                    Based on material cost, similar Bhuj {category.toLowerCase()} listings, and 12% rising demand this month.
+                  <div className="space-y-2">
+                    <Bar label="Average mela price" value={model.mela} max={barMax} tone="bg-clay/60" />
+                    <Bar label="Suggested fair price" value={model.suggested} max={barMax} tone="bg-primary" highlight />
+                    <Bar label="Online retail equivalent" value={model.retail} max={barMax} tone="bg-earth/60" />
+                  </div>
+
+                  <div>
+                    <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Cost breakdown</div>
+                    <dl className="mt-2 divide-y divide-border/60 text-sm">
+                      {[["Raw material", model.material], ["Labor (" + hours + " h × ₹" + model.cat.hourly + ")", model.labor], ["Workshop overhead", model.overhead], ["Authenticity premium", model.giPremium], [`${model.ch.name} fee`, model.fee]].map(([k, v]) => (
+                        <div key={String(k)} className="flex justify-between py-1.5">
+                          <dt className="text-muted-foreground">{k as string}</dt>
+                          <dd className="font-semibold">{rupee(v as number)}</dd>
+                        </div>
+                      ))}
+                      <div className="flex justify-between py-2 text-primary">
+                        <dt className="font-semibold">Artisan take-home / piece</dt>
+                        <dd className="font-display text-lg">{rupee(model.artisanTakeHome)}</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <Stat label="Monthly earning" value={rupee(model.artisanTakeHome * volume)} hint={`${volume} pieces`} />
+                    <Stat label="Model confidence" value={`${Math.round(model.confidence)}%`} hint="vs 340 comparables" />
+                    <Stat label="Demand trend" value={`+${model.cat.demand}%`} hint={<Spark points={model.trend} />} />
+                  </div>
+
+                  <p className="flex gap-2 text-sm text-muted-foreground">
+                    <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                    <span>
+                      {finish} {category.toLowerCase()} at this size sells strongest on {model.ch.name.toLowerCase()} right now — demand is up {model.cat.demand}% this month
+                      {gi ? " and GI-verified pieces are clearing 18% above unverified listings" : ", and verifying this craft could add ~18% more"}. Pricing below {rupee(model.low)} leaves money with the middleman.
+                    </span>
                   </p>
                 </div>
               )}
@@ -174,6 +257,55 @@ function Page() {
 
       <FeatureCta heading="Price it right. Sell it fair." icon={IndianRupee} secondary="See it on live products" />
     </PublicPage>
+  );
+}
+
+function Pills<T extends string>({ options, value, onChange }: { options: readonly T[]; value: T; onChange: (v: T) => void }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {options.map((o) => (
+        <button
+          key={o}
+          type="button"
+          onClick={() => onChange(o)}
+          className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${value === o ? "border-primary bg-primary text-primary-foreground" : "border-border/60 hover:bg-muted"}`}
+        >{o}</button>
+      ))}
+    </div>
+  );
+}
+
+function Bar({ label, value, max, tone, highlight }: { label: string; value: number; max: number; tone: string; highlight?: boolean }) {
+  return (
+    <div>
+      <div className="flex justify-between text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+        <span className={highlight ? "text-primary" : undefined}>{label}</span>
+        <span className={highlight ? "text-primary" : "text-foreground"}>{rupee(value)}</span>
+      </div>
+      <div className="mt-1 h-2.5 rounded-full bg-muted">
+        <div className={`h-full rounded-full ${tone}`} style={{ width: `${Math.min(100, (value / max) * 100)}%` }} />
+      </div>
+    </div>
+  );
+}
+
+function Stat({ label, value, hint }: { label: string; value: string; hint: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-border/60 bg-background p-3">
+      <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label}</div>
+      <div className="mt-1 font-display text-xl">{value}</div>
+      <div className="mt-1 text-[11px] text-muted-foreground">{hint}</div>
+    </div>
+  );
+}
+
+function Spark({ points }: { points: number[] }) {
+  const max = Math.max(...points);
+  const d = points.map((p, i) => `${(i / (points.length - 1)) * 100},${28 - (p / max) * 24}`).join(" ");
+  return (
+    <svg viewBox="0 0 100 30" className="h-6 w-full" preserveAspectRatio="none" aria-hidden>
+      <polyline points={d} fill="none" stroke="currentColor" strokeWidth="2.5" className="text-primary" vectorEffect="non-scaling-stroke" />
+    </svg>
   );
 }
 
