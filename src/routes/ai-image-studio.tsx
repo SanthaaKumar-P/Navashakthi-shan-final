@@ -39,8 +39,9 @@ function Page() {
   const [original, setOriginal] = useState<string | null>(null);
   const [enhanced, setEnhanced] = useState<string | null>(null);
   const [scores, setScores] = useState<Scores | null>(null);
+  const [afterScores, setAfterScores] = useState<Scores | null>(null);
+  const [notes, setNotes] = useState<string[]>([]);
   const [bgPercent, setBgPercent] = useState(0);
-  const [opts, setOpts] = useState<EnhanceOptions>(DEFAULT_ENHANCE);
   const [split, setSplit] = useState(50);
   const [dragging, setDragging] = useState(false);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -54,10 +55,13 @@ function Page() {
       const img = await loadImage(f);
       imgRef.current = img;
       setFile(f);
-      setOriginal(img.src ? URL.createObjectURL(f) : null);
+      setOriginal(URL.createObjectURL(f));
       setEnhanced(null);
+      setAfterScores(null);
+      setNotes([]);
       setScores(scoreImage(img));
-      toast.success("Photo loaded", { description: `${f.name} · ${img.width}×${img.height}` });
+      toast.success("Photo loaded — starting automatic studio pass");
+      setRunning(true);
     } catch {
       toast.error("Could not read that image");
     }
@@ -70,17 +74,23 @@ function Page() {
     }
     setEnhanced(null);
     setRunning(true);
-    toast("Enhancing photo…");
   };
 
   const finish = () => {
     setRunning(false);
-    if (!imgRef.current) return;
-    const { dataUrl, bgPercent } = enhanceImage(imgRef.current, opts);
+    const img = imgRef.current;
+    if (!img) return;
+    const measured = scoreImage(img);
+    const plan = autoEnhanceOptions(measured);
+    const { dataUrl, bgPercent } = enhanceImage(img, plan);
     setEnhanced(dataUrl);
     setBgPercent(bgPercent);
+    setNotes(autoPlanNotes(measured, plan));
     setSplit(50);
-    toast.success("Catalog-ready image generated");
+    const out = new Image();
+    out.onload = () => setAfterScores(scoreImage(out));
+    out.src = dataUrl;
+    toast.success("Catalog-ready image generated automatically");
   };
 
   const reset = () => {
@@ -89,7 +99,8 @@ function Page() {
     setOriginal(null);
     setEnhanced(null);
     setScores(null);
-    setOpts(DEFAULT_ENHANCE);
+    setAfterScores(null);
+    setNotes([]);
   };
 
   return (
@@ -97,7 +108,7 @@ function Page() {
       <PageHero
         eyebrow="Feature · AI Image Studio"
         title="AI Image Studio"
-        subtitle="Every artisan photo gets studio-grade treatment — background removed, lighting corrected, and formatted for e-commerce in seconds. No camera skills required."
+        subtitle="Fully automatic. Upload any craft photo and the studio pass normalizes every image to the same catalog standard — background removed, lighting corrected, 1:1 white export. Artisans set nothing."
       />
 
       <section className="container-x py-16">
@@ -106,14 +117,22 @@ function Page() {
             <div className="rounded-3xl border border-border/60 bg-card p-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <div className="font-display text-2xl">Try the enhancer</div>
-                  <p className="mt-1 text-sm text-muted-foreground">Upload a photo from your laptop — it is processed privately in your browser.</p>
+                  <div className="font-display text-2xl">Drop a photo — that's the whole process</div>
+                  <p className="mt-1 text-sm text-muted-foreground">Processed privately in your browser. No settings, no editing skills.</p>
                 </div>
                 {file && (
                   <button onClick={reset} className="inline-flex items-center gap-1 rounded-full border border-border/60 px-3 py-1.5 text-xs font-semibold hover:bg-muted">
                     <RotateCcw className="h-3 w-3" /> Reset
                   </button>
                 )}
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {[`${STUDIO_TARGET.size}×${STUDIO_TARGET.size} · ${STUDIO_TARGET.ratio}`, STUDIO_TARGET.background, "Auto exposure & white balance", "Auto background removal"].map((t) => (
+                  <span key={t} className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-primary">
+                    <ShieldCheck className="h-3 w-3" /> {t}
+                  </span>
+                ))}
               </div>
 
               <label
@@ -150,32 +169,38 @@ function Page() {
 
               {scores && (
                 <div className="mt-4 grid grid-cols-3 gap-3">
-                  {([["Sharpness", scores.sharpness], ["Exposure", scores.exposure], ["Contrast", scores.contrast]] as const).map(([k, v]) => (
+                  {(["sharpness", "exposure", "contrast"] as const).map((k) => (
                     <div key={k} className="rounded-xl border border-border/60 bg-muted/30 p-3">
                       <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{k}</div>
-                      <div className="mt-1 font-display text-xl">{v}<span className="text-xs text-muted-foreground">/100</span></div>
+                      <div className="mt-1 font-display text-xl">
+                        {afterScores ? afterScores[k] : scores[k]}<span className="text-xs text-muted-foreground">/100</span>
+                      </div>
+                      {afterScores && (
+                        <div className="text-[10px] font-semibold text-primary">was {scores[k]} → target {STUDIO_TARGET[k]}</div>
+                      )}
                       <div className="mt-2 h-1.5 rounded-full bg-muted">
-                        <div className="h-full rounded-full bg-primary" style={{ width: `${v}%` }} />
+                        <div className="h-full rounded-full bg-primary" style={{ width: `${afterScores ? afterScores[k] : scores[k]}%` }} />
                       </div>
                     </div>
                   ))}
                 </div>
               )}
 
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                <Slider label="Brightness" value={opts.brightness} min={0.8} max={1.4} step={0.02} onChange={(v) => setOpts((o) => ({ ...o, brightness: v }))} />
-                <Slider label="Contrast" value={opts.contrast} min={0.8} max={1.5} step={0.02} onChange={(v) => setOpts((o) => ({ ...o, contrast: v }))} />
-                <Slider label="Saturation" value={opts.saturation} min={0.6} max={1.6} step={0.02} onChange={(v) => setOpts((o) => ({ ...o, saturation: v }))} />
-                <Slider label="Background cut" value={opts.tolerance} min={0} max={140} step={2} onChange={(v) => setOpts((o) => ({ ...o, tolerance: v, removeBackground: v > 0 }))} format={(v) => String(Math.round(v))} />
-              </div>
+              {notes.length > 0 && (
+                <ul className="mt-4 space-y-1.5 rounded-2xl border border-border/60 bg-muted/30 p-4 text-xs text-muted-foreground">
+                  <li className="text-[10px] font-semibold uppercase tracking-widest text-clay">Automatic corrections applied</li>
+                  {notes.map((n) => <li key={n}>· {n}</li>)}
+                </ul>
+              )}
 
               <button
                 onClick={run}
                 disabled={running}
                 className="mt-5 w-full rounded-full bg-primary py-3 text-sm font-semibold text-primary-foreground disabled:opacity-60"
               >
-                {running ? "Enhancing…" : enhanced ? "Enhance again" : "Enhance photo"}
+                {running ? "Running studio pass…" : enhanced ? "Run studio pass again" : file ? "Run studio pass" : "Choose a photo"}
               </button>
+
 
               {enhanced && original && (
                 <div className="mt-6">
