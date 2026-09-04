@@ -166,7 +166,7 @@ function Page() {
                   <div>
                     <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Cost breakdown</div>
                     <dl className="mt-2 divide-y divide-border/60 text-sm">
-                      {[["Raw material", model.material], ["Labor (" + hours + " h × ₹" + model.cat.hourly + ")", model.labor], ["Workshop overhead", model.overhead], ["Authenticity premium", model.giPremium], [`${model.ch.name} fee`, model.fee]].map(([k, v]) => (
+                      {[["Raw material (govt. rate)", model.material], [`Labor (${model.hours} h × ₹${model.cat.wageHour} notified wage)`, model.labor], ["Workshop overhead", model.overhead], ["Authenticity premium", model.giPremium], [`${model.ch.name} fee`, model.fee]].map(([k, v]) => (
                         <div key={String(k)} className="flex justify-between py-1.5">
                           <dt className="text-muted-foreground">{k as string}</dt>
                           <dd className="font-semibold">{rupee(v as number)}</dd>
