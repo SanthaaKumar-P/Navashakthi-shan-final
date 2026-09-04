@@ -4,8 +4,9 @@ import { toast } from "sonner";
 import { PublicPage, PageHero } from "@/components/public-page";
 import { Reveal } from "@/components/section";
 import { ScanPipeline } from "@/components/ai/ScanPipeline";
-import { Upload, Crop, Sun, Scissors, Wand2, Download, RotateCcw, ImageIcon } from "lucide-react";
-import { DEFAULT_ENHANCE, enhanceImage, loadImage, scoreImage, type EnhanceOptions } from "@/lib/image-enhance";
+import { Upload, Crop, Sun, Scissors, Wand2, Download, RotateCcw, ImageIcon, ShieldCheck } from "lucide-react";
+import { autoEnhanceOptions, autoPlanNotes, enhanceImage, loadImage, scoreImage, STUDIO_TARGET } from "@/lib/image-enhance";
+
 
 const STEPS = [
   "Detecting product boundaries",
