@@ -50,6 +50,8 @@ import { Route as PortalGovernmentRouteImport } from './routes/portal.government
 import { Route as PortalKioskRouteImport } from './routes/portal.kiosk'
 import { Route as PortalTrainerRouteImport } from './routes/portal.trainer'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
+import { Route as ApiPricingAnalyzeRouteImport } from './routes/api/pricing/analyze'
+import { Route as ApiPricingMarketRouteImport } from './routes/api/pricing/market'
 import { Route as PortalAdminIndexRouteImport } from './routes/portal.admin.index'
 import { Route as PortalAdminCatalogRouteImport } from './routes/portal.admin.catalog'
 import { Route as PortalAdminLogsRouteImport } from './routes/portal.admin.logs'
@@ -303,6 +305,16 @@ const PortalTrainerRoute = PortalTrainerRouteImport.update({
 const ProductsIdRoute = ProductsIdRouteImport.update({
   id: '/products/$id',
   path: '/products/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPricingAnalyzeRoute = ApiPricingAnalyzeRouteImport.update({
+  id: '/api/pricing/analyze',
+  path: '/api/pricing/analyze',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPricingMarketRoute = ApiPricingMarketRouteImport.update({
+  id: '/api/pricing/market',
+  path: '/api/pricing/market',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortalAdminIndexRoute = PortalAdminIndexRouteImport.update({
@@ -602,6 +614,8 @@ export interface FileRoutesByFullPath {
   '/portal/kiosk': typeof PortalKioskRouteWithChildren
   '/portal/trainer': typeof PortalTrainerRouteWithChildren
   '/products/$id': typeof ProductsIdRoute
+  '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
+  '/api/pricing/market': typeof ApiPricingMarketRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
   '/portal/admin/logs': typeof PortalAdminLogsRoute
   '/portal/admin/moderation': typeof PortalAdminModerationRoute
@@ -688,6 +702,8 @@ export interface FileRoutesByTo {
   '/auth/role': typeof AuthRoleRoute
   '/auth/signup': typeof AuthSignupRoute
   '/products/$id': typeof ProductsIdRoute
+  '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
+  '/api/pricing/market': typeof ApiPricingMarketRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
   '/portal/admin/logs': typeof PortalAdminLogsRoute
   '/portal/admin/moderation': typeof PortalAdminModerationRoute
@@ -781,6 +797,8 @@ export interface FileRoutesById {
   '/portal/kiosk': typeof PortalKioskRouteWithChildren
   '/portal/trainer': typeof PortalTrainerRouteWithChildren
   '/products/$id': typeof ProductsIdRoute
+  '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
+  '/api/pricing/market': typeof ApiPricingMarketRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
   '/portal/admin/logs': typeof PortalAdminLogsRoute
   '/portal/admin/moderation': typeof PortalAdminModerationRoute
@@ -875,6 +893,8 @@ export interface FileRouteTypes {
     | '/portal/kiosk'
     | '/portal/trainer'
     | '/products/$id'
+    | '/api/pricing/analyze'
+    | '/api/pricing/market'
     | '/portal/admin/catalog'
     | '/portal/admin/logs'
     | '/portal/admin/moderation'
@@ -961,6 +981,8 @@ export interface FileRouteTypes {
     | '/auth/role'
     | '/auth/signup'
     | '/products/$id'
+    | '/api/pricing/analyze'
+    | '/api/pricing/market'
     | '/portal/admin/catalog'
     | '/portal/admin/logs'
     | '/portal/admin/moderation'
@@ -1053,6 +1075,8 @@ export interface FileRouteTypes {
     | '/portal/kiosk'
     | '/portal/trainer'
     | '/products/$id'
+    | '/api/pricing/analyze'
+    | '/api/pricing/market'
     | '/portal/admin/catalog'
     | '/portal/admin/logs'
     | '/portal/admin/moderation'
@@ -1146,6 +1170,8 @@ export interface RootRouteChildren {
   PortalKioskRoute: typeof PortalKioskRouteWithChildren
   PortalTrainerRoute: typeof PortalTrainerRouteWithChildren
   ProductsIdRoute: typeof ProductsIdRoute
+  ApiPricingAnalyzeRoute: typeof ApiPricingAnalyzeRoute
+  ApiPricingMarketRoute: typeof ApiPricingMarketRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1435,6 +1461,20 @@ declare module '@tanstack/react-router' {
       path: '/products/$id'
       fullPath: '/products/$id'
       preLoaderRoute: typeof ProductsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/pricing/analyze': {
+      id: '/api/pricing/analyze'
+      path: '/api/pricing/analyze'
+      fullPath: '/api/pricing/analyze'
+      preLoaderRoute: typeof ApiPricingAnalyzeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/pricing/market': {
+      id: '/api/pricing/market'
+      path: '/api/pricing/market'
+      fullPath: '/api/pricing/market'
+      preLoaderRoute: typeof ApiPricingMarketRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portal/admin/': {
@@ -1982,6 +2022,8 @@ const rootRouteChildren: RootRouteChildren = {
   PortalKioskRoute: PortalKioskRouteWithChildren,
   PortalTrainerRoute: PortalTrainerRouteWithChildren,
   ProductsIdRoute: ProductsIdRoute,
+  ApiPricingAnalyzeRoute: ApiPricingAnalyzeRoute,
+  ApiPricingMarketRoute: ApiPricingMarketRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
