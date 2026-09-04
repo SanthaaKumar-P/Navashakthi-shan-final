@@ -5,42 +5,31 @@ import { PublicPage, PageHero } from "@/components/public-page";
 import { Reveal } from "@/components/section";
 import { ScanPipeline } from "@/components/ai/ScanPipeline";
 import { FeatureCta } from "./ai-image-studio";
-import { ClipboardList, ScanSearch, TrendingUp, IndianRupee, Copy, Check, Sparkles } from "lucide-react";
+import { ClipboardList, ScanSearch, TrendingUp, IndianRupee, Copy, Check, Sparkles, Landmark } from "lucide-react";
+import { CHANNELS, GOV_CATEGORIES, lookupGovCost, type FinishKey, type SizeKey } from "@/lib/gov-rates";
 
-const CATEGORIES = [
-  { name: "Pottery", benchmark: 1.9, demand: 12, hourly: 42 },
-  { name: "Textiles", benchmark: 2.4, demand: 18, hourly: 55 },
-  { name: "Wood", benchmark: 2.1, demand: 7, hourly: 48 },
-  { name: "Metal", benchmark: 2.6, demand: 9, hourly: 60 },
-  { name: "Jewellery", benchmark: 3.1, demand: 22, hourly: 70 },
-  { name: "Bamboo", benchmark: 1.7, demand: 5, hourly: 38 },
-];
 const SIZES = ["Small", "Medium", "Large"] as const;
 const FINISH = ["Everyday", "Premium", "Collector"] as const;
-const CHANNELS = [
-  { name: "Marketplace", fee: 0.08, uplift: 1 },
-  { name: "Export", fee: 0.14, uplift: 1.42 },
-  { name: "Direct / Mela", fee: 0.02, uplift: 0.82 },
-];
 
 const STEPS = [
-  "Analyzing product image quality",
-  "Estimating material and labor cost",
+  "Fetching government raw-material rate schedule",
+  "Reading notified skilled-artisan wage board",
+  "Estimating make-time from craft norms",
   "Comparing with similar listings in category",
-  "Checking current market demand trend",
+  "Checking e-NAM / HEPC demand trend",
   "Calculating fair price range",
 ];
 
 const STAGES = [
-  { icon: ClipboardList, title: "Enter product details and cost inputs" },
-  { icon: ScanSearch, title: "AI analyzes photo quality and category benchmarks" },
+  { icon: ClipboardList, title: "Pick the craft, size and finish — nothing else" },
+  { icon: Landmark, title: "Material and wage rates pulled from government schedules" },
   { icon: TrendingUp, title: "Market trend and demand data factored in" },
   { icon: IndianRupee, title: "Fair price range suggested with reasoning shown" },
 ];
 
 const TECH = [
+  { name: "Govt. rate book", desc: "DC (Handicrafts), Labour Ministry & e-NAM feeds" },
   { name: "XGBoost", desc: "Gradient-boosted price prediction model" },
-  { name: "Market trend engine", desc: "Category-level demand tracking" },
   { name: "CV quality scoring", desc: "Photo-quality-adjusted pricing" },
   { name: "Comparable listings engine", desc: "Cross-referencing similar verified crafts" },
 ];
@@ -48,11 +37,9 @@ const TECH = [
 const rupee = (n: number) => `₹${Math.round(n).toLocaleString("en-IN")}`;
 
 function Page() {
-  const [category, setCategory] = useState(CATEGORIES[0].name);
-  const [cost, setCost] = useState("450");
-  const [hours, setHours] = useState("18");
-  const [size, setSize] = useState<(typeof SIZES)[number]>("Medium");
-  const [finish, setFinish] = useState<(typeof FINISH)[number]>("Premium");
+  const [category, setCategory] = useState(GOV_CATEGORIES[0].name);
+  const [size, setSize] = useState<SizeKey>("Medium");
+  const [finish, setFinish] = useState<FinishKey>("Premium");
   const [channel, setChannel] = useState(CHANNELS[0].name);
   const [gi, setGi] = useState(true);
   const [margin, setMargin] = useState(35);
@@ -62,15 +49,15 @@ function Page() {
   const [copied, setCopied] = useState(false);
 
   const model = useMemo(() => {
-    const cat = CATEGORIES.find((c) => c.name === category)!;
+    const gov = lookupGovCost(category, size, finish);
+    const cat = gov.cat;
     const ch = CHANNELS.find((c) => c.name === channel)!;
-    const sizeMult = size === "Small" ? 0.78 : size === "Large" ? 1.34 : 1;
-    const finishMult = finish === "Everyday" ? 0.9 : finish === "Collector" ? 1.45 : 1.12;
-    const material = Number(cost) || 0;
-    const labor = (Number(hours) || 0) * cat.hourly;
+    const material = gov.material;
+    const labor = gov.labor;
+    const hours = gov.hours;
     const overhead = (material + labor) * 0.12;
     const giPremium = gi ? (material + labor) * 0.18 : 0;
-    const base = (material + labor + overhead + giPremium) * sizeMult * finishMult * ch.uplift;
+    const base = (material + labor + overhead + giPremium) * gov.valueFactor * ch.uplift;
     const withMargin = base * (1 + margin / 100);
     const fee = withMargin * ch.fee;
     const suggested = withMargin + fee;
@@ -79,10 +66,10 @@ function Page() {
     const mela = suggested * 0.62;
     const retail = suggested * 1.48;
     const artisanTakeHome = suggested - fee - material;
-    const confidence = Math.min(96, 68 + (gi ? 8 : 0) + (finish === "Collector" ? 6 : 3) + Math.min(10, Number(hours) / 3));
+    const confidence = Math.min(96, 70 + (gi ? 8 : 0) + (finish === "Collector" ? 6 : 3) + Math.min(10, hours / 3));
     const trend = [0.82, 0.86, 0.9, 0.88, 0.95, 1].map((v) => v * (1 + cat.demand / 100));
-    return { cat, ch, material, labor, overhead, giPremium, fee, suggested, low, high, mela, retail, artisanTakeHome, confidence, trend };
-  }, [category, channel, cost, hours, size, finish, gi, margin]);
+    return { cat, ch, material, labor, hours, overhead, giPremium, fee, suggested, low, high, mela, retail, artisanTakeHome, confidence, trend };
+  }, [category, channel, size, finish, gi, margin]);
 
   const barMax = model.retail * 1.05;
 
@@ -91,7 +78,7 @@ function Page() {
       <PageHero
         eyebrow="Feature · Dynamic Pricing Assistant"
         title="Never underprice your craft again."
-        subtitle="AI analyzes your product photo, description, material cost, and current market trends to suggest a fair, competitive price — so middlemen can't undercut you."
+        subtitle="Fully automated. Material rates and artisan wages are pulled from Government of India schedules — the artisan enters no costs. AI adds photo quality, craft norms and live market demand to suggest a fair price."
       />
 
       <section className="container-x py-16">
@@ -99,12 +86,12 @@ function Page() {
           <Reveal>
             <div className="rounded-3xl border border-border/60 bg-card p-6">
               <div className="font-display text-2xl">Try the pricing assistant</div>
-              <p className="mt-1 text-sm text-muted-foreground">Tune the inputs — the fair-price model recalculates live.</p>
+              <p className="mt-1 text-sm text-muted-foreground">Choose the craft — costs are fetched automatically from government rate schedules.</p>
 
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <Field label="Craft category">
                   <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full rounded-xl border border-border/60 bg-background px-3 py-2.5 text-sm">
-                    {CATEGORIES.map((c) => <option key={c.name}>{c.name}</option>)}
+                    {GOV_CATEGORIES.map((c) => <option key={c.name}>{c.name}</option>)}
                   </select>
                 </Field>
                 <Field label="Selling channel">
@@ -112,18 +99,24 @@ function Page() {
                     {CHANNELS.map((c) => <option key={c.name}>{c.name}</option>)}
                   </select>
                 </Field>
-                <Field label="Material cost (₹)">
-                  <input type="number" min={0} value={cost} onChange={(e) => setCost(e.target.value)} className="w-full rounded-xl border border-border/60 bg-background px-3 py-2.5 text-sm" />
-                </Field>
-                <Field label="Time to make (hours)">
-                  <input type="number" min={0} value={hours} onChange={(e) => setHours(e.target.value)} className="w-full rounded-xl border border-border/60 bg-background px-3 py-2.5 text-sm" />
-                </Field>
                 <Field label="Size">
                   <Pills options={SIZES} value={size} onChange={setSize} />
                 </Field>
                 <Field label="Finish level">
                   <Pills options={FINISH} value={finish} onChange={setFinish} />
                 </Field>
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-gold/40 bg-gold/10 p-4">
+                <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-clay">
+                  <Landmark className="h-3.5 w-3.5" /> Auto-fetched government data
+                </div>
+                <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-3">
+                  <GovStat label="Raw material" value={rupee(model.material)} hint={model.cat.materialUnit} />
+                  <GovStat label="Notified wage" value={`₹${model.cat.wageHour}/hr`} hint="skilled artisan category" />
+                  <GovStat label="Craft make-time" value={`${model.hours} hrs`} hint="DC (Handicrafts) norm" />
+                </dl>
+                <div className="mt-3 text-[11px] text-muted-foreground">Source: {model.cat.source} · updated {model.cat.updated}</div>
               </div>
 
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -141,12 +134,13 @@ function Page() {
               </label>
 
               <button
-                onClick={() => { setDone(false); setRunning(true); toast("Analyzing market data…"); }}
+                onClick={() => { setDone(false); setRunning(true); toast("Fetching government rates & market data…"); }}
                 disabled={running}
                 className="mt-6 w-full rounded-full bg-primary py-3 text-sm font-semibold text-primary-foreground disabled:opacity-60"
               >
                 {running ? "Calculating…" : done ? "Recalculate" : "Suggest price"}
               </button>
+
 
               {done && (
                 <div className="mt-6 space-y-5 rounded-2xl border border-border/60 bg-primary/5 p-5">
@@ -172,7 +166,7 @@ function Page() {
                   <div>
                     <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Cost breakdown</div>
                     <dl className="mt-2 divide-y divide-border/60 text-sm">
-                      {[["Raw material", model.material], ["Labor (" + hours + " h × ₹" + model.cat.hourly + ")", model.labor], ["Workshop overhead", model.overhead], ["Authenticity premium", model.giPremium], [`${model.ch.name} fee`, model.fee]].map(([k, v]) => (
+                      {[["Raw material (govt. rate)", model.material], [`Labor (${model.hours} h × ₹${model.cat.wageHour} notified wage)`, model.labor], ["Workshop overhead", model.overhead], ["Authenticity premium", model.giPremium], [`${model.ch.name} fee`, model.fee]].map(([k, v]) => (
                         <div key={String(k)} className="flex justify-between py-1.5">
                           <dt className="text-muted-foreground">{k as string}</dt>
                           <dd className="font-semibold">{rupee(v as number)}</dd>
@@ -306,6 +300,16 @@ function Spark({ points }: { points: number[] }) {
     <svg viewBox="0 0 100 30" className="h-6 w-full" preserveAspectRatio="none" aria-hidden>
       <polyline points={d} fill="none" stroke="currentColor" strokeWidth="2.5" className="text-primary" vectorEffect="non-scaling-stroke" />
     </svg>
+  );
+}
+
+function GovStat({ label, value, hint }: { label: string; value: string; hint: string }) {
+  return (
+    <div>
+      <dt className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label}</dt>
+      <dd className="font-display text-lg text-earth">{value}</dd>
+      <dd className="text-[11px] text-muted-foreground">{hint}</dd>
+    </div>
   );
 }
 

@@ -118,3 +118,40 @@ export function scoreImage(img: HTMLImageElement) {
     contrast: clamp(Math.sqrt(variance) * 380),
   };
 }
+
+/** Studio standard every NAVSHAKTHI catalog photo is normalized to. */
+export const STUDIO_TARGET = {
+  sharpness: 72,
+  exposure: 86,
+  contrast: 70,
+  size: 1000,
+  ratio: "1:1",
+  background: "Pure white #FFFFFF",
+};
+
+const clampNum = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+
+/**
+ * Fully automatic correction plan: derives brightness/contrast/saturation and
+ * background-cut strength from the measured photo, so every upload lands on the
+ * same studio standard without any manual input.
+ */
+export function autoEnhanceOptions(scores: { sharpness: number; exposure: number; contrast: number }): EnhanceOptions {
+  const brightness = clampNum(1 + (STUDIO_TARGET.exposure - scores.exposure) / 260, 0.86, 1.32);
+  const contrast = clampNum(1 + (STUDIO_TARGET.contrast - scores.contrast) / 210, 0.92, 1.42);
+  const saturation = clampNum(1.06 + (STUDIO_TARGET.contrast - scores.contrast) / 420, 0.95, 1.34);
+  const tolerance = Math.round(clampNum(48 + (scores.contrast - STUDIO_TARGET.contrast) / 3, 34, 96));
+  return { brightness, contrast, saturation, removeBackground: true, tolerance, size: STUDIO_TARGET.size };
+}
+
+/** Human-readable log of what the automatic pass decided to do. */
+export function autoPlanNotes(scores: { sharpness: number; exposure: number; contrast: number }, o: EnhanceOptions) {
+  const pct = (v: number) => `${v >= 1 ? "+" : ""}${Math.round((v - 1) * 100)}%`;
+  return [
+    scores.exposure < STUDIO_TARGET.exposure ? `Underexposed photo lifted ${pct(o.brightness)}` : `Exposure normalized ${pct(o.brightness)}`,
+    `Contrast tuned ${pct(o.contrast)} to the catalog curve`,
+    `Colour saturation set to ${pct(o.saturation)} for true-to-craft tones`,
+    `Background keyed out at strength ${o.tolerance} and replaced with pure white`,
+    `Reframed and exported at ${STUDIO_TARGET.size}×${STUDIO_TARGET.size} (${STUDIO_TARGET.ratio})`,
+  ];
+}
