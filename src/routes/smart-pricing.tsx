@@ -303,6 +303,16 @@ function Spark({ points }: { points: number[] }) {
   );
 }
 
+function GovStat({ label, value, hint }: { label: string; value: string; hint: string }) {
+  return (
+    <div>
+      <dt className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label}</dt>
+      <dd className="font-display text-lg text-earth">{value}</dd>
+      <dd className="text-[11px] text-muted-foreground">{hint}</dd>
+    </div>
+  );
+}
+
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
