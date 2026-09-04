@@ -50,6 +50,8 @@ import { Route as PortalGovernmentRouteImport } from './routes/portal.government
 import { Route as PortalKioskRouteImport } from './routes/portal.kiosk'
 import { Route as PortalTrainerRouteImport } from './routes/portal.trainer'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
+import { Route as ApiCatalogerGenerateRouteImport } from './routes/api/cataloger/generate'
+import { Route as ApiCatalogerTranscribeRouteImport } from './routes/api/cataloger/transcribe'
 import { Route as ApiPricingAnalyzeRouteImport } from './routes/api/pricing/analyze'
 import { Route as ApiPricingMarketRouteImport } from './routes/api/pricing/market'
 import { Route as PortalAdminIndexRouteImport } from './routes/portal.admin.index'
@@ -305,6 +307,16 @@ const PortalTrainerRoute = PortalTrainerRouteImport.update({
 const ProductsIdRoute = ProductsIdRouteImport.update({
   id: '/products/$id',
   path: '/products/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCatalogerGenerateRoute = ApiCatalogerGenerateRouteImport.update({
+  id: '/api/cataloger/generate',
+  path: '/api/cataloger/generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCatalogerTranscribeRoute = ApiCatalogerTranscribeRouteImport.update({
+  id: '/api/cataloger/transcribe',
+  path: '/api/cataloger/transcribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPricingAnalyzeRoute = ApiPricingAnalyzeRouteImport.update({
@@ -614,6 +626,8 @@ export interface FileRoutesByFullPath {
   '/portal/kiosk': typeof PortalKioskRouteWithChildren
   '/portal/trainer': typeof PortalTrainerRouteWithChildren
   '/products/$id': typeof ProductsIdRoute
+  '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
+  '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
   '/api/pricing/market': typeof ApiPricingMarketRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
@@ -702,6 +716,8 @@ export interface FileRoutesByTo {
   '/auth/role': typeof AuthRoleRoute
   '/auth/signup': typeof AuthSignupRoute
   '/products/$id': typeof ProductsIdRoute
+  '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
+  '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
   '/api/pricing/market': typeof ApiPricingMarketRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
@@ -797,6 +813,8 @@ export interface FileRoutesById {
   '/portal/kiosk': typeof PortalKioskRouteWithChildren
   '/portal/trainer': typeof PortalTrainerRouteWithChildren
   '/products/$id': typeof ProductsIdRoute
+  '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
+  '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
   '/api/pricing/market': typeof ApiPricingMarketRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
@@ -893,6 +911,8 @@ export interface FileRouteTypes {
     | '/portal/kiosk'
     | '/portal/trainer'
     | '/products/$id'
+    | '/api/cataloger/generate'
+    | '/api/cataloger/transcribe'
     | '/api/pricing/analyze'
     | '/api/pricing/market'
     | '/portal/admin/catalog'
@@ -981,6 +1001,8 @@ export interface FileRouteTypes {
     | '/auth/role'
     | '/auth/signup'
     | '/products/$id'
+    | '/api/cataloger/generate'
+    | '/api/cataloger/transcribe'
     | '/api/pricing/analyze'
     | '/api/pricing/market'
     | '/portal/admin/catalog'
@@ -1075,6 +1097,8 @@ export interface FileRouteTypes {
     | '/portal/kiosk'
     | '/portal/trainer'
     | '/products/$id'
+    | '/api/cataloger/generate'
+    | '/api/cataloger/transcribe'
     | '/api/pricing/analyze'
     | '/api/pricing/market'
     | '/portal/admin/catalog'
@@ -1170,6 +1194,8 @@ export interface RootRouteChildren {
   PortalKioskRoute: typeof PortalKioskRouteWithChildren
   PortalTrainerRoute: typeof PortalTrainerRouteWithChildren
   ProductsIdRoute: typeof ProductsIdRoute
+  ApiCatalogerGenerateRoute: typeof ApiCatalogerGenerateRoute
+  ApiCatalogerTranscribeRoute: typeof ApiCatalogerTranscribeRoute
   ApiPricingAnalyzeRoute: typeof ApiPricingAnalyzeRoute
   ApiPricingMarketRoute: typeof ApiPricingMarketRoute
 }
@@ -1461,6 +1487,20 @@ declare module '@tanstack/react-router' {
       path: '/products/$id'
       fullPath: '/products/$id'
       preLoaderRoute: typeof ProductsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/cataloger/generate': {
+      id: '/api/cataloger/generate'
+      path: '/api/cataloger/generate'
+      fullPath: '/api/cataloger/generate'
+      preLoaderRoute: typeof ApiCatalogerGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/cataloger/transcribe': {
+      id: '/api/cataloger/transcribe'
+      path: '/api/cataloger/transcribe'
+      fullPath: '/api/cataloger/transcribe'
+      preLoaderRoute: typeof ApiCatalogerTranscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/pricing/analyze': {
@@ -2022,6 +2062,8 @@ const rootRouteChildren: RootRouteChildren = {
   PortalKioskRoute: PortalKioskRouteWithChildren,
   PortalTrainerRoute: PortalTrainerRouteWithChildren,
   ProductsIdRoute: ProductsIdRoute,
+  ApiCatalogerGenerateRoute: ApiCatalogerGenerateRoute,
+  ApiCatalogerTranscribeRoute: ApiCatalogerTranscribeRoute,
   ApiPricingAnalyzeRoute: ApiPricingAnalyzeRoute,
   ApiPricingMarketRoute: ApiPricingMarketRoute,
 }
