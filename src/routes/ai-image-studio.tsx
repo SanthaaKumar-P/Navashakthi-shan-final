@@ -299,16 +299,6 @@ function Page() {
   );
 }
 
-function Slider({ label, value, min, max, step, onChange, format }: { label: string; value: number; min: number; max: number; step: number; onChange: (v: number) => void; format?: (v: number) => string }) {
-  return (
-    <label className="block">
-      <span className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-        {label} <span className="text-foreground">{format ? format(value) : value.toFixed(2)}</span>
-      </span>
-      <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} className="mt-1.5 w-full" />
-    </label>
-  );
-}
 
 export function FeatureCta({ heading, icon: Icon = Download, secondary }: { heading: string; icon?: typeof Download; secondary: string }) {
   return (
