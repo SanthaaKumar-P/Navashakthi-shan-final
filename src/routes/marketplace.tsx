@@ -3,7 +3,9 @@ import { useMemo, useState } from "react";
 import { Search, SlidersHorizontal, Grid2X2, List, Mic, Sparkles } from "lucide-react";
 import { PublicLayout } from "@/components/layout/public-layout";
 import { ProductCard } from "@/components/product-card";
-import { categories, products } from "@/lib/mock-data";
+import { categories, products as mockProducts, type Product } from "@/lib/mock-data";
+import { getPublishedProducts, type PublishedProduct } from "@/lib/published-listings";
+import { useStoreData } from "@/lib/use-store-sync";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -18,11 +20,17 @@ export const Route = createFileRoute("/marketplace")({
 });
 
 function Marketplace() {
+  const published = useStoreData<PublishedProduct[]>(getPublishedProducts, []);
+  const products = useMemo<Product[]>(() => [...published, ...mockProducts], [published]);
   const [cat, setCat] = useState<string>("all");
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<"featured" | "price-asc" | "price-desc" | "rating">("featured");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [max, setMax] = useState(50000);
+  const [craftmarkOnly, setCraftmarkOnly] = useState(false);
+  const [giOnly, setGiOnly] = useState(false);
+  const [twinOnly, setTwinOnly] = useState(false);
+  const [highScoreOnly, setHighScoreOnly] = useState(false);
 
   const runSearch = () => {
     const term = q.trim();
@@ -67,13 +75,17 @@ function Marketplace() {
         [p.name, p.village, p.artisan, p.state, p.category, p.story]
           .filter(Boolean)
           .some((f) => String(f).toLowerCase().includes(q.trim().toLowerCase()))) &&
-      p.price <= max
+      p.price <= max &&
+      (!craftmarkOnly || p.craftmark === true) &&
+      (!giOnly || p.giCertified === true) &&
+      (!twinOnly || p.digitalTwin === true) &&
+      (!highScoreOnly || (p.authenticity ?? 0) > 95)
     );
     if (sort === "price-asc") list = [...list].sort((a, b) => a.price - b.price);
     if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
     if (sort === "rating") list = [...list].sort((a, b) => b.rating - a.rating);
     return list;
-  }, [cat, q, sort, max]);
+  }, [products, cat, q, sort, max, craftmarkOnly, giOnly, twinOnly, highScoreOnly]);
 
   return (
     <PublicLayout>
@@ -146,10 +158,10 @@ function Marketplace() {
               <div className="mt-6">
                 <div className="text-xs font-semibold uppercase tracking-widest text-clay">Trust badges</div>
                 <div className="mt-3 space-y-2 text-sm">
-                  <label className="flex items-center gap-2"><input type="checkbox" defaultChecked className="accent-primary" /> Craftmark certified</label>
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-primary" /> GI-tagged</label>
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-primary" /> Digital Twin available</label>
-                  <label className="flex items-center gap-2"><input type="checkbox" className="accent-primary" /> AI score {'>'}95</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" checked={craftmarkOnly} onChange={(e) => setCraftmarkOnly(e.target.checked)} className="accent-primary" /> Craftmark certified</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" checked={giOnly} onChange={(e) => setGiOnly(e.target.checked)} className="accent-primary" /> GI-tagged</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" checked={twinOnly} onChange={(e) => setTwinOnly(e.target.checked)} className="accent-primary" /> Digital Twin available</label>
+                  <label className="flex items-center gap-2"><input type="checkbox" checked={highScoreOnly} onChange={(e) => setHighScoreOnly(e.target.checked)} className="accent-primary" /> AI score {'>'}95</label>
                 </div>
               </div>
             </div>
