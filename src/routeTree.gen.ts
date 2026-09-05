@@ -79,6 +79,7 @@ import { Route as PortalArtisanUploadRouteImport } from './routes/portal.artisan
 import { Route as PortalCustomerIndexRouteImport } from './routes/portal.customer.index'
 import { Route as PortalCustomerAddressesRouteImport } from './routes/portal.customer.addresses'
 import { Route as PortalCustomerCartRouteImport } from './routes/portal.customer.cart'
+import { Route as PortalCustomerCheckoutRouteImport } from './routes/portal.customer.checkout'
 import { Route as PortalCustomerGiftsRouteImport } from './routes/portal.customer.gifts'
 import { Route as PortalCustomerMessagesRouteImport } from './routes/portal.customer.messages'
 import { Route as PortalCustomerNotificationsRouteImport } from './routes/portal.customer.notifications'
@@ -456,6 +457,11 @@ const PortalCustomerCartRoute = PortalCustomerCartRouteImport.update({
   path: '/cart',
   getParentRoute: () => PortalCustomerRoute,
 } as any)
+const PortalCustomerCheckoutRoute = PortalCustomerCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
 const PortalCustomerGiftsRoute = PortalCustomerGiftsRouteImport.update({
   id: '/gifts',
   path: '/gifts',
@@ -652,6 +658,7 @@ export interface FileRoutesByFullPath {
   '/portal/artisan/upload': typeof PortalArtisanUploadRoute
   '/portal/customer/addresses': typeof PortalCustomerAddressesRoute
   '/portal/customer/cart': typeof PortalCustomerCartRoute
+  '/portal/customer/checkout': typeof PortalCustomerCheckoutRoute
   '/portal/customer/gifts': typeof PortalCustomerGiftsRoute
   '/portal/customer/messages': typeof PortalCustomerMessagesRoute
   '/portal/customer/notifications': typeof PortalCustomerNotificationsRoute
@@ -742,6 +749,7 @@ export interface FileRoutesByTo {
   '/portal/artisan/upload': typeof PortalArtisanUploadRoute
   '/portal/customer/addresses': typeof PortalCustomerAddressesRoute
   '/portal/customer/cart': typeof PortalCustomerCartRoute
+  '/portal/customer/checkout': typeof PortalCustomerCheckoutRoute
   '/portal/customer/gifts': typeof PortalCustomerGiftsRoute
   '/portal/customer/messages': typeof PortalCustomerMessagesRoute
   '/portal/customer/notifications': typeof PortalCustomerNotificationsRoute
@@ -839,6 +847,7 @@ export interface FileRoutesById {
   '/portal/artisan/upload': typeof PortalArtisanUploadRoute
   '/portal/customer/addresses': typeof PortalCustomerAddressesRoute
   '/portal/customer/cart': typeof PortalCustomerCartRoute
+  '/portal/customer/checkout': typeof PortalCustomerCheckoutRoute
   '/portal/customer/gifts': typeof PortalCustomerGiftsRoute
   '/portal/customer/messages': typeof PortalCustomerMessagesRoute
   '/portal/customer/notifications': typeof PortalCustomerNotificationsRoute
@@ -937,6 +946,7 @@ export interface FileRouteTypes {
     | '/portal/artisan/upload'
     | '/portal/customer/addresses'
     | '/portal/customer/cart'
+    | '/portal/customer/checkout'
     | '/portal/customer/gifts'
     | '/portal/customer/messages'
     | '/portal/customer/notifications'
@@ -1027,6 +1037,7 @@ export interface FileRouteTypes {
     | '/portal/artisan/upload'
     | '/portal/customer/addresses'
     | '/portal/customer/cart'
+    | '/portal/customer/checkout'
     | '/portal/customer/gifts'
     | '/portal/customer/messages'
     | '/portal/customer/notifications'
@@ -1123,6 +1134,7 @@ export interface FileRouteTypes {
     | '/portal/artisan/upload'
     | '/portal/customer/addresses'
     | '/portal/customer/cart'
+    | '/portal/customer/checkout'
     | '/portal/customer/gifts'
     | '/portal/customer/messages'
     | '/portal/customer/notifications'
@@ -1692,6 +1704,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalCustomerCartRouteImport
       parentRoute: typeof PortalCustomerRoute
     }
+    '/portal/customer/checkout': {
+      id: '/portal/customer/checkout'
+      path: '/checkout'
+      fullPath: '/portal/customer/checkout'
+      preLoaderRoute: typeof PortalCustomerCheckoutRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
     '/portal/customer/gifts': {
       id: '/portal/customer/gifts'
       path: '/gifts'
@@ -1930,6 +1949,7 @@ const PortalArtisanRouteWithChildren = PortalArtisanRoute._addFileChildren(
 interface PortalCustomerRouteChildren {
   PortalCustomerAddressesRoute: typeof PortalCustomerAddressesRoute
   PortalCustomerCartRoute: typeof PortalCustomerCartRoute
+  PortalCustomerCheckoutRoute: typeof PortalCustomerCheckoutRoute
   PortalCustomerGiftsRoute: typeof PortalCustomerGiftsRoute
   PortalCustomerMessagesRoute: typeof PortalCustomerMessagesRoute
   PortalCustomerNotificationsRoute: typeof PortalCustomerNotificationsRoute
@@ -1943,6 +1963,7 @@ interface PortalCustomerRouteChildren {
 const PortalCustomerRouteChildren: PortalCustomerRouteChildren = {
   PortalCustomerAddressesRoute: PortalCustomerAddressesRoute,
   PortalCustomerCartRoute: PortalCustomerCartRoute,
+  PortalCustomerCheckoutRoute: PortalCustomerCheckoutRoute,
   PortalCustomerGiftsRoute: PortalCustomerGiftsRoute,
   PortalCustomerMessagesRoute: PortalCustomerMessagesRoute,
   PortalCustomerNotificationsRoute: PortalCustomerNotificationsRoute,

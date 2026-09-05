@@ -50,7 +50,12 @@ function CartPage() {
             <div className="mt-4 flex justify-between border-t border-border pt-4 font-display text-xl">
               <span>Total</span><span className="text-primary">₹{(total + Math.round(total * 0.02)).toLocaleString("en-IN")}</span>
             </div>
-            <button className="mt-6 w-full rounded-full bg-primary py-3.5 text-sm font-semibold text-primary-foreground">Proceed to checkout</button>
+            <Link
+  to="/portal/customer/checkout"
+  className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+>
+  Proceed to checkout
+</Link>
           </aside>
         </div>
       )}
