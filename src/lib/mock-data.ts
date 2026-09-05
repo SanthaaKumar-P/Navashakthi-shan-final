@@ -254,7 +254,7 @@ export const products: Product[] = [
     inStock: 7,
   },
 
-  {
+    {
     id: "p10",
     name: "Blue Pottery Storage Set",
     category: "pottery",
@@ -275,7 +275,96 @@ export const products: Product[] = [
     digitalTwin: false,
     inStock: 8,
   },
+
+  {
+    id: "p11",
+    name: "Handwoven Bamboo Basket",
+    category: "bamboo",
+    price: 1499,
+    mrp: 1999,
+    image: "/craft-images/bamboo-basket/main.jpg",
+    rating: 4.8,
+    reviews: 32,
+    artisan: "NAVSHAKTHI Artisan Collective",
+    village: "Majuli",
+    state: "Assam",
+    story:
+      "A traditionally handwoven bamboo basket made from natural bamboo strips, combining practical utility with the distinctive character of Indian bamboo craftsmanship.",
+    materials: ["Bamboo", "Natural fibre"],
+    authenticity: 96,
+    craftmark: true,
+    giCertified: false,
+    digitalTwin: true,
+    inStock: 12,
+  },
+
+  {
+    id: "p12",
+    name: "Traditional Mud Cooking Utensil",
+    category: "pottery",
+    price: 1199,
+    mrp: 1599,
+    image: "/craft-images/mud-cooking-utensil/main.jpg",
+    rating: 4.7,
+    reviews: 28,
+    artisan: "NAVSHAKTHI Artisan Collective",
+    village: "Tamil Nadu",
+    state: "Tamil Nadu",
+    story:
+      "A traditional mud cooking utensil shaped by hand using natural clay, preserving the earthy character and functional heritage of traditional pottery.",
+    materials: ["Natural clay", "Terracotta"],
+    authenticity: 97,
+    craftmark: true,
+    giCertified: false,
+    digitalTwin: true,
+    inStock: 10,
+  },
+
+  {
+    id: "p13",
+    name: "Handcrafted Wooden Elephant",
+    category: "wood",
+    price: 2499,
+    mrp: 3199,
+    image: "/craft-images/wooden-elephant/main.jpg",
+    rating: 4.9,
+    reviews: 39,
+    artisan: "NAVSHAKTHI Artisan Collective",
+    village: "Tamil Nadu",
+    state: "Tamil Nadu",
+    story:
+      "A handcrafted wooden elephant sculpture featuring traditional carving and finishing, created as a heritage-inspired decorative piece.",
+    materials: ["Wood", "Natural finish"],
+    authenticity: 97,
+    craftmark: true,
+    giCertified: false,
+    digitalTwin: true,
+    inStock: 7,
+  },
+
+  {
+    id: "p14",
+    name: "Traditional Bronze Lamp",
+    category: "metal",
+    price: 3999,
+    mrp: 4999,
+    image: "/craft-images/bronze-lamp/main.jpg",
+    rating: 4.9,
+    reviews: 46,
+    artisan: "NAVSHAKTHI Artisan Collective",
+    village: "Tamil Nadu",
+    state: "Tamil Nadu",
+    story:
+      "A traditional bronze lamp crafted with heritage metalworking techniques, designed to preserve the timeless character of Indian ceremonial and decorative craft.",
+    materials: ["Bronze", "Traditional metalwork"],
+    authenticity: 98,
+    craftmark: true,
+    giCertified: false,
+    digitalTwin: true,
+    inStock: 6,
+  },
 ];
+
 
 export function getProduct(id: string) {
   return products.find((p) => p.id === id);
