@@ -1,40 +1,99 @@
-import { ShieldCheck, Sparkles, Download } from "lucide-react";
+import {
+  Download,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export interface PassportData {
-  id: string; name: string; artisan: string; village: string; district: string; state: string;
-  category: string; handmadeScore: number; authenticity: number; aiStatus: string;
-  craftmark: boolean; twinId: string; govStatus: string; date: string;
-  material: string; buildTime: string; technique: string; impact: string; story: string;
+  id: string;
+  name: string;
+  artisan: string;
+  village: string;
+  district: string;
+  state: string;
+  category: string;
+  handmadeScore: number;
+  authenticity: number;
+  aiStatus: string;
+  craftmark: boolean;
+  twinId: string;
+  govStatus: string;
+  date: string;
+  material: string;
+  buildTime: string;
+  technique: string;
+  impact: string;
+  story: string;
   image?: string;
 }
 
-export function CraftPassport({ data, onDownload }: { data: PassportData; onDownload?: () => void }) {
+export function CraftPassport({
+  data,
+  onDownload,
+}: {
+  data: PassportData;
+  onDownload?: () => void;
+}) {
   return (
-    <div className="mx-auto max-w-3xl overflow-hidden rounded-[2rem] border-2 border-gold/40 bg-cream shadow-elegant">
-      <div className="relative bg-gradient-to-br from-primary via-primary to-primary/80 p-6 text-primary-foreground">
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 20% 30%, white 1px, transparent 1px), radial-gradient(circle at 80% 60%, white 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+    <div
+      id="craft-passport"
+      className="mx-auto max-w-3xl overflow-hidden rounded-[2rem] border-2 border-gold/40 bg-cream shadow-elegant print:max-w-none print:rounded-none print:border print:shadow-none"
+    >
+      {/* HEADER */}
+      <div className="relative bg-gradient-to-br from-primary via-primary to-primary/80 p-6 text-primary-foreground print:p-5">
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 30%, white 1px, transparent 1px), radial-gradient(circle at 80% 60%, white 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+
         <div className="relative flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
-            <img src={logo} alt="" className="h-12 w-12 rounded-full bg-white/20 p-1" />
+            <img
+              src={logo}
+              alt=""
+              className="h-12 w-12 rounded-full bg-white/20 p-1 print:h-10 print:w-10"
+            />
+
             <div>
-              <div className="text-[10px] uppercase tracking-[0.3em] opacity-80">Government of India · Verified</div>
-              <div className="font-display text-2xl">Digital Craft Passport</div>
+              <div className="text-[10px] uppercase tracking-[0.3em] opacity-80">
+                NAVSHAKTHI · Verified Craft Record
+              </div>
+
+              <div className="font-display text-2xl print:text-xl">
+                Digital Craft Passport
+              </div>
             </div>
           </div>
+
           <div className="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest">
             #{data.id}
           </div>
         </div>
       </div>
 
-      <div className="grid gap-6 p-6 md:grid-cols-[1fr_2fr]">
+      {/* PRODUCT INFORMATION */}
+      <div className="grid gap-6 p-6 md:grid-cols-[1fr_2fr] print:grid-cols-[1fr_2fr] print:gap-5 print:p-5">
         {data.image && (
-          <img src={data.image} alt="" className="aspect-square w-full rounded-2xl object-cover" />
+          <img
+            src={data.image}
+            alt={data.name}
+            className="aspect-square w-full rounded-2xl object-cover print:rounded-xl"
+          />
         )}
+
         <div>
-          <div className="font-display text-3xl leading-tight text-earth">{data.name}</div>
-          <div className="mt-1 text-sm text-muted-foreground">{data.category} · {data.technique}</div>
+          <div className="font-display text-3xl leading-tight text-earth print:text-2xl">
+            {data.name}
+          </div>
+
+          <div className="mt-1 text-sm capitalize text-muted-foreground">
+            {data.category} · {data.technique}
+          </div>
 
           <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
             <Row k="Artisan" v={data.artisan} />
@@ -44,50 +103,120 @@ export function CraftPassport({ data, onDownload }: { data: PassportData; onDown
             <Row k="Material" v={data.material} />
             <Row k="Build time" v={data.buildTime} />
             <Row k="Impact" v={data.impact} />
-            <Row k="Issued" v={data.date} />
+            <Row k="Record date" v={data.date} />
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 border-t border-gold/30 bg-white/50 p-6">
-        <Score label="Handmade" value={data.handmadeScore} />
-        <Score label="Authenticity" value={data.authenticity} />
-        <Score label="Twin ID" text={data.twinId.slice(0, 12) + "…"} />
+      {/* VERIFICATION SCORES */}
+      <div className="grid grid-cols-3 gap-3 border-t border-gold/30 bg-white/50 p-6 print:p-5">
+        <Score
+          label="Handmade"
+          value={data.handmadeScore}
+        />
+
+        <Score
+          label="Authenticity"
+          value={data.authenticity}
+        />
+
+        <Score
+          label="Twin ID"
+          text={formatTwinId(data.twinId)}
+        />
       </div>
 
-      <div className="border-t border-gold/30 p-6">
-        <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Story of the craft</div>
-        <p className="mt-2 text-sm leading-relaxed text-earth">{data.story}</p>
-      </div>
-
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gold/30 bg-primary/5 p-6">
-        <div className="flex items-center gap-2 text-sm">
-          <ShieldCheck className="h-5 w-5 text-primary" />
-          <span className="font-semibold text-primary">{data.aiStatus}</span>
-          <span className="text-muted-foreground">· {data.govStatus}</span>
-          {data.craftmark && <span className="ml-2 inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[11px] font-semibold text-earth"><Sparkles className="h-3 w-3" /> Craftmark</span>}
+      {/* STORY */}
+      <div className="border-t border-gold/30 p-6 print:p-5">
+        <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+          Story of the craft
         </div>
-        <button onClick={onDownload} className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">
-          <Download className="h-4 w-4" /> Download Passport
+
+        <p className="mt-2 text-sm leading-relaxed text-earth">
+          {data.story}
+        </p>
+      </div>
+
+      {/* VERIFICATION FOOTER */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-gold/30 bg-primary/5 p-6 print:p-5">
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <ShieldCheck className="h-5 w-5 text-primary" />
+
+          <span className="font-semibold text-primary">
+            {data.aiStatus}
+          </span>
+
+          <span className="text-muted-foreground">
+            · {data.govStatus}
+          </span>
+
+          {data.craftmark && (
+            <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[11px] font-semibold text-earth">
+              <Sparkles className="h-3 w-3" />
+              Craftmark
+            </span>
+          )}
+        </div>
+
+        <button
+          type="button"
+          onClick={onDownload}
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground print:hidden"
+        >
+          <Download className="h-4 w-4" />
+          Download Passport
         </button>
       </div>
     </div>
   );
 }
 
-function Row({ k, v }: { k: string; v: string }) {
+function Row({
+  k,
+  v,
+}: {
+  k: string;
+  v: string;
+}) {
   return (
-    <div>
-      <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{k}</div>
-      <div className="text-sm text-earth">{v}</div>
+    <div className="min-w-0">
+      <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+        {k}
+      </div>
+
+      <div className="break-words text-sm text-earth">
+        {v}
+      </div>
     </div>
   );
 }
-function Score({ label, value, text }: { label: string; value?: number; text?: string }) {
+
+function Score({
+  label,
+  value,
+  text,
+}: {
+  label: string;
+  value?: number;
+  text?: string;
+}) {
   return (
-    <div className="rounded-2xl border border-gold/40 bg-cream p-3 text-center">
-      <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{label}</div>
-      <div className="mt-1 font-display text-2xl text-primary">{text ?? `${value}%`}</div>
+    <div className="rounded-2xl border border-gold/40 bg-cream p-3 text-center print:rounded-xl">
+      <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+        {label}
+      </div>
+
+      <div className="mt-1 break-all font-display text-2xl text-primary">
+        {text ?? `${value}%`}
+      </div>
     </div>
   );
+}
+
+function formatTwinId(twinId: string) {
+  if (twinId.length <= 14) {
+    return twinId;
+  }
+
+  return `${twinId.slice(0, 12)}…`;
 }

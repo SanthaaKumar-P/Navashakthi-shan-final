@@ -50,6 +50,7 @@ import { Route as PortalGovernmentRouteImport } from './routes/portal.government
 import { Route as PortalKioskRouteImport } from './routes/portal.kiosk'
 import { Route as PortalTrainerRouteImport } from './routes/portal.trainer'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
+import { Route as ApiAuthenticationAnalyzeRouteImport } from './routes/api/authentication/analyze'
 import { Route as ApiCatalogerGenerateRouteImport } from './routes/api/cataloger/generate'
 import { Route as ApiCatalogerTranscribeRouteImport } from './routes/api/cataloger/transcribe'
 import { Route as ApiPricingAnalyzeRouteImport } from './routes/api/pricing/analyze'
@@ -310,6 +311,12 @@ const ProductsIdRoute = ProductsIdRouteImport.update({
   path: '/products/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthenticationAnalyzeRoute =
+  ApiAuthenticationAnalyzeRouteImport.update({
+    id: '/api/authentication/analyze',
+    path: '/api/authentication/analyze',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiCatalogerGenerateRoute = ApiCatalogerGenerateRouteImport.update({
   id: '/api/cataloger/generate',
   path: '/api/cataloger/generate',
@@ -632,6 +639,7 @@ export interface FileRoutesByFullPath {
   '/portal/kiosk': typeof PortalKioskRouteWithChildren
   '/portal/trainer': typeof PortalTrainerRouteWithChildren
   '/products/$id': typeof ProductsIdRoute
+  '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
@@ -723,6 +731,7 @@ export interface FileRoutesByTo {
   '/auth/role': typeof AuthRoleRoute
   '/auth/signup': typeof AuthSignupRoute
   '/products/$id': typeof ProductsIdRoute
+  '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
@@ -821,6 +830,7 @@ export interface FileRoutesById {
   '/portal/kiosk': typeof PortalKioskRouteWithChildren
   '/portal/trainer': typeof PortalTrainerRouteWithChildren
   '/products/$id': typeof ProductsIdRoute
+  '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
@@ -920,6 +930,7 @@ export interface FileRouteTypes {
     | '/portal/kiosk'
     | '/portal/trainer'
     | '/products/$id'
+    | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
     | '/api/pricing/analyze'
@@ -1011,6 +1022,7 @@ export interface FileRouteTypes {
     | '/auth/role'
     | '/auth/signup'
     | '/products/$id'
+    | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
     | '/api/pricing/analyze'
@@ -1108,6 +1120,7 @@ export interface FileRouteTypes {
     | '/portal/kiosk'
     | '/portal/trainer'
     | '/products/$id'
+    | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
     | '/api/pricing/analyze'
@@ -1206,6 +1219,7 @@ export interface RootRouteChildren {
   PortalKioskRoute: typeof PortalKioskRouteWithChildren
   PortalTrainerRoute: typeof PortalTrainerRouteWithChildren
   ProductsIdRoute: typeof ProductsIdRoute
+  ApiAuthenticationAnalyzeRoute: typeof ApiAuthenticationAnalyzeRoute
   ApiCatalogerGenerateRoute: typeof ApiCatalogerGenerateRoute
   ApiCatalogerTranscribeRoute: typeof ApiCatalogerTranscribeRoute
   ApiPricingAnalyzeRoute: typeof ApiPricingAnalyzeRoute
@@ -1499,6 +1513,13 @@ declare module '@tanstack/react-router' {
       path: '/products/$id'
       fullPath: '/products/$id'
       preLoaderRoute: typeof ProductsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/authentication/analyze': {
+      id: '/api/authentication/analyze'
+      path: '/api/authentication/analyze'
+      fullPath: '/api/authentication/analyze'
+      preLoaderRoute: typeof ApiAuthenticationAnalyzeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/cataloger/generate': {
@@ -2083,6 +2104,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortalKioskRoute: PortalKioskRouteWithChildren,
   PortalTrainerRoute: PortalTrainerRouteWithChildren,
   ProductsIdRoute: ProductsIdRoute,
+  ApiAuthenticationAnalyzeRoute: ApiAuthenticationAnalyzeRoute,
   ApiCatalogerGenerateRoute: ApiCatalogerGenerateRoute,
   ApiCatalogerTranscribeRoute: ApiCatalogerTranscribeRoute,
   ApiPricingAnalyzeRoute: ApiPricingAnalyzeRoute,
