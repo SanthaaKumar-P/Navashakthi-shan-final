@@ -32,6 +32,11 @@ export function ProductCard({ product, index = 0 }: { product: Product; index?: 
           />
           <div className="absolute inset-x-3 top-3 flex items-start justify-between">
             <div className="flex flex-col gap-1.5">
+              {(product as any).aiPublished && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-clay px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur">
+                  <Sparkles className="h-3 w-3" /> AI Published
+                </span>
+              )}
               {product.digitalTwin && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-primary/95 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground backdrop-blur">
                   <Sparkles className="h-3 w-3" /> Digital Twin

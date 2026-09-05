@@ -9,229 +9,104 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as AiAnalyticsRouteImport } from './routes/ai-analytics'
-import { Route as AiAuthenticationRouteImport } from './routes/ai-authentication'
-import { Route as AiFeaturesRouteImport } from './routes/ai-features'
-import { Route as AiImageStudioRouteImport } from './routes/ai-image-studio'
-import { Route as CertificatesRouteImport } from './routes/certificates'
-import { Route as CertificationCentreRouteImport } from './routes/certification-centre'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CraftPassportRouteImport } from './routes/craft-passport'
-import { Route as DigitalTwinRouteImport } from './routes/digital-twin'
-import { Route as FaqRouteImport } from './routes/faq'
-import { Route as HowItWorksRouteImport } from './routes/how-it-works'
-import { Route as IndiaPostRouteImport } from './routes/india-post'
-import { Route as KioskRouteImport } from './routes/kiosk'
-import { Route as KioskAppointmentRouteImport } from './routes/kiosk-appointment'
-import { Route as MarketplaceRouteImport } from './routes/marketplace'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as ResearchRouteImport } from './routes/research'
-import { Route as ReverseMarketplaceRouteImport } from './routes/reverse-marketplace'
-import { Route as SchemesRouteImport } from './routes/schemes'
-import { Route as SmartCatalogerRouteImport } from './routes/smart-cataloger'
-import { Route as SmartKioskPortalRouteImport } from './routes/smart-kiosk-portal'
-import { Route as SmartPricingRouteImport } from './routes/smart-pricing'
-import { Route as TeamRouteImport } from './routes/team'
-import { Route as TermsRouteImport } from './routes/terms'
-import { Route as TrainingPortalRouteImport } from './routes/training-portal'
 import { Route as WorkshopBookingRouteImport } from './routes/workshop-booking'
-import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
-import { Route as AuthLoginRouteImport } from './routes/auth.login'
-import { Route as AuthOtpRouteImport } from './routes/auth.otp'
-import { Route as AuthResetRouteImport } from './routes/auth.reset'
-import { Route as AuthRoleRouteImport } from './routes/auth.role'
-import { Route as AuthSignupRouteImport } from './routes/auth.signup'
-import { Route as PortalAdminRouteImport } from './routes/portal.admin'
-import { Route as PortalArtisanRouteImport } from './routes/portal.artisan'
-import { Route as PortalCustomerRouteImport } from './routes/portal.customer'
-import { Route as PortalGovernmentRouteImport } from './routes/portal.government'
-import { Route as PortalKioskRouteImport } from './routes/portal.kiosk'
-import { Route as PortalTrainerRouteImport } from './routes/portal.trainer'
+import { Route as TrainingPortalRouteImport } from './routes/training-portal'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TeamRouteImport } from './routes/team'
+import { Route as SmartPricingRouteImport } from './routes/smart-pricing'
+import { Route as SmartKioskPortalRouteImport } from './routes/smart-kiosk-portal'
+import { Route as SmartCatalogerRouteImport } from './routes/smart-cataloger'
+import { Route as SchemesRouteImport } from './routes/schemes'
+import { Route as ReverseMarketplaceRouteImport } from './routes/reverse-marketplace'
+import { Route as ResearchRouteImport } from './routes/research'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as KioskAppointmentRouteImport } from './routes/kiosk-appointment'
+import { Route as KioskRouteImport } from './routes/kiosk'
+import { Route as IndiaPostRouteImport } from './routes/india-post'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as DigitalTwinRouteImport } from './routes/digital-twin'
+import { Route as CraftPassportRouteImport } from './routes/craft-passport'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CertificationCentreRouteImport } from './routes/certification-centre'
+import { Route as CertificatesRouteImport } from './routes/certificates'
+import { Route as AiImageStudioRouteImport } from './routes/ai-image-studio'
+import { Route as AiFeaturesRouteImport } from './routes/ai-features'
+import { Route as AiAuthenticationRouteImport } from './routes/ai-authentication'
+import { Route as AiAnalyticsRouteImport } from './routes/ai-analytics'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
-import { Route as ApiCatalogerGenerateRouteImport } from './routes/api/cataloger/generate'
-import { Route as ApiCatalogerTranscribeRouteImport } from './routes/api/cataloger/transcribe'
-import { Route as ApiPricingAnalyzeRouteImport } from './routes/api/pricing/analyze'
-import { Route as ApiPricingMarketRouteImport } from './routes/api/pricing/market'
-import { Route as PortalAdminIndexRouteImport } from './routes/portal.admin.index'
-import { Route as PortalAdminCatalogRouteImport } from './routes/portal.admin.catalog'
-import { Route as PortalAdminLogsRouteImport } from './routes/portal.admin.logs'
-import { Route as PortalAdminModerationRouteImport } from './routes/portal.admin.moderation'
-import { Route as PortalAdminReportsRouteImport } from './routes/portal.admin.reports'
-import { Route as PortalAdminSystemsRouteImport } from './routes/portal.admin.systems'
-import { Route as PortalAdminUsersRouteImport } from './routes/portal.admin.users'
-import { Route as PortalArtisanIndexRouteImport } from './routes/portal.artisan.index'
-import { Route as PortalArtisanAiRouteImport } from './routes/portal.artisan.ai'
-import { Route as PortalArtisanAnalyticsRouteImport } from './routes/portal.artisan.analytics'
-import { Route as PortalArtisanAuthenticationRouteImport } from './routes/portal.artisan.authentication'
-import { Route as PortalArtisanCertificatesRouteImport } from './routes/portal.artisan.certificates'
-import { Route as PortalArtisanExportRouteImport } from './routes/portal.artisan.export'
-import { Route as PortalArtisanNfcRouteImport } from './routes/portal.artisan.nfc'
-import { Route as PortalArtisanOrdersRouteImport } from './routes/portal.artisan.orders'
-import { Route as PortalArtisanPassportRouteImport } from './routes/portal.artisan.passport'
-import { Route as PortalArtisanPaymentsRouteImport } from './routes/portal.artisan.payments'
-import { Route as PortalArtisanProductsRouteImport } from './routes/portal.artisan.products'
-import { Route as PortalArtisanSchemesRouteImport } from './routes/portal.artisan.schemes'
-import { Route as PortalArtisanTrainingRouteImport } from './routes/portal.artisan.training'
-import { Route as PortalArtisanTwinRouteImport } from './routes/portal.artisan.twin'
-import { Route as PortalArtisanUploadRouteImport } from './routes/portal.artisan.upload'
-import { Route as PortalCustomerIndexRouteImport } from './routes/portal.customer.index'
-import { Route as PortalCustomerAddressesRouteImport } from './routes/portal.customer.addresses'
-import { Route as PortalCustomerCartRouteImport } from './routes/portal.customer.cart'
-import { Route as PortalCustomerGiftsRouteImport } from './routes/portal.customer.gifts'
-import { Route as PortalCustomerMessagesRouteImport } from './routes/portal.customer.messages'
-import { Route as PortalCustomerNotificationsRouteImport } from './routes/portal.customer.notifications'
-import { Route as PortalCustomerOrdersRouteImport } from './routes/portal.customer.orders'
-import { Route as PortalCustomerProfileRouteImport } from './routes/portal.customer.profile'
-import { Route as PortalCustomerVoiceRouteImport } from './routes/portal.customer.voice'
-import { Route as PortalCustomerWishlistRouteImport } from './routes/portal.customer.wishlist'
-import { Route as PortalGovernmentIndexRouteImport } from './routes/portal.government.index'
-import { Route as PortalGovernmentArtisansRouteImport } from './routes/portal.government.artisans'
-import { Route as PortalGovernmentCertificationRouteImport } from './routes/portal.government.certification'
-import { Route as PortalGovernmentClustersRouteImport } from './routes/portal.government.clusters'
-import { Route as PortalGovernmentGiRouteImport } from './routes/portal.government.gi'
-import { Route as PortalGovernmentImpactRouteImport } from './routes/portal.government.impact'
-import { Route as PortalGovernmentOfficersRouteImport } from './routes/portal.government.officers'
-import { Route as PortalGovernmentSchemesRouteImport } from './routes/portal.government.schemes'
-import { Route as PortalGovernmentTrainingRouteImport } from './routes/portal.government.training'
-import { Route as PortalKioskIndexRouteImport } from './routes/portal.kiosk.index'
-import { Route as PortalKioskAppointmentsRouteImport } from './routes/portal.kiosk.appointments'
-import { Route as PortalKioskArtisansRouteImport } from './routes/portal.kiosk.artisans'
-import { Route as PortalKioskServicesRouteImport } from './routes/portal.kiosk.services'
+import { Route as PortalTrainerRouteImport } from './routes/portal.trainer'
+import { Route as PortalKioskRouteImport } from './routes/portal.kiosk'
+import { Route as PortalGovernmentRouteImport } from './routes/portal.government'
+import { Route as PortalCustomerRouteImport } from './routes/portal.customer'
+import { Route as PortalArtisanRouteImport } from './routes/portal.artisan'
+import { Route as PortalAdminRouteImport } from './routes/portal.admin'
+import { Route as AuthSignupRouteImport } from './routes/auth.signup'
+import { Route as AuthRoleRouteImport } from './routes/auth.role'
+import { Route as AuthResetRouteImport } from './routes/auth.reset'
+import { Route as AuthOtpRouteImport } from './routes/auth.otp'
+import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
 import { Route as PortalTrainerIndexRouteImport } from './routes/portal.trainer.index'
-import { Route as PortalTrainerCertificatesRouteImport } from './routes/portal.trainer.certificates'
-import { Route as PortalTrainerCoursesRouteImport } from './routes/portal.trainer.courses'
+import { Route as PortalKioskIndexRouteImport } from './routes/portal.kiosk.index'
+import { Route as PortalGovernmentIndexRouteImport } from './routes/portal.government.index'
+import { Route as PortalCustomerIndexRouteImport } from './routes/portal.customer.index'
+import { Route as PortalArtisanIndexRouteImport } from './routes/portal.artisan.index'
+import { Route as PortalAdminIndexRouteImport } from './routes/portal.admin.index'
 import { Route as PortalTrainerSlotsRouteImport } from './routes/portal.trainer.slots'
+import { Route as PortalTrainerCoursesRouteImport } from './routes/portal.trainer.courses'
+import { Route as PortalTrainerCertificatesRouteImport } from './routes/portal.trainer.certificates'
+import { Route as PortalKioskServicesRouteImport } from './routes/portal.kiosk.services'
+import { Route as PortalKioskArtisansRouteImport } from './routes/portal.kiosk.artisans'
+import { Route as PortalKioskAppointmentsRouteImport } from './routes/portal.kiosk.appointments'
+import { Route as PortalGovernmentTrainingRouteImport } from './routes/portal.government.training'
+import { Route as PortalGovernmentSchemesRouteImport } from './routes/portal.government.schemes'
+import { Route as PortalGovernmentOfficersRouteImport } from './routes/portal.government.officers'
+import { Route as PortalGovernmentImpactRouteImport } from './routes/portal.government.impact'
+import { Route as PortalGovernmentGiRouteImport } from './routes/portal.government.gi'
+import { Route as PortalGovernmentClustersRouteImport } from './routes/portal.government.clusters'
+import { Route as PortalGovernmentCertificationRouteImport } from './routes/portal.government.certification'
+import { Route as PortalGovernmentArtisansRouteImport } from './routes/portal.government.artisans'
+import { Route as PortalCustomerWishlistRouteImport } from './routes/portal.customer.wishlist'
+import { Route as PortalCustomerVoiceRouteImport } from './routes/portal.customer.voice'
+import { Route as PortalCustomerProfileRouteImport } from './routes/portal.customer.profile'
+import { Route as PortalCustomerOrdersRouteImport } from './routes/portal.customer.orders'
+import { Route as PortalCustomerNotificationsRouteImport } from './routes/portal.customer.notifications'
+import { Route as PortalCustomerMessagesRouteImport } from './routes/portal.customer.messages'
+import { Route as PortalCustomerGiftsRouteImport } from './routes/portal.customer.gifts'
+import { Route as PortalCustomerCartRouteImport } from './routes/portal.customer.cart'
+import { Route as PortalCustomerAddressesRouteImport } from './routes/portal.customer.addresses'
+import { Route as PortalArtisanUploadRouteImport } from './routes/portal.artisan.upload'
+import { Route as PortalArtisanTwinRouteImport } from './routes/portal.artisan.twin'
+import { Route as PortalArtisanTrainingRouteImport } from './routes/portal.artisan.training'
+import { Route as PortalArtisanSchemesRouteImport } from './routes/portal.artisan.schemes'
+import { Route as PortalArtisanProductsRouteImport } from './routes/portal.artisan.products'
+import { Route as PortalArtisanPaymentsRouteImport } from './routes/portal.artisan.payments'
+import { Route as PortalArtisanPassportRouteImport } from './routes/portal.artisan.passport'
+import { Route as PortalArtisanOrdersRouteImport } from './routes/portal.artisan.orders'
+import { Route as PortalArtisanNfcRouteImport } from './routes/portal.artisan.nfc'
+import { Route as PortalArtisanExportRouteImport } from './routes/portal.artisan.export'
+import { Route as PortalArtisanCertificatesRouteImport } from './routes/portal.artisan.certificates'
+import { Route as PortalArtisanAuthenticationRouteImport } from './routes/portal.artisan.authentication'
+import { Route as PortalArtisanAnalyticsRouteImport } from './routes/portal.artisan.analytics'
+import { Route as PortalArtisanAiRouteImport } from './routes/portal.artisan.ai'
+import { Route as PortalAdminUsersRouteImport } from './routes/portal.admin.users'
+import { Route as PortalAdminSystemsRouteImport } from './routes/portal.admin.systems'
+import { Route as PortalAdminReportsRouteImport } from './routes/portal.admin.reports'
+import { Route as PortalAdminModerationRouteImport } from './routes/portal.admin.moderation'
+import { Route as PortalAdminLogsRouteImport } from './routes/portal.admin.logs'
+import { Route as PortalAdminCatalogRouteImport } from './routes/portal.admin.catalog'
+import { Route as ApiPricingMarketRouteImport } from './routes/api/pricing/market'
+import { Route as ApiPricingAnalyzeRouteImport } from './routes/api/pricing/analyze'
+import { Route as ApiCatalogerTranscribeRouteImport } from './routes/api/cataloger/transcribe'
+import { Route as ApiCatalogerGenerateRouteImport } from './routes/api/cataloger/generate'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AiAnalyticsRoute = AiAnalyticsRouteImport.update({
-  id: '/ai-analytics',
-  path: '/ai-analytics',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AiAuthenticationRoute = AiAuthenticationRouteImport.update({
-  id: '/ai-authentication',
-  path: '/ai-authentication',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AiFeaturesRoute = AiFeaturesRouteImport.update({
-  id: '/ai-features',
-  path: '/ai-features',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AiImageStudioRoute = AiImageStudioRouteImport.update({
-  id: '/ai-image-studio',
-  path: '/ai-image-studio',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CertificatesRoute = CertificatesRouteImport.update({
-  id: '/certificates',
-  path: '/certificates',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CertificationCentreRoute = CertificationCentreRouteImport.update({
-  id: '/certification-centre',
-  path: '/certification-centre',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CraftPassportRoute = CraftPassportRouteImport.update({
-  id: '/craft-passport',
-  path: '/craft-passport',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DigitalTwinRoute = DigitalTwinRouteImport.update({
-  id: '/digital-twin',
-  path: '/digital-twin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqRoute = FaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HowItWorksRoute = HowItWorksRouteImport.update({
-  id: '/how-it-works',
-  path: '/how-it-works',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndiaPostRoute = IndiaPostRouteImport.update({
-  id: '/india-post',
-  path: '/india-post',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KioskRoute = KioskRouteImport.update({
-  id: '/kiosk',
-  path: '/kiosk',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KioskAppointmentRoute = KioskAppointmentRouteImport.update({
-  id: '/kiosk-appointment',
-  path: '/kiosk-appointment',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MarketplaceRoute = MarketplaceRouteImport.update({
-  id: '/marketplace',
-  path: '/marketplace',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResearchRoute = ResearchRouteImport.update({
-  id: '/research',
-  path: '/research',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReverseMarketplaceRoute = ReverseMarketplaceRouteImport.update({
-  id: '/reverse-marketplace',
-  path: '/reverse-marketplace',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SchemesRoute = SchemesRouteImport.update({
-  id: '/schemes',
-  path: '/schemes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SmartCatalogerRoute = SmartCatalogerRouteImport.update({
-  id: '/smart-cataloger',
-  path: '/smart-cataloger',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SmartKioskPortalRoute = SmartKioskPortalRouteImport.update({
-  id: '/smart-kiosk-portal',
-  path: '/smart-kiosk-portal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SmartPricingRoute = SmartPricingRouteImport.update({
-  id: '/smart-pricing',
-  path: '/smart-pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TeamRoute = TeamRouteImport.update({
-  id: '/team',
-  path: '/team',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
+const WorkshopBookingRoute = WorkshopBookingRouteImport.update({
+  id: '/workshop-booking',
+  path: '/workshop-booking',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrainingPortalRoute = TrainingPortalRouteImport.update({
@@ -239,69 +114,134 @@ const TrainingPortalRoute = TrainingPortalRouteImport.update({
   path: '/training-portal',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WorkshopBookingRoute = WorkshopBookingRouteImport.update({
-  id: '/workshop-booking',
-  path: '/workshop-booking',
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthForgotRoute = AuthForgotRouteImport.update({
-  id: '/auth/forgot',
-  path: '/auth/forgot',
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
+const SmartPricingRoute = SmartPricingRouteImport.update({
+  id: '/smart-pricing',
+  path: '/smart-pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthOtpRoute = AuthOtpRouteImport.update({
-  id: '/auth/otp',
-  path: '/auth/otp',
+const SmartKioskPortalRoute = SmartKioskPortalRouteImport.update({
+  id: '/smart-kiosk-portal',
+  path: '/smart-kiosk-portal',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthResetRoute = AuthResetRouteImport.update({
-  id: '/auth/reset',
-  path: '/auth/reset',
+const SmartCatalogerRoute = SmartCatalogerRouteImport.update({
+  id: '/smart-cataloger',
+  path: '/smart-cataloger',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRoleRoute = AuthRoleRouteImport.update({
-  id: '/auth/role',
-  path: '/auth/role',
+const SchemesRoute = SchemesRouteImport.update({
+  id: '/schemes',
+  path: '/schemes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthSignupRoute = AuthSignupRouteImport.update({
-  id: '/auth/signup',
-  path: '/auth/signup',
+const ReverseMarketplaceRoute = ReverseMarketplaceRouteImport.update({
+  id: '/reverse-marketplace',
+  path: '/reverse-marketplace',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalAdminRoute = PortalAdminRouteImport.update({
-  id: '/portal/admin',
-  path: '/portal/admin',
+const ResearchRoute = ResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalArtisanRoute = PortalArtisanRouteImport.update({
-  id: '/portal/artisan',
-  path: '/portal/artisan',
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalCustomerRoute = PortalCustomerRouteImport.update({
-  id: '/portal/customer',
-  path: '/portal/customer',
+const MarketplaceRoute = MarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalGovernmentRoute = PortalGovernmentRouteImport.update({
-  id: '/portal/government',
-  path: '/portal/government',
+const KioskAppointmentRoute = KioskAppointmentRouteImport.update({
+  id: '/kiosk-appointment',
+  path: '/kiosk-appointment',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalKioskRoute = PortalKioskRouteImport.update({
-  id: '/portal/kiosk',
-  path: '/portal/kiosk',
+const KioskRoute = KioskRouteImport.update({
+  id: '/kiosk',
+  path: '/kiosk',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalTrainerRoute = PortalTrainerRouteImport.update({
-  id: '/portal/trainer',
-  path: '/portal/trainer',
+const IndiaPostRoute = IndiaPostRouteImport.update({
+  id: '/india-post',
+  path: '/india-post',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DigitalTwinRoute = DigitalTwinRouteImport.update({
+  id: '/digital-twin',
+  path: '/digital-twin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftPassportRoute = CraftPassportRouteImport.update({
+  id: '/craft-passport',
+  path: '/craft-passport',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CertificationCentreRoute = CertificationCentreRouteImport.update({
+  id: '/certification-centre',
+  path: '/certification-centre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CertificatesRoute = CertificatesRouteImport.update({
+  id: '/certificates',
+  path: '/certificates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiImageStudioRoute = AiImageStudioRouteImport.update({
+  id: '/ai-image-studio',
+  path: '/ai-image-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiFeaturesRoute = AiFeaturesRouteImport.update({
+  id: '/ai-features',
+  path: '/ai-features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiAuthenticationRoute = AiAuthenticationRouteImport.update({
+  id: '/ai-authentication',
+  path: '/ai-authentication',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiAnalyticsRoute = AiAnalyticsRouteImport.update({
+  id: '/ai-analytics',
+  path: '/ai-analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsIdRoute = ProductsIdRouteImport.update({
@@ -309,262 +249,104 @@ const ProductsIdRoute = ProductsIdRouteImport.update({
   path: '/products/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiCatalogerGenerateRoute = ApiCatalogerGenerateRouteImport.update({
-  id: '/api/cataloger/generate',
-  path: '/api/cataloger/generate',
+const PortalTrainerRoute = PortalTrainerRouteImport.update({
+  id: '/portal/trainer',
+  path: '/portal/trainer',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiCatalogerTranscribeRoute = ApiCatalogerTranscribeRouteImport.update({
-  id: '/api/cataloger/transcribe',
-  path: '/api/cataloger/transcribe',
+const PortalKioskRoute = PortalKioskRouteImport.update({
+  id: '/portal/kiosk',
+  path: '/portal/kiosk',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPricingAnalyzeRoute = ApiPricingAnalyzeRouteImport.update({
-  id: '/api/pricing/analyze',
-  path: '/api/pricing/analyze',
+const PortalGovernmentRoute = PortalGovernmentRouteImport.update({
+  id: '/portal/government',
+  path: '/portal/government',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPricingMarketRoute = ApiPricingMarketRouteImport.update({
-  id: '/api/pricing/market',
-  path: '/api/pricing/market',
+const PortalCustomerRoute = PortalCustomerRouteImport.update({
+  id: '/portal/customer',
+  path: '/portal/customer',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PortalAdminIndexRoute = PortalAdminIndexRouteImport.update({
+const PortalArtisanRoute = PortalArtisanRouteImport.update({
+  id: '/portal/artisan',
+  path: '/portal/artisan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalAdminRoute = PortalAdminRouteImport.update({
+  id: '/portal/admin',
+  path: '/portal/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignupRoute = AuthSignupRouteImport.update({
+  id: '/auth/signup',
+  path: '/auth/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoleRoute = AuthRoleRouteImport.update({
+  id: '/auth/role',
+  path: '/auth/role',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthResetRoute = AuthResetRouteImport.update({
+  id: '/auth/reset',
+  path: '/auth/reset',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthOtpRoute = AuthOtpRouteImport.update({
+  id: '/auth/otp',
+  path: '/auth/otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthForgotRoute = AuthForgotRouteImport.update({
+  id: '/auth/forgot',
+  path: '/auth/forgot',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalTrainerIndexRoute = PortalTrainerIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => PortalAdminRoute,
+  getParentRoute: () => PortalTrainerRoute,
 } as any)
-const PortalAdminCatalogRoute = PortalAdminCatalogRouteImport.update({
-  id: '/catalog',
-  path: '/catalog',
-  getParentRoute: () => PortalAdminRoute,
-} as any)
-const PortalAdminLogsRoute = PortalAdminLogsRouteImport.update({
-  id: '/logs',
-  path: '/logs',
-  getParentRoute: () => PortalAdminRoute,
-} as any)
-const PortalAdminModerationRoute = PortalAdminModerationRouteImport.update({
-  id: '/moderation',
-  path: '/moderation',
-  getParentRoute: () => PortalAdminRoute,
-} as any)
-const PortalAdminReportsRoute = PortalAdminReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => PortalAdminRoute,
-} as any)
-const PortalAdminSystemsRoute = PortalAdminSystemsRouteImport.update({
-  id: '/systems',
-  path: '/systems',
-  getParentRoute: () => PortalAdminRoute,
-} as any)
-const PortalAdminUsersRoute = PortalAdminUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => PortalAdminRoute,
-} as any)
-const PortalArtisanIndexRoute = PortalArtisanIndexRouteImport.update({
+const PortalKioskIndexRoute = PortalKioskIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanAiRoute = PortalArtisanAiRouteImport.update({
-  id: '/ai',
-  path: '/ai',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanAnalyticsRoute = PortalArtisanAnalyticsRouteImport.update({
-  id: '/analytics',
-  path: '/analytics',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanAuthenticationRoute =
-  PortalArtisanAuthenticationRouteImport.update({
-    id: '/authentication',
-    path: '/authentication',
-    getParentRoute: () => PortalArtisanRoute,
-  } as any)
-const PortalArtisanCertificatesRoute =
-  PortalArtisanCertificatesRouteImport.update({
-    id: '/certificates',
-    path: '/certificates',
-    getParentRoute: () => PortalArtisanRoute,
-  } as any)
-const PortalArtisanExportRoute = PortalArtisanExportRouteImport.update({
-  id: '/export',
-  path: '/export',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanNfcRoute = PortalArtisanNfcRouteImport.update({
-  id: '/nfc',
-  path: '/nfc',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanOrdersRoute = PortalArtisanOrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanPassportRoute = PortalArtisanPassportRouteImport.update({
-  id: '/passport',
-  path: '/passport',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanPaymentsRoute = PortalArtisanPaymentsRouteImport.update({
-  id: '/payments',
-  path: '/payments',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanProductsRoute = PortalArtisanProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanSchemesRoute = PortalArtisanSchemesRouteImport.update({
-  id: '/schemes',
-  path: '/schemes',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanTrainingRoute = PortalArtisanTrainingRouteImport.update({
-  id: '/training',
-  path: '/training',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanTwinRoute = PortalArtisanTwinRouteImport.update({
-  id: '/twin',
-  path: '/twin',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalArtisanUploadRoute = PortalArtisanUploadRouteImport.update({
-  id: '/upload',
-  path: '/upload',
-  getParentRoute: () => PortalArtisanRoute,
-} as any)
-const PortalCustomerIndexRoute = PortalCustomerIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PortalCustomerRoute,
-} as any)
-const PortalCustomerAddressesRoute = PortalCustomerAddressesRouteImport.update({
-  id: '/addresses',
-  path: '/addresses',
-  getParentRoute: () => PortalCustomerRoute,
-} as any)
-const PortalCustomerCartRoute = PortalCustomerCartRouteImport.update({
-  id: '/cart',
-  path: '/cart',
-  getParentRoute: () => PortalCustomerRoute,
-} as any)
-const PortalCustomerGiftsRoute = PortalCustomerGiftsRouteImport.update({
-  id: '/gifts',
-  path: '/gifts',
-  getParentRoute: () => PortalCustomerRoute,
-} as any)
-const PortalCustomerMessagesRoute = PortalCustomerMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => PortalCustomerRoute,
-} as any)
-const PortalCustomerNotificationsRoute =
-  PortalCustomerNotificationsRouteImport.update({
-    id: '/notifications',
-    path: '/notifications',
-    getParentRoute: () => PortalCustomerRoute,
-  } as any)
-const PortalCustomerOrdersRoute = PortalCustomerOrdersRouteImport.update({
-  id: '/orders',
-  path: '/orders',
-  getParentRoute: () => PortalCustomerRoute,
-} as any)
-const PortalCustomerProfileRoute = PortalCustomerProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => PortalCustomerRoute,
-} as any)
-const PortalCustomerVoiceRoute = PortalCustomerVoiceRouteImport.update({
-  id: '/voice',
-  path: '/voice',
-  getParentRoute: () => PortalCustomerRoute,
-} as any)
-const PortalCustomerWishlistRoute = PortalCustomerWishlistRouteImport.update({
-  id: '/wishlist',
-  path: '/wishlist',
-  getParentRoute: () => PortalCustomerRoute,
+  getParentRoute: () => PortalKioskRoute,
 } as any)
 const PortalGovernmentIndexRoute = PortalGovernmentIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PortalGovernmentRoute,
 } as any)
-const PortalGovernmentArtisansRoute =
-  PortalGovernmentArtisansRouteImport.update({
-    id: '/artisans',
-    path: '/artisans',
-    getParentRoute: () => PortalGovernmentRoute,
-  } as any)
-const PortalGovernmentCertificationRoute =
-  PortalGovernmentCertificationRouteImport.update({
-    id: '/certification',
-    path: '/certification',
-    getParentRoute: () => PortalGovernmentRoute,
-  } as any)
-const PortalGovernmentClustersRoute =
-  PortalGovernmentClustersRouteImport.update({
-    id: '/clusters',
-    path: '/clusters',
-    getParentRoute: () => PortalGovernmentRoute,
-  } as any)
-const PortalGovernmentGiRoute = PortalGovernmentGiRouteImport.update({
-  id: '/gi',
-  path: '/gi',
-  getParentRoute: () => PortalGovernmentRoute,
-} as any)
-const PortalGovernmentImpactRoute = PortalGovernmentImpactRouteImport.update({
-  id: '/impact',
-  path: '/impact',
-  getParentRoute: () => PortalGovernmentRoute,
-} as any)
-const PortalGovernmentOfficersRoute =
-  PortalGovernmentOfficersRouteImport.update({
-    id: '/officers',
-    path: '/officers',
-    getParentRoute: () => PortalGovernmentRoute,
-  } as any)
-const PortalGovernmentSchemesRoute = PortalGovernmentSchemesRouteImport.update({
-  id: '/schemes',
-  path: '/schemes',
-  getParentRoute: () => PortalGovernmentRoute,
-} as any)
-const PortalGovernmentTrainingRoute =
-  PortalGovernmentTrainingRouteImport.update({
-    id: '/training',
-    path: '/training',
-    getParentRoute: () => PortalGovernmentRoute,
-  } as any)
-const PortalKioskIndexRoute = PortalKioskIndexRouteImport.update({
+const PortalCustomerIndexRoute = PortalCustomerIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => PortalKioskRoute,
+  getParentRoute: () => PortalCustomerRoute,
 } as any)
-const PortalKioskAppointmentsRoute = PortalKioskAppointmentsRouteImport.update({
-  id: '/appointments',
-  path: '/appointments',
-  getParentRoute: () => PortalKioskRoute,
-} as any)
-const PortalKioskArtisansRoute = PortalKioskArtisansRouteImport.update({
-  id: '/artisans',
-  path: '/artisans',
-  getParentRoute: () => PortalKioskRoute,
-} as any)
-const PortalKioskServicesRoute = PortalKioskServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
-  getParentRoute: () => PortalKioskRoute,
-} as any)
-const PortalTrainerIndexRoute = PortalTrainerIndexRouteImport.update({
+const PortalArtisanIndexRoute = PortalArtisanIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalAdminIndexRoute = PortalAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalAdminRoute,
+} as any)
+const PortalTrainerSlotsRoute = PortalTrainerSlotsRouteImport.update({
+  id: '/slots',
+  path: '/slots',
+  getParentRoute: () => PortalTrainerRoute,
+} as any)
+const PortalTrainerCoursesRoute = PortalTrainerCoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
   getParentRoute: () => PortalTrainerRoute,
 } as any)
 const PortalTrainerCertificatesRoute =
@@ -573,15 +355,233 @@ const PortalTrainerCertificatesRoute =
     path: '/certificates',
     getParentRoute: () => PortalTrainerRoute,
   } as any)
-const PortalTrainerCoursesRoute = PortalTrainerCoursesRouteImport.update({
-  id: '/courses',
-  path: '/courses',
-  getParentRoute: () => PortalTrainerRoute,
+const PortalKioskServicesRoute = PortalKioskServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => PortalKioskRoute,
 } as any)
-const PortalTrainerSlotsRoute = PortalTrainerSlotsRouteImport.update({
-  id: '/slots',
-  path: '/slots',
-  getParentRoute: () => PortalTrainerRoute,
+const PortalKioskArtisansRoute = PortalKioskArtisansRouteImport.update({
+  id: '/artisans',
+  path: '/artisans',
+  getParentRoute: () => PortalKioskRoute,
+} as any)
+const PortalKioskAppointmentsRoute = PortalKioskAppointmentsRouteImport.update({
+  id: '/appointments',
+  path: '/appointments',
+  getParentRoute: () => PortalKioskRoute,
+} as any)
+const PortalGovernmentTrainingRoute =
+  PortalGovernmentTrainingRouteImport.update({
+    id: '/training',
+    path: '/training',
+    getParentRoute: () => PortalGovernmentRoute,
+  } as any)
+const PortalGovernmentSchemesRoute = PortalGovernmentSchemesRouteImport.update({
+  id: '/schemes',
+  path: '/schemes',
+  getParentRoute: () => PortalGovernmentRoute,
+} as any)
+const PortalGovernmentOfficersRoute =
+  PortalGovernmentOfficersRouteImport.update({
+    id: '/officers',
+    path: '/officers',
+    getParentRoute: () => PortalGovernmentRoute,
+  } as any)
+const PortalGovernmentImpactRoute = PortalGovernmentImpactRouteImport.update({
+  id: '/impact',
+  path: '/impact',
+  getParentRoute: () => PortalGovernmentRoute,
+} as any)
+const PortalGovernmentGiRoute = PortalGovernmentGiRouteImport.update({
+  id: '/gi',
+  path: '/gi',
+  getParentRoute: () => PortalGovernmentRoute,
+} as any)
+const PortalGovernmentClustersRoute =
+  PortalGovernmentClustersRouteImport.update({
+    id: '/clusters',
+    path: '/clusters',
+    getParentRoute: () => PortalGovernmentRoute,
+  } as any)
+const PortalGovernmentCertificationRoute =
+  PortalGovernmentCertificationRouteImport.update({
+    id: '/certification',
+    path: '/certification',
+    getParentRoute: () => PortalGovernmentRoute,
+  } as any)
+const PortalGovernmentArtisansRoute =
+  PortalGovernmentArtisansRouteImport.update({
+    id: '/artisans',
+    path: '/artisans',
+    getParentRoute: () => PortalGovernmentRoute,
+  } as any)
+const PortalCustomerWishlistRoute = PortalCustomerWishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerVoiceRoute = PortalCustomerVoiceRouteImport.update({
+  id: '/voice',
+  path: '/voice',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerProfileRoute = PortalCustomerProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerOrdersRoute = PortalCustomerOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerNotificationsRoute =
+  PortalCustomerNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => PortalCustomerRoute,
+  } as any)
+const PortalCustomerMessagesRoute = PortalCustomerMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerGiftsRoute = PortalCustomerGiftsRouteImport.update({
+  id: '/gifts',
+  path: '/gifts',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerCartRoute = PortalCustomerCartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalCustomerAddressesRoute = PortalCustomerAddressesRouteImport.update({
+  id: '/addresses',
+  path: '/addresses',
+  getParentRoute: () => PortalCustomerRoute,
+} as any)
+const PortalArtisanUploadRoute = PortalArtisanUploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanTwinRoute = PortalArtisanTwinRouteImport.update({
+  id: '/twin',
+  path: '/twin',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanTrainingRoute = PortalArtisanTrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanSchemesRoute = PortalArtisanSchemesRouteImport.update({
+  id: '/schemes',
+  path: '/schemes',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanProductsRoute = PortalArtisanProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanPaymentsRoute = PortalArtisanPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanPassportRoute = PortalArtisanPassportRouteImport.update({
+  id: '/passport',
+  path: '/passport',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanOrdersRoute = PortalArtisanOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanNfcRoute = PortalArtisanNfcRouteImport.update({
+  id: '/nfc',
+  path: '/nfc',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanExportRoute = PortalArtisanExportRouteImport.update({
+  id: '/export',
+  path: '/export',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanCertificatesRoute =
+  PortalArtisanCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
+    getParentRoute: () => PortalArtisanRoute,
+  } as any)
+const PortalArtisanAuthenticationRoute =
+  PortalArtisanAuthenticationRouteImport.update({
+    id: '/authentication',
+    path: '/authentication',
+    getParentRoute: () => PortalArtisanRoute,
+  } as any)
+const PortalArtisanAnalyticsRoute = PortalArtisanAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalArtisanAiRoute = PortalArtisanAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => PortalArtisanRoute,
+} as any)
+const PortalAdminUsersRoute = PortalAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => PortalAdminRoute,
+} as any)
+const PortalAdminSystemsRoute = PortalAdminSystemsRouteImport.update({
+  id: '/systems',
+  path: '/systems',
+  getParentRoute: () => PortalAdminRoute,
+} as any)
+const PortalAdminReportsRoute = PortalAdminReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => PortalAdminRoute,
+} as any)
+const PortalAdminModerationRoute = PortalAdminModerationRouteImport.update({
+  id: '/moderation',
+  path: '/moderation',
+  getParentRoute: () => PortalAdminRoute,
+} as any)
+const PortalAdminLogsRoute = PortalAdminLogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => PortalAdminRoute,
+} as any)
+const PortalAdminCatalogRoute = PortalAdminCatalogRouteImport.update({
+  id: '/catalog',
+  path: '/catalog',
+  getParentRoute: () => PortalAdminRoute,
+} as any)
+const ApiPricingMarketRoute = ApiPricingMarketRouteImport.update({
+  id: '/api/pricing/market',
+  path: '/api/pricing/market',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPricingAnalyzeRoute = ApiPricingAnalyzeRouteImport.update({
+  id: '/api/pricing/analyze',
+  path: '/api/pricing/analyze',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCatalogerTranscribeRoute = ApiCatalogerTranscribeRouteImport.update({
+  id: '/api/cataloger/transcribe',
+  path: '/api/cataloger/transcribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCatalogerGenerateRoute = ApiCatalogerGenerateRouteImport.update({
+  id: '/api/cataloger/generate',
+  path: '/api/cataloger/generate',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -1202,186 +1202,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ai-analytics': {
-      id: '/ai-analytics'
-      path: '/ai-analytics'
-      fullPath: '/ai-analytics'
-      preLoaderRoute: typeof AiAnalyticsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ai-authentication': {
-      id: '/ai-authentication'
-      path: '/ai-authentication'
-      fullPath: '/ai-authentication'
-      preLoaderRoute: typeof AiAuthenticationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ai-features': {
-      id: '/ai-features'
-      path: '/ai-features'
-      fullPath: '/ai-features'
-      preLoaderRoute: typeof AiFeaturesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ai-image-studio': {
-      id: '/ai-image-studio'
-      path: '/ai-image-studio'
-      fullPath: '/ai-image-studio'
-      preLoaderRoute: typeof AiImageStudioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/certificates': {
-      id: '/certificates'
-      path: '/certificates'
-      fullPath: '/certificates'
-      preLoaderRoute: typeof CertificatesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/certification-centre': {
-      id: '/certification-centre'
-      path: '/certification-centre'
-      fullPath: '/certification-centre'
-      preLoaderRoute: typeof CertificationCentreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/craft-passport': {
-      id: '/craft-passport'
-      path: '/craft-passport'
-      fullPath: '/craft-passport'
-      preLoaderRoute: typeof CraftPassportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/digital-twin': {
-      id: '/digital-twin'
-      path: '/digital-twin'
-      fullPath: '/digital-twin'
-      preLoaderRoute: typeof DigitalTwinRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/how-it-works': {
-      id: '/how-it-works'
-      path: '/how-it-works'
-      fullPath: '/how-it-works'
-      preLoaderRoute: typeof HowItWorksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/india-post': {
-      id: '/india-post'
-      path: '/india-post'
-      fullPath: '/india-post'
-      preLoaderRoute: typeof IndiaPostRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/kiosk': {
-      id: '/kiosk'
-      path: '/kiosk'
-      fullPath: '/kiosk'
-      preLoaderRoute: typeof KioskRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/kiosk-appointment': {
-      id: '/kiosk-appointment'
-      path: '/kiosk-appointment'
-      fullPath: '/kiosk-appointment'
-      preLoaderRoute: typeof KioskAppointmentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/marketplace': {
-      id: '/marketplace'
-      path: '/marketplace'
-      fullPath: '/marketplace'
-      preLoaderRoute: typeof MarketplaceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/research': {
-      id: '/research'
-      path: '/research'
-      fullPath: '/research'
-      preLoaderRoute: typeof ResearchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reverse-marketplace': {
-      id: '/reverse-marketplace'
-      path: '/reverse-marketplace'
-      fullPath: '/reverse-marketplace'
-      preLoaderRoute: typeof ReverseMarketplaceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/schemes': {
-      id: '/schemes'
-      path: '/schemes'
-      fullPath: '/schemes'
-      preLoaderRoute: typeof SchemesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/smart-cataloger': {
-      id: '/smart-cataloger'
-      path: '/smart-cataloger'
-      fullPath: '/smart-cataloger'
-      preLoaderRoute: typeof SmartCatalogerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/smart-kiosk-portal': {
-      id: '/smart-kiosk-portal'
-      path: '/smart-kiosk-portal'
-      fullPath: '/smart-kiosk-portal'
-      preLoaderRoute: typeof SmartKioskPortalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/smart-pricing': {
-      id: '/smart-pricing'
-      path: '/smart-pricing'
-      fullPath: '/smart-pricing'
-      preLoaderRoute: typeof SmartPricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/team': {
-      id: '/team'
-      path: '/team'
-      fullPath: '/team'
-      preLoaderRoute: typeof TeamRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
+    '/workshop-booking': {
+      id: '/workshop-booking'
+      path: '/workshop-booking'
+      fullPath: '/workshop-booking'
+      preLoaderRoute: typeof WorkshopBookingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/training-portal': {
@@ -1391,95 +1216,186 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrainingPortalRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/workshop-booking': {
-      id: '/workshop-booking'
-      path: '/workshop-booking'
-      fullPath: '/workshop-booking'
-      preLoaderRoute: typeof WorkshopBookingRouteImport
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/forgot': {
-      id: '/auth/forgot'
-      path: '/auth/forgot'
-      fullPath: '/auth/forgot'
-      preLoaderRoute: typeof AuthForgotRouteImport
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
+    '/smart-pricing': {
+      id: '/smart-pricing'
+      path: '/smart-pricing'
+      fullPath: '/smart-pricing'
+      preLoaderRoute: typeof SmartPricingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/otp': {
-      id: '/auth/otp'
-      path: '/auth/otp'
-      fullPath: '/auth/otp'
-      preLoaderRoute: typeof AuthOtpRouteImport
+    '/smart-kiosk-portal': {
+      id: '/smart-kiosk-portal'
+      path: '/smart-kiosk-portal'
+      fullPath: '/smart-kiosk-portal'
+      preLoaderRoute: typeof SmartKioskPortalRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/reset': {
-      id: '/auth/reset'
-      path: '/auth/reset'
-      fullPath: '/auth/reset'
-      preLoaderRoute: typeof AuthResetRouteImport
+    '/smart-cataloger': {
+      id: '/smart-cataloger'
+      path: '/smart-cataloger'
+      fullPath: '/smart-cataloger'
+      preLoaderRoute: typeof SmartCatalogerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/role': {
-      id: '/auth/role'
-      path: '/auth/role'
-      fullPath: '/auth/role'
-      preLoaderRoute: typeof AuthRoleRouteImport
+    '/schemes': {
+      id: '/schemes'
+      path: '/schemes'
+      fullPath: '/schemes'
+      preLoaderRoute: typeof SchemesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/signup': {
-      id: '/auth/signup'
-      path: '/auth/signup'
-      fullPath: '/auth/signup'
-      preLoaderRoute: typeof AuthSignupRouteImport
+    '/reverse-marketplace': {
+      id: '/reverse-marketplace'
+      path: '/reverse-marketplace'
+      fullPath: '/reverse-marketplace'
+      preLoaderRoute: typeof ReverseMarketplaceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal/admin': {
-      id: '/portal/admin'
-      path: '/portal/admin'
-      fullPath: '/portal/admin'
-      preLoaderRoute: typeof PortalAdminRouteImport
+    '/research': {
+      id: '/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof ResearchRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal/artisan': {
-      id: '/portal/artisan'
-      path: '/portal/artisan'
-      fullPath: '/portal/artisan'
-      preLoaderRoute: typeof PortalArtisanRouteImport
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal/customer': {
-      id: '/portal/customer'
-      path: '/portal/customer'
-      fullPath: '/portal/customer'
-      preLoaderRoute: typeof PortalCustomerRouteImport
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal/government': {
-      id: '/portal/government'
-      path: '/portal/government'
-      fullPath: '/portal/government'
-      preLoaderRoute: typeof PortalGovernmentRouteImport
+    '/kiosk-appointment': {
+      id: '/kiosk-appointment'
+      path: '/kiosk-appointment'
+      fullPath: '/kiosk-appointment'
+      preLoaderRoute: typeof KioskAppointmentRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal/kiosk': {
-      id: '/portal/kiosk'
-      path: '/portal/kiosk'
-      fullPath: '/portal/kiosk'
-      preLoaderRoute: typeof PortalKioskRouteImport
+    '/kiosk': {
+      id: '/kiosk'
+      path: '/kiosk'
+      fullPath: '/kiosk'
+      preLoaderRoute: typeof KioskRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal/trainer': {
-      id: '/portal/trainer'
-      path: '/portal/trainer'
-      fullPath: '/portal/trainer'
-      preLoaderRoute: typeof PortalTrainerRouteImport
+    '/india-post': {
+      id: '/india-post'
+      path: '/india-post'
+      fullPath: '/india-post'
+      preLoaderRoute: typeof IndiaPostRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/digital-twin': {
+      id: '/digital-twin'
+      path: '/digital-twin'
+      fullPath: '/digital-twin'
+      preLoaderRoute: typeof DigitalTwinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/craft-passport': {
+      id: '/craft-passport'
+      path: '/craft-passport'
+      fullPath: '/craft-passport'
+      preLoaderRoute: typeof CraftPassportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certification-centre': {
+      id: '/certification-centre'
+      path: '/certification-centre'
+      fullPath: '/certification-centre'
+      preLoaderRoute: typeof CertificationCentreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certificates': {
+      id: '/certificates'
+      path: '/certificates'
+      fullPath: '/certificates'
+      preLoaderRoute: typeof CertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-image-studio': {
+      id: '/ai-image-studio'
+      path: '/ai-image-studio'
+      fullPath: '/ai-image-studio'
+      preLoaderRoute: typeof AiImageStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-features': {
+      id: '/ai-features'
+      path: '/ai-features'
+      fullPath: '/ai-features'
+      preLoaderRoute: typeof AiFeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-authentication': {
+      id: '/ai-authentication'
+      path: '/ai-authentication'
+      fullPath: '/ai-authentication'
+      preLoaderRoute: typeof AiAuthenticationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-analytics': {
+      id: '/ai-analytics'
+      path: '/ai-analytics'
+      fullPath: '/ai-analytics'
+      preLoaderRoute: typeof AiAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products/$id': {
@@ -1489,348 +1405,89 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/cataloger/generate': {
-      id: '/api/cataloger/generate'
-      path: '/api/cataloger/generate'
-      fullPath: '/api/cataloger/generate'
-      preLoaderRoute: typeof ApiCatalogerGenerateRouteImport
+    '/portal/trainer': {
+      id: '/portal/trainer'
+      path: '/portal/trainer'
+      fullPath: '/portal/trainer'
+      preLoaderRoute: typeof PortalTrainerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/cataloger/transcribe': {
-      id: '/api/cataloger/transcribe'
-      path: '/api/cataloger/transcribe'
-      fullPath: '/api/cataloger/transcribe'
-      preLoaderRoute: typeof ApiCatalogerTranscribeRouteImport
+    '/portal/kiosk': {
+      id: '/portal/kiosk'
+      path: '/portal/kiosk'
+      fullPath: '/portal/kiosk'
+      preLoaderRoute: typeof PortalKioskRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/pricing/analyze': {
-      id: '/api/pricing/analyze'
-      path: '/api/pricing/analyze'
-      fullPath: '/api/pricing/analyze'
-      preLoaderRoute: typeof ApiPricingAnalyzeRouteImport
+    '/portal/government': {
+      id: '/portal/government'
+      path: '/portal/government'
+      fullPath: '/portal/government'
+      preLoaderRoute: typeof PortalGovernmentRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/pricing/market': {
-      id: '/api/pricing/market'
-      path: '/api/pricing/market'
-      fullPath: '/api/pricing/market'
-      preLoaderRoute: typeof ApiPricingMarketRouteImport
+    '/portal/customer': {
+      id: '/portal/customer'
+      path: '/portal/customer'
+      fullPath: '/portal/customer'
+      preLoaderRoute: typeof PortalCustomerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/portal/admin/': {
-      id: '/portal/admin/'
-      path: '/'
-      fullPath: '/portal/admin/'
-      preLoaderRoute: typeof PortalAdminIndexRouteImport
-      parentRoute: typeof PortalAdminRoute
+    '/portal/artisan': {
+      id: '/portal/artisan'
+      path: '/portal/artisan'
+      fullPath: '/portal/artisan'
+      preLoaderRoute: typeof PortalArtisanRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/portal/admin/catalog': {
-      id: '/portal/admin/catalog'
-      path: '/catalog'
-      fullPath: '/portal/admin/catalog'
-      preLoaderRoute: typeof PortalAdminCatalogRouteImport
-      parentRoute: typeof PortalAdminRoute
+    '/portal/admin': {
+      id: '/portal/admin'
+      path: '/portal/admin'
+      fullPath: '/portal/admin'
+      preLoaderRoute: typeof PortalAdminRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/portal/admin/logs': {
-      id: '/portal/admin/logs'
-      path: '/logs'
-      fullPath: '/portal/admin/logs'
-      preLoaderRoute: typeof PortalAdminLogsRouteImport
-      parentRoute: typeof PortalAdminRoute
+    '/auth/signup': {
+      id: '/auth/signup'
+      path: '/auth/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthSignupRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/portal/admin/moderation': {
-      id: '/portal/admin/moderation'
-      path: '/moderation'
-      fullPath: '/portal/admin/moderation'
-      preLoaderRoute: typeof PortalAdminModerationRouteImport
-      parentRoute: typeof PortalAdminRoute
+    '/auth/role': {
+      id: '/auth/role'
+      path: '/auth/role'
+      fullPath: '/auth/role'
+      preLoaderRoute: typeof AuthRoleRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/portal/admin/reports': {
-      id: '/portal/admin/reports'
-      path: '/reports'
-      fullPath: '/portal/admin/reports'
-      preLoaderRoute: typeof PortalAdminReportsRouteImport
-      parentRoute: typeof PortalAdminRoute
+    '/auth/reset': {
+      id: '/auth/reset'
+      path: '/auth/reset'
+      fullPath: '/auth/reset'
+      preLoaderRoute: typeof AuthResetRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/portal/admin/systems': {
-      id: '/portal/admin/systems'
-      path: '/systems'
-      fullPath: '/portal/admin/systems'
-      preLoaderRoute: typeof PortalAdminSystemsRouteImport
-      parentRoute: typeof PortalAdminRoute
+    '/auth/otp': {
+      id: '/auth/otp'
+      path: '/auth/otp'
+      fullPath: '/auth/otp'
+      preLoaderRoute: typeof AuthOtpRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/portal/admin/users': {
-      id: '/portal/admin/users'
-      path: '/users'
-      fullPath: '/portal/admin/users'
-      preLoaderRoute: typeof PortalAdminUsersRouteImport
-      parentRoute: typeof PortalAdminRoute
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/portal/artisan/': {
-      id: '/portal/artisan/'
-      path: '/'
-      fullPath: '/portal/artisan/'
-      preLoaderRoute: typeof PortalArtisanIndexRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/ai': {
-      id: '/portal/artisan/ai'
-      path: '/ai'
-      fullPath: '/portal/artisan/ai'
-      preLoaderRoute: typeof PortalArtisanAiRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/analytics': {
-      id: '/portal/artisan/analytics'
-      path: '/analytics'
-      fullPath: '/portal/artisan/analytics'
-      preLoaderRoute: typeof PortalArtisanAnalyticsRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/authentication': {
-      id: '/portal/artisan/authentication'
-      path: '/authentication'
-      fullPath: '/portal/artisan/authentication'
-      preLoaderRoute: typeof PortalArtisanAuthenticationRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/certificates': {
-      id: '/portal/artisan/certificates'
-      path: '/certificates'
-      fullPath: '/portal/artisan/certificates'
-      preLoaderRoute: typeof PortalArtisanCertificatesRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/export': {
-      id: '/portal/artisan/export'
-      path: '/export'
-      fullPath: '/portal/artisan/export'
-      preLoaderRoute: typeof PortalArtisanExportRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/nfc': {
-      id: '/portal/artisan/nfc'
-      path: '/nfc'
-      fullPath: '/portal/artisan/nfc'
-      preLoaderRoute: typeof PortalArtisanNfcRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/orders': {
-      id: '/portal/artisan/orders'
-      path: '/orders'
-      fullPath: '/portal/artisan/orders'
-      preLoaderRoute: typeof PortalArtisanOrdersRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/passport': {
-      id: '/portal/artisan/passport'
-      path: '/passport'
-      fullPath: '/portal/artisan/passport'
-      preLoaderRoute: typeof PortalArtisanPassportRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/payments': {
-      id: '/portal/artisan/payments'
-      path: '/payments'
-      fullPath: '/portal/artisan/payments'
-      preLoaderRoute: typeof PortalArtisanPaymentsRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/products': {
-      id: '/portal/artisan/products'
-      path: '/products'
-      fullPath: '/portal/artisan/products'
-      preLoaderRoute: typeof PortalArtisanProductsRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/schemes': {
-      id: '/portal/artisan/schemes'
-      path: '/schemes'
-      fullPath: '/portal/artisan/schemes'
-      preLoaderRoute: typeof PortalArtisanSchemesRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/training': {
-      id: '/portal/artisan/training'
-      path: '/training'
-      fullPath: '/portal/artisan/training'
-      preLoaderRoute: typeof PortalArtisanTrainingRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/twin': {
-      id: '/portal/artisan/twin'
-      path: '/twin'
-      fullPath: '/portal/artisan/twin'
-      preLoaderRoute: typeof PortalArtisanTwinRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/artisan/upload': {
-      id: '/portal/artisan/upload'
-      path: '/upload'
-      fullPath: '/portal/artisan/upload'
-      preLoaderRoute: typeof PortalArtisanUploadRouteImport
-      parentRoute: typeof PortalArtisanRoute
-    }
-    '/portal/customer/': {
-      id: '/portal/customer/'
-      path: '/'
-      fullPath: '/portal/customer/'
-      preLoaderRoute: typeof PortalCustomerIndexRouteImport
-      parentRoute: typeof PortalCustomerRoute
-    }
-    '/portal/customer/addresses': {
-      id: '/portal/customer/addresses'
-      path: '/addresses'
-      fullPath: '/portal/customer/addresses'
-      preLoaderRoute: typeof PortalCustomerAddressesRouteImport
-      parentRoute: typeof PortalCustomerRoute
-    }
-    '/portal/customer/cart': {
-      id: '/portal/customer/cart'
-      path: '/cart'
-      fullPath: '/portal/customer/cart'
-      preLoaderRoute: typeof PortalCustomerCartRouteImport
-      parentRoute: typeof PortalCustomerRoute
-    }
-    '/portal/customer/gifts': {
-      id: '/portal/customer/gifts'
-      path: '/gifts'
-      fullPath: '/portal/customer/gifts'
-      preLoaderRoute: typeof PortalCustomerGiftsRouteImport
-      parentRoute: typeof PortalCustomerRoute
-    }
-    '/portal/customer/messages': {
-      id: '/portal/customer/messages'
-      path: '/messages'
-      fullPath: '/portal/customer/messages'
-      preLoaderRoute: typeof PortalCustomerMessagesRouteImport
-      parentRoute: typeof PortalCustomerRoute
-    }
-    '/portal/customer/notifications': {
-      id: '/portal/customer/notifications'
-      path: '/notifications'
-      fullPath: '/portal/customer/notifications'
-      preLoaderRoute: typeof PortalCustomerNotificationsRouteImport
-      parentRoute: typeof PortalCustomerRoute
-    }
-    '/portal/customer/orders': {
-      id: '/portal/customer/orders'
-      path: '/orders'
-      fullPath: '/portal/customer/orders'
-      preLoaderRoute: typeof PortalCustomerOrdersRouteImport
-      parentRoute: typeof PortalCustomerRoute
-    }
-    '/portal/customer/profile': {
-      id: '/portal/customer/profile'
-      path: '/profile'
-      fullPath: '/portal/customer/profile'
-      preLoaderRoute: typeof PortalCustomerProfileRouteImport
-      parentRoute: typeof PortalCustomerRoute
-    }
-    '/portal/customer/voice': {
-      id: '/portal/customer/voice'
-      path: '/voice'
-      fullPath: '/portal/customer/voice'
-      preLoaderRoute: typeof PortalCustomerVoiceRouteImport
-      parentRoute: typeof PortalCustomerRoute
-    }
-    '/portal/customer/wishlist': {
-      id: '/portal/customer/wishlist'
-      path: '/wishlist'
-      fullPath: '/portal/customer/wishlist'
-      preLoaderRoute: typeof PortalCustomerWishlistRouteImport
-      parentRoute: typeof PortalCustomerRoute
-    }
-    '/portal/government/': {
-      id: '/portal/government/'
-      path: '/'
-      fullPath: '/portal/government/'
-      preLoaderRoute: typeof PortalGovernmentIndexRouteImport
-      parentRoute: typeof PortalGovernmentRoute
-    }
-    '/portal/government/artisans': {
-      id: '/portal/government/artisans'
-      path: '/artisans'
-      fullPath: '/portal/government/artisans'
-      preLoaderRoute: typeof PortalGovernmentArtisansRouteImport
-      parentRoute: typeof PortalGovernmentRoute
-    }
-    '/portal/government/certification': {
-      id: '/portal/government/certification'
-      path: '/certification'
-      fullPath: '/portal/government/certification'
-      preLoaderRoute: typeof PortalGovernmentCertificationRouteImport
-      parentRoute: typeof PortalGovernmentRoute
-    }
-    '/portal/government/clusters': {
-      id: '/portal/government/clusters'
-      path: '/clusters'
-      fullPath: '/portal/government/clusters'
-      preLoaderRoute: typeof PortalGovernmentClustersRouteImport
-      parentRoute: typeof PortalGovernmentRoute
-    }
-    '/portal/government/gi': {
-      id: '/portal/government/gi'
-      path: '/gi'
-      fullPath: '/portal/government/gi'
-      preLoaderRoute: typeof PortalGovernmentGiRouteImport
-      parentRoute: typeof PortalGovernmentRoute
-    }
-    '/portal/government/impact': {
-      id: '/portal/government/impact'
-      path: '/impact'
-      fullPath: '/portal/government/impact'
-      preLoaderRoute: typeof PortalGovernmentImpactRouteImport
-      parentRoute: typeof PortalGovernmentRoute
-    }
-    '/portal/government/officers': {
-      id: '/portal/government/officers'
-      path: '/officers'
-      fullPath: '/portal/government/officers'
-      preLoaderRoute: typeof PortalGovernmentOfficersRouteImport
-      parentRoute: typeof PortalGovernmentRoute
-    }
-    '/portal/government/schemes': {
-      id: '/portal/government/schemes'
-      path: '/schemes'
-      fullPath: '/portal/government/schemes'
-      preLoaderRoute: typeof PortalGovernmentSchemesRouteImport
-      parentRoute: typeof PortalGovernmentRoute
-    }
-    '/portal/government/training': {
-      id: '/portal/government/training'
-      path: '/training'
-      fullPath: '/portal/government/training'
-      preLoaderRoute: typeof PortalGovernmentTrainingRouteImport
-      parentRoute: typeof PortalGovernmentRoute
-    }
-    '/portal/kiosk/': {
-      id: '/portal/kiosk/'
-      path: '/'
-      fullPath: '/portal/kiosk/'
-      preLoaderRoute: typeof PortalKioskIndexRouteImport
-      parentRoute: typeof PortalKioskRoute
-    }
-    '/portal/kiosk/appointments': {
-      id: '/portal/kiosk/appointments'
-      path: '/appointments'
-      fullPath: '/portal/kiosk/appointments'
-      preLoaderRoute: typeof PortalKioskAppointmentsRouteImport
-      parentRoute: typeof PortalKioskRoute
-    }
-    '/portal/kiosk/artisans': {
-      id: '/portal/kiosk/artisans'
-      path: '/artisans'
-      fullPath: '/portal/kiosk/artisans'
-      preLoaderRoute: typeof PortalKioskArtisansRouteImport
-      parentRoute: typeof PortalKioskRoute
-    }
-    '/portal/kiosk/services': {
-      id: '/portal/kiosk/services'
-      path: '/services'
-      fullPath: '/portal/kiosk/services'
-      preLoaderRoute: typeof PortalKioskServicesRouteImport
-      parentRoute: typeof PortalKioskRoute
+    '/auth/forgot': {
+      id: '/auth/forgot'
+      path: '/auth/forgot'
+      fullPath: '/auth/forgot'
+      preLoaderRoute: typeof AuthForgotRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/portal/trainer/': {
       id: '/portal/trainer/'
@@ -1839,11 +1496,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalTrainerIndexRouteImport
       parentRoute: typeof PortalTrainerRoute
     }
-    '/portal/trainer/certificates': {
-      id: '/portal/trainer/certificates'
-      path: '/certificates'
-      fullPath: '/portal/trainer/certificates'
-      preLoaderRoute: typeof PortalTrainerCertificatesRouteImport
+    '/portal/kiosk/': {
+      id: '/portal/kiosk/'
+      path: '/'
+      fullPath: '/portal/kiosk/'
+      preLoaderRoute: typeof PortalKioskIndexRouteImport
+      parentRoute: typeof PortalKioskRoute
+    }
+    '/portal/government/': {
+      id: '/portal/government/'
+      path: '/'
+      fullPath: '/portal/government/'
+      preLoaderRoute: typeof PortalGovernmentIndexRouteImport
+      parentRoute: typeof PortalGovernmentRoute
+    }
+    '/portal/customer/': {
+      id: '/portal/customer/'
+      path: '/'
+      fullPath: '/portal/customer/'
+      preLoaderRoute: typeof PortalCustomerIndexRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/artisan/': {
+      id: '/portal/artisan/'
+      path: '/'
+      fullPath: '/portal/artisan/'
+      preLoaderRoute: typeof PortalArtisanIndexRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/admin/': {
+      id: '/portal/admin/'
+      path: '/'
+      fullPath: '/portal/admin/'
+      preLoaderRoute: typeof PortalAdminIndexRouteImport
+      parentRoute: typeof PortalAdminRoute
+    }
+    '/portal/trainer/slots': {
+      id: '/portal/trainer/slots'
+      path: '/slots'
+      fullPath: '/portal/trainer/slots'
+      preLoaderRoute: typeof PortalTrainerSlotsRouteImport
       parentRoute: typeof PortalTrainerRoute
     }
     '/portal/trainer/courses': {
@@ -1853,12 +1545,320 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalTrainerCoursesRouteImport
       parentRoute: typeof PortalTrainerRoute
     }
-    '/portal/trainer/slots': {
-      id: '/portal/trainer/slots'
-      path: '/slots'
-      fullPath: '/portal/trainer/slots'
-      preLoaderRoute: typeof PortalTrainerSlotsRouteImport
+    '/portal/trainer/certificates': {
+      id: '/portal/trainer/certificates'
+      path: '/certificates'
+      fullPath: '/portal/trainer/certificates'
+      preLoaderRoute: typeof PortalTrainerCertificatesRouteImport
       parentRoute: typeof PortalTrainerRoute
+    }
+    '/portal/kiosk/services': {
+      id: '/portal/kiosk/services'
+      path: '/services'
+      fullPath: '/portal/kiosk/services'
+      preLoaderRoute: typeof PortalKioskServicesRouteImport
+      parentRoute: typeof PortalKioskRoute
+    }
+    '/portal/kiosk/artisans': {
+      id: '/portal/kiosk/artisans'
+      path: '/artisans'
+      fullPath: '/portal/kiosk/artisans'
+      preLoaderRoute: typeof PortalKioskArtisansRouteImport
+      parentRoute: typeof PortalKioskRoute
+    }
+    '/portal/kiosk/appointments': {
+      id: '/portal/kiosk/appointments'
+      path: '/appointments'
+      fullPath: '/portal/kiosk/appointments'
+      preLoaderRoute: typeof PortalKioskAppointmentsRouteImport
+      parentRoute: typeof PortalKioskRoute
+    }
+    '/portal/government/training': {
+      id: '/portal/government/training'
+      path: '/training'
+      fullPath: '/portal/government/training'
+      preLoaderRoute: typeof PortalGovernmentTrainingRouteImport
+      parentRoute: typeof PortalGovernmentRoute
+    }
+    '/portal/government/schemes': {
+      id: '/portal/government/schemes'
+      path: '/schemes'
+      fullPath: '/portal/government/schemes'
+      preLoaderRoute: typeof PortalGovernmentSchemesRouteImport
+      parentRoute: typeof PortalGovernmentRoute
+    }
+    '/portal/government/officers': {
+      id: '/portal/government/officers'
+      path: '/officers'
+      fullPath: '/portal/government/officers'
+      preLoaderRoute: typeof PortalGovernmentOfficersRouteImport
+      parentRoute: typeof PortalGovernmentRoute
+    }
+    '/portal/government/impact': {
+      id: '/portal/government/impact'
+      path: '/impact'
+      fullPath: '/portal/government/impact'
+      preLoaderRoute: typeof PortalGovernmentImpactRouteImport
+      parentRoute: typeof PortalGovernmentRoute
+    }
+    '/portal/government/gi': {
+      id: '/portal/government/gi'
+      path: '/gi'
+      fullPath: '/portal/government/gi'
+      preLoaderRoute: typeof PortalGovernmentGiRouteImport
+      parentRoute: typeof PortalGovernmentRoute
+    }
+    '/portal/government/clusters': {
+      id: '/portal/government/clusters'
+      path: '/clusters'
+      fullPath: '/portal/government/clusters'
+      preLoaderRoute: typeof PortalGovernmentClustersRouteImport
+      parentRoute: typeof PortalGovernmentRoute
+    }
+    '/portal/government/certification': {
+      id: '/portal/government/certification'
+      path: '/certification'
+      fullPath: '/portal/government/certification'
+      preLoaderRoute: typeof PortalGovernmentCertificationRouteImport
+      parentRoute: typeof PortalGovernmentRoute
+    }
+    '/portal/government/artisans': {
+      id: '/portal/government/artisans'
+      path: '/artisans'
+      fullPath: '/portal/government/artisans'
+      preLoaderRoute: typeof PortalGovernmentArtisansRouteImport
+      parentRoute: typeof PortalGovernmentRoute
+    }
+    '/portal/customer/wishlist': {
+      id: '/portal/customer/wishlist'
+      path: '/wishlist'
+      fullPath: '/portal/customer/wishlist'
+      preLoaderRoute: typeof PortalCustomerWishlistRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/voice': {
+      id: '/portal/customer/voice'
+      path: '/voice'
+      fullPath: '/portal/customer/voice'
+      preLoaderRoute: typeof PortalCustomerVoiceRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/profile': {
+      id: '/portal/customer/profile'
+      path: '/profile'
+      fullPath: '/portal/customer/profile'
+      preLoaderRoute: typeof PortalCustomerProfileRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/orders': {
+      id: '/portal/customer/orders'
+      path: '/orders'
+      fullPath: '/portal/customer/orders'
+      preLoaderRoute: typeof PortalCustomerOrdersRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/notifications': {
+      id: '/portal/customer/notifications'
+      path: '/notifications'
+      fullPath: '/portal/customer/notifications'
+      preLoaderRoute: typeof PortalCustomerNotificationsRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/messages': {
+      id: '/portal/customer/messages'
+      path: '/messages'
+      fullPath: '/portal/customer/messages'
+      preLoaderRoute: typeof PortalCustomerMessagesRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/gifts': {
+      id: '/portal/customer/gifts'
+      path: '/gifts'
+      fullPath: '/portal/customer/gifts'
+      preLoaderRoute: typeof PortalCustomerGiftsRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/cart': {
+      id: '/portal/customer/cart'
+      path: '/cart'
+      fullPath: '/portal/customer/cart'
+      preLoaderRoute: typeof PortalCustomerCartRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/customer/addresses': {
+      id: '/portal/customer/addresses'
+      path: '/addresses'
+      fullPath: '/portal/customer/addresses'
+      preLoaderRoute: typeof PortalCustomerAddressesRouteImport
+      parentRoute: typeof PortalCustomerRoute
+    }
+    '/portal/artisan/upload': {
+      id: '/portal/artisan/upload'
+      path: '/upload'
+      fullPath: '/portal/artisan/upload'
+      preLoaderRoute: typeof PortalArtisanUploadRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/twin': {
+      id: '/portal/artisan/twin'
+      path: '/twin'
+      fullPath: '/portal/artisan/twin'
+      preLoaderRoute: typeof PortalArtisanTwinRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/training': {
+      id: '/portal/artisan/training'
+      path: '/training'
+      fullPath: '/portal/artisan/training'
+      preLoaderRoute: typeof PortalArtisanTrainingRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/schemes': {
+      id: '/portal/artisan/schemes'
+      path: '/schemes'
+      fullPath: '/portal/artisan/schemes'
+      preLoaderRoute: typeof PortalArtisanSchemesRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/products': {
+      id: '/portal/artisan/products'
+      path: '/products'
+      fullPath: '/portal/artisan/products'
+      preLoaderRoute: typeof PortalArtisanProductsRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/payments': {
+      id: '/portal/artisan/payments'
+      path: '/payments'
+      fullPath: '/portal/artisan/payments'
+      preLoaderRoute: typeof PortalArtisanPaymentsRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/passport': {
+      id: '/portal/artisan/passport'
+      path: '/passport'
+      fullPath: '/portal/artisan/passport'
+      preLoaderRoute: typeof PortalArtisanPassportRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/orders': {
+      id: '/portal/artisan/orders'
+      path: '/orders'
+      fullPath: '/portal/artisan/orders'
+      preLoaderRoute: typeof PortalArtisanOrdersRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/nfc': {
+      id: '/portal/artisan/nfc'
+      path: '/nfc'
+      fullPath: '/portal/artisan/nfc'
+      preLoaderRoute: typeof PortalArtisanNfcRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/export': {
+      id: '/portal/artisan/export'
+      path: '/export'
+      fullPath: '/portal/artisan/export'
+      preLoaderRoute: typeof PortalArtisanExportRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/certificates': {
+      id: '/portal/artisan/certificates'
+      path: '/certificates'
+      fullPath: '/portal/artisan/certificates'
+      preLoaderRoute: typeof PortalArtisanCertificatesRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/authentication': {
+      id: '/portal/artisan/authentication'
+      path: '/authentication'
+      fullPath: '/portal/artisan/authentication'
+      preLoaderRoute: typeof PortalArtisanAuthenticationRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/analytics': {
+      id: '/portal/artisan/analytics'
+      path: '/analytics'
+      fullPath: '/portal/artisan/analytics'
+      preLoaderRoute: typeof PortalArtisanAnalyticsRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/artisan/ai': {
+      id: '/portal/artisan/ai'
+      path: '/ai'
+      fullPath: '/portal/artisan/ai'
+      preLoaderRoute: typeof PortalArtisanAiRouteImport
+      parentRoute: typeof PortalArtisanRoute
+    }
+    '/portal/admin/users': {
+      id: '/portal/admin/users'
+      path: '/users'
+      fullPath: '/portal/admin/users'
+      preLoaderRoute: typeof PortalAdminUsersRouteImport
+      parentRoute: typeof PortalAdminRoute
+    }
+    '/portal/admin/systems': {
+      id: '/portal/admin/systems'
+      path: '/systems'
+      fullPath: '/portal/admin/systems'
+      preLoaderRoute: typeof PortalAdminSystemsRouteImport
+      parentRoute: typeof PortalAdminRoute
+    }
+    '/portal/admin/reports': {
+      id: '/portal/admin/reports'
+      path: '/reports'
+      fullPath: '/portal/admin/reports'
+      preLoaderRoute: typeof PortalAdminReportsRouteImport
+      parentRoute: typeof PortalAdminRoute
+    }
+    '/portal/admin/moderation': {
+      id: '/portal/admin/moderation'
+      path: '/moderation'
+      fullPath: '/portal/admin/moderation'
+      preLoaderRoute: typeof PortalAdminModerationRouteImport
+      parentRoute: typeof PortalAdminRoute
+    }
+    '/portal/admin/logs': {
+      id: '/portal/admin/logs'
+      path: '/logs'
+      fullPath: '/portal/admin/logs'
+      preLoaderRoute: typeof PortalAdminLogsRouteImport
+      parentRoute: typeof PortalAdminRoute
+    }
+    '/portal/admin/catalog': {
+      id: '/portal/admin/catalog'
+      path: '/catalog'
+      fullPath: '/portal/admin/catalog'
+      preLoaderRoute: typeof PortalAdminCatalogRouteImport
+      parentRoute: typeof PortalAdminRoute
+    }
+    '/api/pricing/market': {
+      id: '/api/pricing/market'
+      path: '/api/pricing/market'
+      fullPath: '/api/pricing/market'
+      preLoaderRoute: typeof ApiPricingMarketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/pricing/analyze': {
+      id: '/api/pricing/analyze'
+      path: '/api/pricing/analyze'
+      fullPath: '/api/pricing/analyze'
+      preLoaderRoute: typeof ApiPricingAnalyzeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/cataloger/transcribe': {
+      id: '/api/cataloger/transcribe'
+      path: '/api/cataloger/transcribe'
+      fullPath: '/api/cataloger/transcribe'
+      preLoaderRoute: typeof ApiCatalogerTranscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/cataloger/generate': {
+      id: '/api/cataloger/generate'
+      path: '/api/cataloger/generate'
+      fullPath: '/api/cataloger/generate'
+      preLoaderRoute: typeof ApiCatalogerGenerateRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
