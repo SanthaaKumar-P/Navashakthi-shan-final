@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type ChangeEvent, type ReactNode } from "react";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -17,6 +17,7 @@ import {
 import {
   getCraftDraft,
   publishCraftDraft,
+  saveFinalSellingPrice,
   type CraftDraft,
 } from "@/lib/craft-draft";
 
@@ -27,10 +28,28 @@ export const Route = createFileRoute("/portal/artisan/upload")({
 function ArtisanCraftUploadPage() {
   const navigate = useNavigate();
   const [draft, setDraft] = useState<CraftDraft | null>(null);
+  const [sellingPrice, setSellingPrice] = useState("");
   const [publishing, setPublishing] = useState(false);
 
   const refreshDraft = () => {
-    setDraft(getCraftDraft());
+    const nextDraft = getCraftDraft();
+    setDraft(nextDraft);
+    setSellingPrice(
+      nextDraft?.finalSellingPrice
+        ? String(nextDraft.finalSellingPrice)
+        : "",
+    );
+  };
+
+  const handleSellingPriceChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value.replace(/\D/g, "");
+    setSellingPrice(value);
+
+    const numericValue = Number(value);
+    saveFinalSellingPrice(numericValue > 0 ? numericValue : null);
+    window.dispatchEvent(new Event("navshakthi:craft-draft-updated"));
   };
 
   useEffect(() => {
@@ -64,12 +83,19 @@ function ArtisanCraftUploadPage() {
   const imageReady = Boolean(draft?.image?.enhancedImage);
   const catalogReady = Boolean(draft?.catalog?.english?.title);
   const pricingReady = Boolean(draft?.pricing?.recommended);
+  const sellingPriceReady = Boolean(
+    draft?.finalSellingPrice && draft.finalSellingPrice > 0,
+  );
 
-  const completedSteps = [imageReady, catalogReady, pricingReady].filter(
-    Boolean,
-  ).length;
+  const completedSteps = [
+    imageReady,
+    catalogReady,
+    pricingReady,
+    sellingPriceReady,
+  ].filter(Boolean).length;
 
-  const canPublish = imageReady && catalogReady && pricingReady;
+  const canPublish =
+    imageReady && catalogReady && pricingReady && sellingPriceReady;
 
   const handlePublish = () => {
     if (!canPublish || publishing) return;
@@ -112,13 +138,13 @@ function ArtisanCraftUploadPage() {
             </div>
 
             <div className="mt-1 text-2xl font-bold">
-              {completedSteps}/3
+              {completedSteps}/4
             </div>
 
             <div className="mt-2 h-2 w-40 overflow-hidden rounded-full bg-border">
               <div
                 className="h-full rounded-full bg-primary transition-all"
-                style={{ width: `${(completedSteps / 3) * 100}%` }}
+                style={{ width: `${(completedSteps / 4) * 100}%` }}
               />
             </div>
           </div>
@@ -472,6 +498,85 @@ function ArtisanCraftUploadPage() {
         )}
       </section>
 
+      {/* Final Selling Price */}
+      <section className="rounded-3xl border border-primary/20 bg-card p-6 shadow-sm md:p-8">
+        <SectionHeader
+          icon={<CircleDollarSign className="h-5 w-5" />}
+          title="4. Set your selling price"
+          subtitle="Smart Pricing gives you a recommendation. You decide the final price customers will pay."
+        />
+
+        {draft?.pricing ? (
+          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+            <div className="rounded-2xl bg-muted/50 p-6">
+              <div className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+                AI suggested price
+              </div>
+
+              <div className="mt-2 text-3xl font-bold">
+                {formatCurrency(draft.pricing.recommended)}
+              </div>
+
+              <p className="mt-2 text-sm text-muted-foreground">
+                Suggested range{" "}
+                <span className="font-medium text-foreground">
+                  {formatCurrency(draft.pricing.low)} –{" "}
+                  {formatCurrency(draft.pricing.high)}
+                </span>
+              </p>
+
+              <p className="mt-4 text-xs leading-5 text-muted-foreground">
+                This is only an AI recommendation based on the available cost
+                and market references. It does not automatically become your
+                selling price.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6">
+              <label
+                htmlFor="artisan-selling-price"
+                className="text-sm font-semibold"
+              >
+                Your Selling Price
+              </label>
+
+              <div className="mt-3 flex items-center rounded-2xl border border-border bg-background px-4 py-3 focus-within:border-primary">
+                <span className="mr-2 text-lg font-semibold">₹</span>
+                <input
+                  id="artisan-selling-price"
+                  type="text"
+                  inputMode="numeric"
+                  value={sellingPrice}
+                  onChange={handleSellingPriceChange}
+                  placeholder="Enter your price"
+                  aria-describedby="artisan-selling-price-help"
+                  className="w-full bg-transparent text-xl font-bold outline-none placeholder:text-muted-foreground/60"
+                />
+              </div>
+
+              <p
+                id="artisan-selling-price-help"
+                className="mt-3 text-sm text-muted-foreground"
+              >
+                This is the price customers will see on the marketplace.
+              </p>
+
+              {sellingPriceReady && (
+                <div className="mt-3 flex items-center gap-2 text-sm font-medium text-primary">
+                  <CheckCircle2 className="h-4 w-4" />
+                  Final selling price saved
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="mt-6 rounded-2xl bg-muted/30 p-6 text-sm text-muted-foreground">
+            Run Smart Pricing first. Then enter the final price you want
+            customers to pay.
+          </div>
+        )}
+      </section>
+
       {/* Publish */}
       <section className="rounded-3xl border border-primary/20 bg-primary/5 p-6 md:p-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
@@ -482,9 +587,9 @@ function ArtisanCraftUploadPage() {
             </div>
 
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              Review the image, multilingual listing and price recommendation
-              above. Once all three are ready, publish this craft to your
-              artisan dashboard.
+              Review the image, multilingual listing, AI price suggestion and
+              your final selling price. The price you enter is the price
+              customers will see.
             </p>
           </div>
 
@@ -509,7 +614,7 @@ function ArtisanCraftUploadPage() {
         </div>
 
         {!canPublish && (
-          <div className="mt-5 grid gap-2 text-sm sm:grid-cols-3">
+          <div className="mt-5 grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
             <StatusBadge
               done={imageReady}
               label="AI Image Studio"
@@ -521,6 +626,10 @@ function ArtisanCraftUploadPage() {
             <StatusBadge
               done={pricingReady}
               label="Smart Pricing"
+            />
+            <StatusBadge
+              done={sellingPriceReady}
+              label="Final Selling Price"
             />
           </div>
         )}

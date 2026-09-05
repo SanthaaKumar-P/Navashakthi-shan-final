@@ -48,7 +48,12 @@ function pick(attrs: Record<string, string>, keys: string[]) {
   return undefined;
 }
 
-export function draftToProduct(draft: CraftDraft): PublishedProduct {
+export function draftToProduct(draft: CraftDraft): PublishedProduct | null {
+  // A published marketplace product must have an explicit artisan price.
+  // Never fall back to pricing.recommended here.
+  const price = draft.finalSellingPrice;
+  if (!price || price <= 0) return null;
+
   const attrs = draft.catalog?.product ?? {};
   const title =
     draft.catalog?.english?.title?.trim() ||
@@ -60,20 +65,23 @@ export function draftToProduct(draft: CraftDraft): PublishedProduct {
   const images = [draft.image?.enhancedImage, draft.image?.originalImage].filter(
     (x): x is string => Boolean(x),
   );
-  const price = Math.max(1, Math.round(draft.pricing?.recommended ?? 0)) || 999;
-  const high = Math.round(draft.pricing?.high ?? Math.round(price * 1.25));
+
   const confidencePct = Math.round(
     ((draft.pricing?.confidence ?? draft.catalog?.confidence ?? 0.9) <= 1
       ? (draft.pricing?.confidence ?? draft.catalog?.confidence ?? 0.9) * 100
       : (draft.pricing?.confidence ?? 90)),
   );
 
+  // MRP is still a display/reference value. It is never used as the selling price.
+  const referenceHigh = Math.round(draft.pricing?.high ?? price);
+  const mrp = Math.max(price, referenceHigh);
+
   return {
     id: draft.id,
     name: title,
     category: toCategorySlug(pick(attrs, ["category", "craft"]), title),
     price,
-    mrp: Math.max(high, Math.round(price * 1.2)),
+    mrp,
     image: images[0] ?? fallbackImage,
     images: images.length ? images : [fallbackImage],
     rating: 5,
@@ -93,8 +101,8 @@ export function draftToProduct(draft: CraftDraft): PublishedProduct {
     inStock: 5,
     aiPublished: true,
     attributes: attrs,
-    priceLow: Math.round(draft.pricing?.low ?? Math.round(price * 0.85)),
-    priceHigh: high,
+    priceLow: Math.round(draft.pricing?.low ?? price),
+    priceHigh: Math.max(price, referenceHigh),
     confidence: confidencePct,
     marketBenchmark: draft.pricing?.marketBenchmark ?? null,
     metaDescription: draft.catalog?.english?.metaDescription,
@@ -108,7 +116,8 @@ export function getPublishedProducts(): PublishedProduct[] {
   try {
     return getArtisanListings()
       .filter((d) => d && d.status === "published")
-      .map(draftToProduct);
+      .map(draftToProduct)
+      .filter((p): p is PublishedProduct => p !== null);
   } catch {
     return [];
   }
