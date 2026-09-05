@@ -42,6 +42,11 @@ import {
   STUDIO_TARGET,
 } from "@/lib/image-enhance"
 
+import {
+  getCraftDraft,
+  saveCraftImage,
+} from "@/lib/craft-draft"
+
 /* =========================================================
    PIPELINE STEPS
 ========================================================= */
@@ -535,6 +540,21 @@ function Page() {
             result.bgPercent,
           )
 
+          saveCraftImage({
+            originalImage: null,
+            enhancedImage: result.dataUrl,
+            imageScore: measured,
+            afterImageScore: null,
+            backgroundRemovedPercent:
+              result.bgPercent,
+          })
+
+          window.dispatchEvent(
+            new Event(
+              "navshakthi:craft-draft-updated",
+            ),
+          )
+
           setNotes(
             autoPlanNotes(
               measured,
@@ -553,11 +573,29 @@ function Page() {
 
           output.onload =
             () => {
+              const finalScores =
+                scoreImage(output)
+
               setAfterScores(
-                scoreImage(
-                  output,
-                ),
+                finalScores,
               )
+
+              const latestDraft =
+                getCraftDraft()
+
+              if (latestDraft?.image) {
+                saveCraftImage({
+                  ...latestDraft.image,
+                  afterImageScore:
+                    finalScores,
+                })
+
+                window.dispatchEvent(
+                  new Event(
+                    "navshakthi:craft-draft-updated",
+                  ),
+                )
+              }
             }
 
           output.src =

@@ -21,6 +21,7 @@ import {
 
 import { PublicPage, PageHero } from "@/components/public-page";
 import { Reveal } from "@/components/section";
+import { saveCraftPricing } from "@/lib/craft-draft";
 
 export const Route = createFileRoute("/smart-pricing")({
   component: SmartPricingPage,
@@ -766,6 +767,38 @@ function SmartPricingPage() {
 
       setMarketData(matchedMarket);
       setPriceResult(result);
+
+      saveCraftPricing({
+        materialCost: result.materialCost,
+        labourBenchmark: result.labourBenchmark,
+        estimatedLabourCost: result.estimatedLabourCost,
+        packaging: result.packaging,
+        overhead: result.overhead,
+        sustainableFloor: result.sustainableFloor,
+        marketBenchmark: result.marketBenchmark,
+        recommended: result.recommended,
+        low: result.low,
+        high: result.high,
+        confidence: result.confidence,
+        market: {
+          low: matchedMarket.low,
+          median: matchedMarket.median,
+          high: matchedMarket.high,
+          demandChange: matchedMarket.demandChange,
+          comparableCount: matchedMarket.comparableCount,
+          matchLabel: matchedMarket.matchLabel,
+          sourceType: matchedMarket.sourceType,
+          sourceLabel: matchedMarket.sourceLabel,
+          updatedAt: matchedMarket.updatedAt,
+          materialCostReference:
+            matchedMarket.materialCostReference,
+          labourBenchmark: matchedMarket.labourBenchmark,
+        },
+      });
+
+      window.dispatchEvent(
+        new Event("navshakthi:craft-draft-updated"),
+      );
 
       toast.success(
         `Matched market segment: ${matchedMarket.matchLabel}` ,

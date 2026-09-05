@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { PublicPage, PageHero } from "@/components/public-page";
 import { Reveal } from "@/components/section";
 import { FeatureCta } from "./ai-image-studio";
+import { saveCraftCatalog } from "@/lib/craft-draft";
 import {
   Mic,
   Square,
@@ -256,7 +257,25 @@ function Page() {
         throw new Error(generationData.error || "Catalog generation failed.");
       }
 
-      setCatalog(generationData.catalog);
+      const generatedCatalog = generationData.catalog as Catalog;
+
+      setCatalog(generatedCatalog);
+
+      saveCraftCatalog({
+        detectedLanguage: generatedCatalog.detectedLanguage,
+        transcript: nextTranscript,
+        product: generatedCatalog.product,
+        english: generatedCatalog.english,
+        hindi: generatedCatalog.hindi,
+        seoKeywords: generatedCatalog.seoKeywords,
+        hashtags: generatedCatalog.hashtags,
+        confidence: generatedCatalog.confidence,
+      });
+
+      window.dispatchEvent(
+        new Event("navshakthi:craft-draft-updated"),
+      );
+
       setTab("English");
       setPipeline("done");
       toast.success("English & Hindi marketplace listings generated");
