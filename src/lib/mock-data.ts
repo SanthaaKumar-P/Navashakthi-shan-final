@@ -497,33 +497,27 @@ export const impactStats = [
 
 export const teamMembers = [
   {
-    name: "Aarav Kumaran",
-    role: "Founder & Product",
-    init: "AK",
+    name: "Santhaa Kumar P",
+    init: "SK",
   },
   {
-    name: "Divya Rajesh",
-    role: "AI & Digital Twin Lead",
-    init: "DR",
+    name: "Sanjana R P",
+    init: "SR",
   },
   {
-    name: "Meera Balaji",
-    role: "Design & Research",
-    init: "MB",
+    name: "Sachita N",
+    init: "SN",
   },
   {
-    name: "Kishore Iyer",
-    role: "Full-stack Engineering",
-    init: "KI",
+    name: "Prithik Aswin S",
+    init: "PA",
   },
   {
-    name: "Sneha Prakash",
-    role: "Field & Community",
-    init: "SP",
-  },
-  {
-    name: "Rohit Venkat",
-    role: "Government Partnerships",
+    name: "Ranjeeth V",
     init: "RV",
+  },
+  {
+    name: "Sharan S P",
+    init: "SS",
   },
 ];
