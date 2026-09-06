@@ -16,7 +16,7 @@ const columns = [
   {
     title: "Platform",
     links: [
-      { to: "/digital-twin", label: "Digital Twin" },
+      
       { to: "/ai-features", label: "AI Features" },
       { to: "/kiosk", label: "Smart Kiosks" },
       { to: "/india-post", label: "India Post logistics" },
