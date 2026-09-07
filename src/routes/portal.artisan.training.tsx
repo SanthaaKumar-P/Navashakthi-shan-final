@@ -37,14 +37,20 @@ export const Route = createFileRoute("/portal/artisan/training")({
             <div className="relative aspect-video overflow-hidden bg-mesh-forest">
               {module.video ? (
                 <video
-                  className="h-full w-full object-cover"
-                  controls
-                  preload="metadata"
-                  playsInline
-                >
-                  <source src={module.video} type="video/mp4" />
-                  Your browser does not support video playback.
-                </video>
+  className="h-full w-full cursor-pointer object-cover"
+  muted
+  playsInline
+  preload="metadata"
+  onClick={(e) => {
+    const video = e.currentTarget;
+
+    if (video.paused) {
+      video.play();
+    } else {
+      video.pause();
+    }
+  }}
+/>
               ) : (
                 <>
                   <div className="absolute inset-0 flex items-center justify-center">
