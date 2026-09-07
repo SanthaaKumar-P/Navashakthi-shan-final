@@ -37,20 +37,21 @@ export const Route = createFileRoute("/portal/artisan/training")({
             <div className="relative aspect-video overflow-hidden bg-mesh-forest">
               {module.video ? (
                 <video
-  className="h-full w-full cursor-pointer object-cover"
-  muted
-  playsInline
-  preload="metadata"
-  onClick={(e) => {
-    const video = e.currentTarget;
+                  className="h-full w-full cursor-pointer object-cover"
+                  muted
+                  playsInline
+                  preload="metadata"
+                  src={module.video}
+                  onClick={(e) => {
+                    const video = e.currentTarget;
 
-    if (video.paused) {
-      video.play();
-    } else {
-      video.pause();
-    }
-  }}
-/>
+                    if (video.paused) {
+                      video.play().catch(() => {});
+                    } else {
+                      video.pause();
+                    }
+                  }}
+                />
               ) : (
                 <>
                   <div className="absolute inset-0 flex items-center justify-center">
