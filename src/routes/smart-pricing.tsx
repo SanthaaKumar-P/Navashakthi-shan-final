@@ -1,31 +1,53 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
+  useEffect,
   useRef,
   useState,
   type ChangeEvent,
 } from "react";
 import { toast } from "sonner";
 import {
+  Activity,
+  ArrowUpRight,
+  CalendarDays,
   Check,
   CloudUpload,
   Copy,
-  Image as ImageIcon,
   IndianRupee,
   Landmark,
   Loader2,
+  PackageCheck,
+  RefreshCw,
   ScanSearch,
+  ShieldCheck,
   Sparkles,
+  Target,
+  TrendingDown,
   TrendingUp,
   Upload,
+   Image as ImageIcon,
 } from "lucide-react";
 
-import { PublicPage, PageHero } from "@/components/public-page";
+import {
+  PublicPage,
+  PageHero,
+} from "@/components/public-page";
 import { Reveal } from "@/components/section";
 import { saveCraftPricing } from "@/lib/craft-draft";
 
-export const Route = createFileRoute("/smart-pricing")({
+/* =========================================================
+   ROUTE
+========================================================= */
+
+export const Route = createFileRoute(
+  "/smart-pricing",
+)({
   component: SmartPricingPage,
 });
+
+/* =========================================================
+   TYPES
+========================================================= */
 
 type CraftCategory =
   | "Pottery"
@@ -38,7 +60,10 @@ type CraftCategory =
   | "Sculptures & Stone Carving"
   | "Folk Musical Instruments";
 
-type FinishLevel = "Basic" | "Fine" | "Intricate";
+type FinishLevel =
+  | "Basic"
+  | "Fine"
+  | "Intricate";
 
 type SizeLabel =
   | "Mini"
@@ -68,17 +93,13 @@ interface MarketData {
   demandChange: number;
   comparableCount: number;
   matchLabel: string;
-  sourceType: "curated_reference" | "official_reference";
+  sourceType:
+    | "curated_reference"
+    | "official_reference";
   sourceLabel: string;
   updatedAt: string;
   materialCostReference: number;
   labourBenchmark: number;
-}
-
-interface CraftProfile {
-  materialCost: number;
-  labourBenchmark: number;
-  baseHours: number;
 }
 
 interface PriceResult {
@@ -95,7 +116,103 @@ interface PriceResult {
   confidence: number;
 }
 
-const CRAFT_PROFILES: Record<CraftCategory, CraftProfile> = {
+interface FutureOutlook {
+  low: number;
+  central: number;
+  high: number;
+  changePercent: number;
+}
+
+interface GovernmentEvent {
+  title: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  relevance: number;
+  source: string;
+}
+
+interface PlannerSource {
+  label: string;
+  url: string;
+  type:
+    | "official"
+    | "curated_reference"
+    | "calculation";
+  updatedAt?: string;
+}
+
+interface PlannerDataQuality {
+  marketReferenceAvailable: boolean;
+  governmentEventsAvailable: boolean;
+  tradeDataAvailable: boolean;
+  odopDataAvailable: boolean;
+  notes: string[];
+}
+
+interface FuturePlannerResult {
+  currentReference: number;
+  currentLow: number;
+  currentHigh: number;
+
+  threeMonth: FutureOutlook;
+  sixMonth: FutureOutlook;
+
+  demandDirection:
+    | "increasing"
+    | "stable"
+    | "decreasing"
+    | "insufficient_data";
+
+  demandChange: number | null;
+  comparableCount: number;
+
+  seasonalityLevel:
+    | "low"
+    | "moderate"
+    | "high";
+
+  opportunityScore: number;
+
+  opportunityLevel:
+    | "low"
+    | "moderate"
+    | "high";
+
+  productionRecommendation: string;
+
+  forecast: Array<{
+    month: string;
+    demandScore: number;
+    seasonalityIndex: number;
+  }>;
+
+  governmentEvents: GovernmentEvent[];
+
+  sources: PlannerSource[];
+
+  dataQuality: PlannerDataQuality;
+}
+
+interface FuturePlannerResponse {
+  success: boolean;
+  result?: FuturePlannerResult;
+
+  error?: string;
+}
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
+const CRAFT_PROFILES: Record<
+  CraftCategory,
+  {
+    materialCost: number;
+    labourBenchmark: number;
+    baseHours: number;
+  }
+> = {
   Pottery: {
     materialCost: 25,
     labourBenchmark: 35,
@@ -151,7 +268,10 @@ const CRAFT_PROFILES: Record<CraftCategory, CraftProfile> = {
   },
 };
 
-const SIZE_MULTIPLIER: Record<SizeLabel, number> = {
+const SIZE_MULTIPLIER: Record<
+  SizeLabel,
+  number
+> = {
   Mini: 0.65,
   Small: 0.82,
   Standard: 1,
@@ -161,13 +281,19 @@ const SIZE_MULTIPLIER: Record<SizeLabel, number> = {
   Monumental: 2.5,
 };
 
-const FINISH_MULTIPLIER: Record<FinishLevel, number> = {
+const FINISH_MULTIPLIER: Record<
+  FinishLevel,
+  number
+> = {
   Basic: 0.96,
   Fine: 1.06,
   Intricate: 1.16,
 };
 
-const CATEGORY_ICONS: Record<CraftCategory, string> = {
+const CATEGORY_ICONS: Record<
+  CraftCategory,
+  string
+> = {
   Pottery: "🏺",
   "Handloom & Textiles": "🧵",
   "Wooden Crafts": "🪵",
@@ -179,20 +305,76 @@ const CATEGORY_ICONS: Record<CraftCategory, string> = {
   "Folk Musical Instruments": "🎶",
 };
 
-function roundToFive(value: number) {
-  return Math.max(5, Math.round(value / 5) * 5);
-}
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function clamp(
   value: number,
   minimum: number,
   maximum: number,
 ) {
-  return Math.min(Math.max(value, minimum), maximum);
+  return Math.min(
+    Math.max(value, minimum),
+    maximum,
+  );
 }
 
-function getDecorationMultiplier(decoration: string) {
-  const text = decoration.toLowerCase().trim();
+function roundToFive(
+  value: number,
+) {
+  return Math.max(
+    5,
+    Math.round(value / 5) * 5,
+  );
+}
+
+function formatCurrency(
+  value: number,
+) {
+  return new Intl.NumberFormat(
+    "en-IN",
+    {
+      maximumFractionDigits: 0,
+    },
+  ).format(value);
+}
+
+function formatDate(
+  value: string,
+) {
+  if (!value) {
+    return "Date unavailable";
+  }
+
+  const date =
+    new Date(value);
+
+  if (
+    Number.isNaN(
+      date.getTime(),
+    )
+  ) {
+    return value;
+  }
+
+  return date.toLocaleDateString(
+    "en-IN",
+    {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    },
+  );
+}
+
+function getDecorationMultiplier(
+  decoration: string,
+) {
+  const text =
+    decoration
+      .toLowerCase()
+      .trim();
 
   if (
     !text ||
@@ -222,142 +404,131 @@ function getDecorationMultiplier(decoration: string) {
   return 1.02;
 }
 
+/* =========================================================
+   PRICE ENGINE
+========================================================= */
+
 function calculateFairPrice(
   analysis: Analysis,
   market: MarketData,
 ): PriceResult {
-  const profile = CRAFT_PROFILES[analysis.category];
-
-  /* =========================================================
-     1. AI-DERIVED CRAFTSMANSHIP SIGNALS
-     ========================================================= */
+  const profile =
+    CRAFT_PROFILES[
+      analysis.category
+    ];
 
   const sizeMultiplier =
-    SIZE_MULTIPLIER[analysis.sizeLabel] ?? 1;
+    SIZE_MULTIPLIER[
+      analysis.sizeLabel
+    ] ?? 1;
 
   const finishMultiplier =
-    FINISH_MULTIPLIER[analysis.finish] ?? 1;
+    FINISH_MULTIPLIER[
+      analysis.finish
+    ] ?? 1;
 
   /*
-   * Complexity now has a meaningful but bounded effect.
-   *
-   * Approximate signal:
-   *   1/10 -> 0.94x
-   *   3/10 -> 1.01x
-   *   5/10 -> 1.08x
-   *   8/10 -> 1.18x
-   *  10/10 -> 1.25x
-   *
-   * This makes a visibly more difficult product worth more
-   * without allowing complexity alone to create an extreme price.
+   * Bounded craftsmanship signal.
    */
-  const complexityMultiplier = clamp(
-    0.90 + analysis.complexity * 0.035,
-    0.90,
-    1.25,
-  );
+  const complexityMultiplier =
+    clamp(
+      0.90 +
+        analysis.complexity *
+          0.035,
+      0.90,
+      1.25,
+    );
 
-  /*
-   * Decoration is derived from Gemini's existing description.
-   * No second AI call is required.
-   *
-   * Plain/minimal work gets no premium.
-   * Visible patterns/engraving get a small premium.
-   * Elaborate/ornate work gets a stronger premium.
-   */
   const decorationMultiplier =
-    getDecorationMultiplier(analysis.decoration);
+    getDecorationMultiplier(
+      analysis.decoration,
+    );
 
   /*
-   * Demand affects price modestly.
-   *
-   * Example:
-   * +14% demand -> roughly +4.2% pricing signal,
-   * not +14%.
+   * Demand is intentionally NOT
+   * treated as direct price growth.
    */
-  const trendMultiplier = clamp(
-    1 + (market.demandChange / 100) * 0.30,
-    0.97,
-    1.07,
-  );
-
-  /* =========================================================
-     2. REFERENCE PRODUCTION COST
-     ========================================================= */
+  const trendMultiplier =
+    clamp(
+      1 +
+        (market.demandChange /
+          100) *
+          0.30,
+      0.97,
+      1.07,
+    );
 
   /*
-   * A photograph cannot reveal exact labour hours.
-   * Therefore this is a transparent reference estimate.
-   *
-   * Complexity now affects labour more clearly:
-   * higher visual complexity -> more reference labour time.
+   * Reference labour estimate.
    */
   const estimatedHours =
     profile.baseHours *
-    (0.75 + analysis.complexity * 0.08) *
+    (0.75 +
+      analysis.complexity *
+        0.08) *
     sizeMultiplier *
-    (analysis.finish === "Intricate"
+    (analysis.finish ===
+    "Intricate"
       ? 1.12
-      : analysis.finish === "Fine"
+      : analysis.finish ===
+          "Fine"
         ? 1.05
         : 1);
 
-  const estimatedLabourCost = Math.round(
-    estimatedHours * market.labourBenchmark,
-  );
-
-  /*
-   * Material reference scales with broad visual size.
-   */
-  const materialCost = Math.round(
-    market.materialCostReference * sizeMultiplier,
-  );
-
-  /*
-   * Small packaging allowance.
-   */
-  const packaging = Math.max(
-    10,
+  const estimatedLabourCost =
     Math.round(
-      (materialCost + estimatedLabourCost) * 0.045,
-    ),
-  );
+      estimatedHours *
+        market.labourBenchmark,
+    );
 
   /*
-   * Small production overhead allowance.
+   * Reference material cost.
    */
-  const overhead = Math.max(
-    10,
+  const materialCost =
     Math.round(
-      (materialCost + estimatedLabourCost) * 0.055,
-    ),
-  );
+      market.materialCostReference *
+        sizeMultiplier,
+    );
 
   /*
-   * Minimum sustainable production cost.
+   * Packaging allowance.
    */
-  const sustainableFloor = roundToFive(
-    materialCost +
-      estimatedLabourCost +
-      packaging +
-      overhead,
-  );
-
-  /* =========================================================
-     3. MARKET-ANCHORED CRAFT VALUE
-     ========================================================= */
+  const packaging =
+    Math.max(
+      10,
+      Math.round(
+        (materialCost +
+          estimatedLabourCost) *
+          0.045,
+      ),
+    );
 
   /*
-   * The market median is still the primary anchor.
-   *
-   * AI signals:
-   *   - complexity
-   *   - finish
-   *   - size
-   *   - visible decoration
-   *   - demand
-   *
-   * all contribute, but within controlled bounds.
+   * Overhead allowance.
+   */
+  const overhead =
+    Math.max(
+      10,
+      Math.round(
+        (materialCost +
+          estimatedLabourCost) *
+          0.055,
+      ),
+    );
+
+  /*
+   * Sustainable production floor.
+   */
+  const sustainableFloor =
+    roundToFive(
+      materialCost +
+        estimatedLabourCost +
+        packaging +
+        overhead,
+    );
+
+  /*
+   * Market anchored value.
    */
   const rawMarketPrice =
     market.median *
@@ -368,95 +539,79 @@ function calculateFairPrice(
     trendMultiplier;
 
   /*
-   * Allow craftsmanship to move the median meaningfully,
-   * but prevent an AI visual estimate from becoming extreme.
-   *
-   * Normal range:
-   *   0.85x to 1.45x of market median.
+   * Guardrail:
+   * visual signals cannot create an
+   * extreme unrestricted price.
    */
-  const marketAnchoredPrice = clamp(
-    rawMarketPrice,
-    market.median * 0.85,
-    market.median * 1.45,
-  );
-
-  /* =========================================================
-     4. FAIR-PRICE GUARDRAILS
-     ========================================================= */
+  const marketAnchoredPrice =
+    clamp(
+      rawMarketPrice,
+      market.median * 0.85,
+      market.median * 1.45,
+    );
 
   let recommended: number;
 
   /*
-   * NORMAL MARKET CASE
-   *
-   * If the estimated production cost fits inside the observed
-   * market range, the market remains the dominant signal.
+   * Normal market case.
    */
-  if (sustainableFloor <= market.high) {
-    recommended = Math.max(
-      marketAnchoredPrice,
-      sustainableFloor * 1.08,
-    );
+  if (
+    sustainableFloor <=
+    market.high
+  ) {
+    recommended =
+      Math.max(
+        marketAnchoredPrice,
+        sustainableFloor * 1.08,
+      );
 
-    /*
-     * A normal product should not exceed the observed market
-     * high merely because AI detected more decoration.
-     */
-    recommended = Math.min(
-      recommended,
-      market.high,
-    );
+    recommended =
+      Math.min(
+        recommended,
+        market.high,
+      );
   } else {
     /*
-     * COST-PRESSURE CASE
-     *
-     * If production itself is above the observed market high,
-     * never force the artisan to sell below cost.
-     *
-     * A modest 10% sustainable margin is used.
+     * Cost pressure case.
      */
-    recommended = sustainableFloor * 1.10;
+    recommended =
+      sustainableFloor * 1.10;
   }
 
-  /*
-   * Always keep the final price above the production floor.
-   */
-  recommended = roundToFive(
-    Math.max(
-      recommended,
-      sustainableFloor,
-    ),
-  );
-
-  /* =========================================================
-     5. SUGGESTED SELLING RANGE
-     ========================================================= */
+  recommended =
+    roundToFive(
+      Math.max(
+        recommended,
+        sustainableFloor,
+      ),
+    );
 
   let low: number;
   let high: number;
 
-  if (sustainableFloor <= market.high) {
-    /*
-     * Normal case:
-     * keep the suggested range inside the observed market band.
-     */
-    low = roundToFive(
-      Math.max(
-        market.low,
-        sustainableFloor,
-        recommended * 0.92,
-      ),
-    );
-
-    high = roundToFive(
-      Math.min(
-        market.high,
+  if (
+    sustainableFloor <=
+    market.high
+  ) {
+    low =
+      roundToFive(
         Math.max(
-          recommended * 1.08,
-          recommended + 10,
+          market.low,
+          sustainableFloor,
+          recommended * 0.92,
         ),
-      ),
-    );
+      );
+
+    high =
+      roundToFive(
+        Math.min(
+          market.high,
+          Math.max(
+            recommended * 1.08,
+            recommended + 10,
+          ),
+        ),
+      );
 
     if (low > recommended) {
       low = recommended;
@@ -466,164 +621,235 @@ function calculateFairPrice(
       high = recommended;
     }
   } else {
-    /*
-     * Cost-pressure case:
-     * show a transparent range around the sustainable price.
-     */
-    low = roundToFive(
-      Math.max(
-        sustainableFloor,
-        recommended * 0.95,
-      ),
-    );
+    low =
+      roundToFive(
+        Math.max(
+          sustainableFloor,
+          recommended * 0.95,
+        ),
+      );
 
-    high = roundToFive(
-      Math.max(
-        recommended * 1.10,
-        recommended + 25,
-      ),
-    );
+    high =
+      roundToFive(
+        Math.max(
+          recommended * 1.10,
+          recommended + 25,
+        ),
+      );
   }
 
-  /* =========================================================
-     6. PRICING CONFIDENCE
-     ========================================================= */
+  const marketConfidence =
+    clamp(
+      70 +
+        market.comparableCount *
+          0.4,
+      70,
+      90,
+    );
 
-  /*
-   * Prototype market confidence is based on the number of
-   * comparable products available in the reference dataset.
-   */
-  const marketConfidence = clamp(
-    70 + market.comparableCount * 0.4,
-    70,
-    90,
-  );
-
-  /*
-   * AI visual confidence is weighted more heavily because the
-   * price calculation directly depends on detected features.
-   */
-  const confidence = Math.round(
-    analysis.confidence * 0.65 +
-      marketConfidence * 0.35,
-  );
-
-  /* =========================================================
-     7. FINAL RESULT
-     ========================================================= */
+  const confidence =
+    Math.round(
+      analysis.confidence *
+        0.65 +
+        marketConfidence *
+          0.35,
+    );
 
   return {
     materialCost,
-    labourBenchmark: market.labourBenchmark,
+    labourBenchmark:
+      market.labourBenchmark,
     estimatedLabourCost,
     packaging,
     overhead,
     sustainableFloor,
-    marketBenchmark: market.median,
+    marketBenchmark:
+      market.median,
     recommended,
     low,
     high,
-    confidence: clamp(
-      confidence,
-      0,
-      100,
-    ),
+    confidence:
+      clamp(
+        confidence,
+        0,
+        100,
+      ),
   };
 }
 
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-IN", {
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function InfoCard({
-  icon: Icon,
-  title,
-  text,
-}: {
-  icon: typeof Landmark;
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-border bg-card p-5">
-      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-        <Icon className="h-5 w-5" />
-      </div>
-
-      <h3 className="font-semibold text-foreground">
-        {title}
-      </h3>
-
-      <p className="mt-2 text-sm leading-6 text-muted-foreground">
-        {text}
-      </p>
-    </div>
-  );
-}
+/* =========================================================
+   SMART PRICING PAGE
+========================================================= */
 
 function SmartPricingPage() {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRef =
+    useRef<HTMLInputElement | null>(
+      null,
+    );
 
-  const [imageFile, setImageFile] =
+  const [
+    imageFile,
+    setImageFile,
+  ] =
     useState<File | null>(null);
 
-  const [imagePreview, setImagePreview] =
-    useState<string | null>(null);
+  const [
+    imagePreview,
+    setImagePreview,
+  ] =
+    useState<string | null>(
+      null,
+    );
 
-  const [analysis, setAnalysis] =
-    useState<Analysis | null>(null);
+  const [
+    analysis,
+    setAnalysis,
+  ] =
+    useState<Analysis | null>(
+      null,
+    );
 
-  const [priceResult, setPriceResult] =
-    useState<PriceResult | null>(null);
+  const [
+    marketData,
+    setMarketData,
+  ] =
+    useState<MarketData | null>(
+      null,
+    );
 
-  const [isAnalyzing, setIsAnalyzing] =
+  const [
+    priceResult,
+    setPriceResult,
+  ] =
+    useState<PriceResult | null>(
+      null,
+    );
+
+  const [
+    isAnalyzing,
+    setIsAnalyzing,
+  ] =
     useState(false);
 
-  const [isPricing, setIsPricing] =
+  const [
+    isPricing,
+    setIsPricing,
+  ] =
     useState(false);
 
-  const [copied, setCopied] =
+  const [
+    copied,
+    setCopied,
+  ] =
     useState(false);
 
-  const [marketData, setMarketData] =
-    useState<MarketData | null>(null);
+  /* ---------------------------------------------------------
+     FUTURE PLANNER STATE
+  --------------------------------------------------------- */
+
+  const [
+    futurePlanner,
+    setFuturePlanner,
+  ] =
+    useState<FuturePlannerResult | null>(
+      null,
+    );
+
+  const [
+    futureLoading,
+    setFutureLoading,
+  ] =
+    useState(false);
+
+  const [
+    futureError,
+    setFutureError,
+  ] =
+    useState("");
+
+  /*
+   * Prevent stale object URLs.
+   */
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(
+          imagePreview,
+        );
+      }
+    };
+  }, [imagePreview]);
+
+  /* =========================================================
+     IMAGE HANDLER
+  ========================================================= */
 
   const handleImage = (
     event: ChangeEvent<HTMLInputElement>,
   ) => {
-    const file = event.target.files?.[0];
+    const file =
+      event.target.files?.[0];
 
     if (!file) {
       return;
     }
 
-    if (!file.type.startsWith("image/")) {
-      toast.error("Please upload a valid image.");
+    if (
+      !file.type.startsWith(
+        "image/",
+      )
+    ) {
+      toast.error(
+        "Please upload a valid image.",
+      );
       return;
     }
 
-    if (file.size > 8 * 1024 * 1024) {
-      toast.error("Image must be smaller than 8 MB.");
+    if (
+      file.size >
+      8 * 1024 * 1024
+    ) {
+      toast.error(
+        "Image must be smaller than 8 MB.",
+      );
       return;
     }
+
+    if (imagePreview) {
+      URL.revokeObjectURL(
+        imagePreview,
+      );
+    }
+
+    const previewUrl =
+      URL.createObjectURL(
+        file,
+      );
 
     setImageFile(file);
-
-    const previewUrl = URL.createObjectURL(file);
-
-    setImagePreview(previewUrl);
+    setImagePreview(
+      previewUrl,
+    );
 
     setAnalysis(null);
     setMarketData(null);
     setPriceResult(null);
+
+    setFuturePlanner(null);
+    setFutureError("");
+
     setCopied(false);
   };
 
+  /* =========================================================
+     CLEAR IMAGE
+  ========================================================= */
+
   const clearImage = () => {
     if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
+      URL.revokeObjectURL(
+        imagePreview,
+      );
     }
 
     setImageFile(null);
@@ -631,43 +857,64 @@ function SmartPricingPage() {
     setAnalysis(null);
     setMarketData(null);
     setPriceResult(null);
+
+    setFuturePlanner(null);
+    setFutureError("");
+
     setCopied(false);
 
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+    if (
+      fileInputRef.current
+    ) {
+      fileInputRef.current.value =
+        "";
     }
   };
 
+  /* =========================================================
+     AI ANALYSIS
+  ========================================================= */
+
   const runAnalysis = async () => {
     if (!imageFile) {
-      toast.error("Please upload a craft image first.");
+      toast.error(
+        "Please upload a craft image first.",
+      );
       return;
     }
 
     setIsAnalyzing(true);
+
     setAnalysis(null);
     setMarketData(null);
     setPriceResult(null);
 
+    setFuturePlanner(null);
+    setFutureError("");
+
     try {
-      const formData = new FormData();
+      const formData =
+        new FormData();
 
       /*
-       * IMPORTANT:
-       * Send the actual File object.
-       * We do NOT send the filename for AI classification.
+       * Send the actual image.
        */
-      formData.append("image", imageFile);
-
-      const response = await fetch(
-        "/api/pricing/analyze",
-        {
-          method: "POST",
-          body: formData,
-        },
+      formData.append(
+        "image",
+        imageFile,
       );
 
-      const data = await response.json();
+      const response =
+        await fetch(
+          "/api/pricing/analyze",
+          {
+            method: "POST",
+            body: formData,
+          },
+        );
+
+      const data =
+        await response.json();
 
       if (!response.ok) {
         throw new Error(
@@ -676,7 +923,10 @@ function SmartPricingPage() {
         );
       }
 
-      if (!data?.success || !data?.analysis) {
+      if (
+        !data?.success ||
+        !data?.analysis
+      ) {
         throw new Error(
           data?.error ||
             "Gemini did not return a valid analysis.",
@@ -686,7 +936,9 @@ function SmartPricingPage() {
       const detected =
         data.analysis as Analysis;
 
-      setAnalysis(detected);
+      setAnalysis(
+        detected,
+      );
 
       toast.success(
         "AI craft analysis completed.",
@@ -707,6 +959,10 @@ function SmartPricingPage() {
     }
   };
 
+  /* =========================================================
+     MARKET + PRICE
+  ========================================================= */
+
   const runPricing = async () => {
     if (!analysis) {
       toast.error(
@@ -719,89 +975,158 @@ function SmartPricingPage() {
     setMarketData(null);
     setPriceResult(null);
 
+    setFuturePlanner(null);
+    setFutureError("");
+
     try {
       /*
-       * Step 4 market intelligence:
-       * match the AI-detected product to the most relevant
-       * product-specific market profile on the server.
+       * Product-specific market lookup.
        */
-      const params = new URLSearchParams({
-        category: analysis.category,
-        productType: analysis.productType,
-        material: analysis.material,
-        sizeLabel: analysis.sizeLabel,
-        complexity: String(analysis.complexity),
-      });
+      const params =
+        new URLSearchParams({
+          category:
+            analysis.category,
+          productType:
+            analysis.productType,
+          material:
+            analysis.material,
+          sizeLabel:
+            analysis.sizeLabel,
+          complexity:
+            String(
+              analysis.complexity,
+            ),
+        });
 
-      const response = await fetch(
-        `/api/pricing/market?${params.toString()}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
+      const response =
+        await fetch(
+          `/api/pricing/market?${params.toString()}`,
+          {
+            method: "GET",
+            headers: {
+              Accept:
+                "application/json",
+            },
           },
-        },
-      );
+        );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
-      if (!response.ok || !data?.success || !data?.market) {
+      if (
+        !response.ok ||
+        !data?.success ||
+        !data?.market
+      ) {
         throw new Error(
           data?.error ||
             "Unable to retrieve market intelligence.",
         );
       }
 
-      const matchedMarket = data.market as MarketData;
+      const matchedMarket =
+        data.market as MarketData;
 
       /*
-       * The market API already accounts for product-specific
-       * market segment, broad size and visual complexity.
-       * The local engine then adds finish, decoration, demand
-       * and the sustainable production floor.
+       * Local transparent price
+       * engine.
        */
-      const result = calculateFairPrice(
-        analysis,
+      const result =
+        calculateFairPrice(
+          analysis,
+          matchedMarket,
+        );
+
+      setMarketData(
         matchedMarket,
       );
 
-      setMarketData(matchedMarket);
-      setPriceResult(result);
+      setPriceResult(
+        result,
+      );
 
+      /*
+       * Save pricing into shared
+       * Craft Draft.
+       */
       saveCraftPricing({
-        materialCost: result.materialCost,
-        labourBenchmark: result.labourBenchmark,
-        estimatedLabourCost: result.estimatedLabourCost,
-        packaging: result.packaging,
-        overhead: result.overhead,
-        sustainableFloor: result.sustainableFloor,
-        marketBenchmark: result.marketBenchmark,
-        recommended: result.recommended,
-        low: result.low,
-        high: result.high,
-        confidence: result.confidence,
+        materialCost:
+          result.materialCost,
+
+        labourBenchmark:
+          result.labourBenchmark,
+
+        estimatedLabourCost:
+          result.estimatedLabourCost,
+
+        packaging:
+          result.packaging,
+
+        overhead:
+          result.overhead,
+
+        sustainableFloor:
+          result.sustainableFloor,
+
+        marketBenchmark:
+          result.marketBenchmark,
+
+        recommended:
+          result.recommended,
+
+        low:
+          result.low,
+
+        high:
+          result.high,
+
+        confidence:
+          result.confidence,
+
         market: {
-          low: matchedMarket.low,
-          median: matchedMarket.median,
-          high: matchedMarket.high,
-          demandChange: matchedMarket.demandChange,
-          comparableCount: matchedMarket.comparableCount,
-          matchLabel: matchedMarket.matchLabel,
-          sourceType: matchedMarket.sourceType,
-          sourceLabel: matchedMarket.sourceLabel,
-          updatedAt: matchedMarket.updatedAt,
+          low:
+            matchedMarket.low,
+
+          median:
+            matchedMarket.median,
+
+          high:
+            matchedMarket.high,
+
+          demandChange:
+            matchedMarket.demandChange,
+
+          comparableCount:
+            matchedMarket.comparableCount,
+
+          matchLabel:
+            matchedMarket.matchLabel,
+
+          sourceType:
+            matchedMarket.sourceType,
+
+          sourceLabel:
+            matchedMarket.sourceLabel,
+
+          updatedAt:
+            matchedMarket.updatedAt,
+
           materialCostReference:
             matchedMarket.materialCostReference,
-          labourBenchmark: matchedMarket.labourBenchmark,
+
+          labourBenchmark:
+            matchedMarket.labourBenchmark,
         },
       });
 
       window.dispatchEvent(
-        new Event("navshakthi:craft-draft-updated"),
+        new Event(
+          "navshakthi:craft-draft-updated",
+        ),
       );
 
       toast.success(
-        `Matched market segment: ${matchedMarket.matchLabel}` ,
+        `Matched market segment: ${matchedMarket.matchLabel}`,
       );
     } catch (error) {
       console.error(
@@ -818,6 +1143,128 @@ function SmartPricingPage() {
       setIsPricing(false);
     }
   };
+
+  /* =========================================================
+     FUTURE PLANNER
+  ========================================================= */
+
+  const handleGenerateFutureForecast =
+  async () => {
+    if (!analysis) {
+      toast.error(
+        "Complete AI craft analysis first.",
+      );
+      return;
+    }
+
+    if (!priceResult) {
+      toast.error(
+        "Calculate the fair price first.",
+      );
+      return;
+    }
+
+    setFutureLoading(true);
+    setFutureError("");
+
+    try {
+      /*
+       * The Future Planner receives the same
+       * craft characteristics and current
+       * pricing range used by Smart Pricing.
+       *
+       * The backend then retrieves the exact
+       * matched market reference itself.
+       */
+      const response =
+        await fetch(
+          "/api/pricing/future-planner",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              Accept:
+                "application/json",
+            },
+
+            body: JSON.stringify({
+              category:
+                analysis.category,
+
+              productType:
+                analysis.productType,
+
+              material:
+                analysis.material,
+
+              currentLow:
+                priceResult.low,
+
+              currentHigh:
+                priceResult.high,
+
+              complexity:
+                analysis.complexity,
+            }),
+          },
+        );
+
+      const data =
+        (await response.json()) as FuturePlannerResponse;
+
+      if (
+        !response.ok ||
+        !data.success ||
+        !data.result
+      ) {
+        throw new Error(
+          data.error ||
+            "Unable to generate the future planning outlook.",
+        );
+      }
+
+      /*
+       * Keep the planner result in the page state.
+       *
+       * We intentionally do NOT pass it through
+       * saveCraftPricing(), because that function
+       * accepts only CraftPricingDraft fields.
+       */
+      setFuturePlanner(
+        data.result,
+      );
+
+      toast.success(
+        "Future planning outlook refreshed.",
+      );
+    } catch (error) {
+      console.error(
+        "Future Planner error:",
+        error,
+      );
+
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to generate the future outlook.";
+
+      setFutureError(
+        message,
+      );
+
+      toast.error(
+        message,
+      );
+    } finally {
+      setFutureLoading(false);
+    }
+  };
+  /* =========================================================
+     COPY
+  ========================================================= */
 
   const copyPrice = async () => {
     if (!priceResult) {
@@ -837,7 +1284,9 @@ function SmartPricingPage() {
       )}`;
 
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(
+        text,
+      );
 
       setCopied(true);
 
@@ -845,7 +1294,7 @@ function SmartPricingPage() {
         "Price details copied.",
       );
 
-      setTimeout(
+      window.setTimeout(
         () => setCopied(false),
         2000,
       );
@@ -856,21 +1305,60 @@ function SmartPricingPage() {
     }
   };
 
+  /* =========================================================
+     DERIVED VALUES
+  ========================================================= */
+
+  const demandChange =
+    marketData?.demandChange ??
+    futurePlanner?.demandChange ??
+    null;
+
+  const demandDirection =
+    futurePlanner?.demandDirection ??
+    (demandChange === null
+      ? "insufficient_data"
+      : demandChange >= 3
+        ? "increasing"
+        : demandChange <= -3
+          ? "decreasing"
+          : "stable");
+
+  const opportunityScore =
+    futurePlanner?.opportunityScore ??
+    (demandChange === null
+      ? 0
+      : clamp(
+          Math.round(
+            50 +
+              demandChange *
+                (50 / 30),
+          ),
+          0,
+          100,
+        ));
+
+  /* =========================================================
+     RENDER
+  ========================================================= */
+
   return (
     <PublicPage>
       <PageHero
-  eyebrow="AI-POWERED FAIR PRICING"
-  title="Know the right price for your craft."
-  subtitle="Upload a photo of your handmade product. NAVSHAKTHI uses visual AI, market benchmarks and a transparent pricing model to help you arrive at a competitive and sustainable selling price."
-/>
+        eyebrow="AI-POWERED FAIR PRICING"
+        title="Know the right price for your craft."
+        subtitle="Upload a photo of your handmade product. NAVSHAKTHI uses visual AI, product-specific market benchmarks and a transparent pricing model to help you arrive at a competitive and sustainable selling price."
+      />
 
       <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        {/* ------------------------------------------------------- */}
-        {/* HOW IT WORKS                                            */}
-        {/* ------------------------------------------------------- */}
+
+        {/* =====================================================
+            HOW IT WORKS
+        ===================================================== */}
 
         <Reveal>
           <section className="mb-10 grid gap-4 md:grid-cols-3">
+
             <InfoCard
               icon={ScanSearch}
               title="1. AI understands the craft"
@@ -880,32 +1368,41 @@ function SmartPricingPage() {
             <InfoCard
               icon={TrendingUp}
               title="2. Market benchmarks"
-              text="The pricing engine compares the detected craft against benchmark market ranges and demand signals."
+              text="The pricing engine matches the detected craft against product-specific market references and observed demand signals."
             />
 
             <InfoCard
-              icon={Landmark}
+              icon={ShieldCheck}
               title="3. Protect the artisan"
-              text="A sustainable cost floor and market sanity checks help prevent both underpricing and unrealistic AI-generated prices."
+              text="A sustainable production floor and bounded pricing rules help prevent both underpricing and unrealistic AI-generated prices."
             />
+
           </section>
         </Reveal>
 
-        {/* ------------------------------------------------------- */}
-        {/* UPLOAD + ANALYSIS                                       */}
-        {/* ------------------------------------------------------- */}
+        {/* =====================================================
+            UPLOAD + ANALYSIS
+        ===================================================== */}
 
         <Reveal>
           <section className="grid gap-8 lg:grid-cols-[1fr_1.1fr]">
-            {/* Upload card */}
+
+            {/* -------------------------------------------------
+                UPLOAD
+            ------------------------------------------------- */}
+
             <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+
               <div className="mb-6">
+
                 <div className="mb-2 flex items-center gap-2">
+
                   <Sparkles className="h-5 w-5 text-primary" />
 
                   <span className="text-sm font-semibold uppercase tracking-[0.15em] text-primary">
                     Step 1
                   </span>
+
                 </div>
 
                 <h2 className="text-2xl font-bold text-foreground">
@@ -913,9 +1410,9 @@ function SmartPricingPage() {
                 </h2>
 
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  A clear product photo gives the AI
-                  better visual evidence.
+                  A clear product photo gives the AI better visual evidence.
                 </p>
+
               </div>
 
               <input
@@ -927,6 +1424,7 @@ function SmartPricingPage() {
               />
 
               {!imagePreview ? (
+
                 <button
                   type="button"
                   onClick={() =>
@@ -934,6 +1432,7 @@ function SmartPricingPage() {
                   }
                   className="group flex min-h-[360px] w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/30 px-6 text-center transition hover:border-primary/50 hover:bg-primary/5"
                 >
+
                   <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary transition group-hover:scale-105">
                     <CloudUpload className="h-8 w-8" />
                   </div>
@@ -950,10 +1449,15 @@ function SmartPricingPage() {
                     <Upload className="h-4 w-4" />
                     Choose image
                   </span>
+
                 </button>
+
               ) : (
+
                 <div className="overflow-hidden rounded-2xl border border-border bg-muted/20">
+
                   <div className="relative">
+
                     <img
                       src={imagePreview}
                       alt="Uploaded craft"
@@ -967,12 +1471,15 @@ function SmartPricingPage() {
                     >
                       Remove
                     </button>
+
                   </div>
 
                   <div className="flex items-center gap-3 border-t border-border p-4">
+
                     <ImageIcon className="h-5 w-5 shrink-0 text-primary" />
 
                     <div className="min-w-0 flex-1">
+
                       <p className="truncate text-sm font-medium text-foreground">
                         {imageFile?.name}
                       </p>
@@ -986,9 +1493,13 @@ function SmartPricingPage() {
                             ).toFixed(2)} MB`
                           : ""}
                       </p>
+
                     </div>
+
                   </div>
+
                 </div>
+
               )}
 
               <button
@@ -1000,6 +1511,7 @@ function SmartPricingPage() {
                 onClick={runAnalysis}
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               >
+
                 {isAnalyzing ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -1011,29 +1523,41 @@ function SmartPricingPage() {
                     Analyze Craft with AI
                   </>
                 )}
+
               </button>
 
               <div className="mt-5 rounded-xl bg-muted/40 p-4">
+
                 <p className="text-xs leading-5 text-muted-foreground">
+
                   <strong className="text-foreground">
                     Privacy:
                   </strong>{" "}
-                  Your image is sent to the AI analysis
-                  service only when you press the analysis
-                  button. The API key remains on the server.
+                  Your image is sent to the AI analysis service only when you
+                  press the analysis button. The API key remains on the server.
+
                 </p>
+
               </div>
+
             </div>
 
-            {/* Analysis card */}
+            {/* -------------------------------------------------
+                ANALYSIS
+            ------------------------------------------------- */}
+
             <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+
               <div className="mb-6">
+
                 <div className="mb-2 flex items-center gap-2">
+
                   <ScanSearch className="h-5 w-5 text-primary" />
 
                   <span className="text-sm font-semibold uppercase tracking-[0.15em] text-primary">
                     Step 2
                   </span>
+
                 </div>
 
                 <h2 className="text-2xl font-bold text-foreground">
@@ -1041,13 +1565,15 @@ function SmartPricingPage() {
                 </h2>
 
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  Gemini analyzes the actual image and
-                  returns structured craft characteristics.
+                  Gemini analyzes the actual image and returns structured craft characteristics.
                 </p>
+
               </div>
 
               {isAnalyzing ? (
+
                 <div className="flex min-h-[360px] flex-col items-center justify-center rounded-2xl bg-muted/30 px-6 text-center">
+
                   <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                     <Sparkles className="h-8 w-8 animate-pulse" />
                   </div>
@@ -1057,17 +1583,21 @@ function SmartPricingPage() {
                   </h3>
 
                   <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
-                    Identifying material, category,
-                    workmanship, decoration and complexity.
+                    Identifying material, category, workmanship, decoration and complexity.
                   </p>
 
                   <Loader2 className="mt-6 h-5 w-5 animate-spin text-primary" />
+
                 </div>
+
               ) : analysis ? (
+
                 <div className="space-y-4">
-                  {/* Product heading */}
+
                   <div className="rounded-2xl bg-primary/5 p-5">
+
                     <div className="flex items-start gap-4">
+
                       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-background text-2xl shadow-sm">
                         {CATEGORY_ICONS[
                           analysis.category
@@ -1075,6 +1605,7 @@ function SmartPricingPage() {
                       </div>
 
                       <div className="min-w-0">
+
                         <p className="text-xs font-semibold uppercase tracking-wider text-primary">
                           Detected product
                         </p>
@@ -1086,12 +1617,15 @@ function SmartPricingPage() {
                         <p className="mt-1 text-sm text-muted-foreground">
                           {analysis.category}
                         </p>
+
                       </div>
+
                     </div>
+
                   </div>
 
-                  {/* AI characteristics */}
                   <div className="grid gap-3 sm:grid-cols-2">
+
                     <AnalysisItem
                       label="Material"
                       value={analysis.material}
@@ -1121,10 +1655,11 @@ function SmartPricingPage() {
                       label="AI confidence"
                       value={`${analysis.confidence}%`}
                     />
+
                   </div>
 
-                  {/* Decoration */}
                   <div className="rounded-2xl border border-border p-4">
+
                     <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                       Visible decoration
                     </p>
@@ -1132,28 +1667,33 @@ function SmartPricingPage() {
                     <p className="mt-2 text-sm leading-6 text-foreground">
                       {analysis.decoration}
                     </p>
+
                   </div>
 
-                  {/* Confidence */}
                   <div className="rounded-2xl border border-border p-4">
+
                     <div className="flex items-center justify-between gap-4">
+
                       <div>
+
                         <p className="text-sm font-semibold text-foreground">
                           Visual analysis confidence
                         </p>
 
                         <p className="mt-1 text-xs text-muted-foreground">
-                          Confidence reflects the AI's
-                          visual certainty, not pricing accuracy.
+                          Confidence reflects AI visual certainty, not pricing accuracy.
                         </p>
+
                       </div>
 
                       <span className="text-lg font-bold text-primary">
                         {analysis.confidence}%
                       </span>
+
                     </div>
 
                     <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted">
+
                       <div
                         className="h-full rounded-full bg-primary transition-all"
                         style={{
@@ -1164,16 +1704,18 @@ function SmartPricingPage() {
                           )}%`,
                         }}
                       />
+
                     </div>
+
                   </div>
 
-                  {/* Price button */}
                   <button
                     type="button"
                     disabled={isPricing}
                     onClick={runPricing}
                     className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                   >
+
                     {isPricing ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -1185,10 +1727,15 @@ function SmartPricingPage() {
                         Calculate Fair Price
                       </>
                     )}
+
                   </button>
+
                 </div>
+
               ) : (
+
                 <div className="flex min-h-[360px] flex-col items-center justify-center rounded-2xl bg-muted/30 px-6 text-center">
+
                   <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                     <ScanSearch className="h-8 w-8" />
                   </div>
@@ -1198,283 +1745,1012 @@ function SmartPricingPage() {
                   </h3>
 
                   <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
-                    Upload a craft image and press
-                    "Analyze Craft with AI" to identify the
-                    product.
+                    Upload a craft image and press “Analyze Craft with AI” to identify the product.
                   </p>
+
                 </div>
+
               )}
+
             </div>
+
           </section>
         </Reveal>
 
-        {/* ------------------------------------------------------- */}
-        {/* PRICE RESULT                                            */}
-        {/* ------------------------------------------------------- */}
+        {/* =====================================================
+            PRICE RESULT
+        ===================================================== */}
 
-        {priceResult && analysis && marketData && (
-          <Reveal>
-            <section className="mt-10 rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
-              <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-                <div>
-                  <div className="mb-2 flex items-center gap-2">
-                    <IndianRupee className="h-5 w-5 text-primary" />
+        {priceResult &&
+          analysis &&
+          marketData && (
 
-                    <span className="text-sm font-semibold uppercase tracking-[0.15em] text-primary">
-                      Step 3
-                    </span>
-                  </div>
+            <Reveal>
 
-                  <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
-                    Fair price recommendation
-                  </h2>
+              <section className="mt-10 rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
 
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Based on AI-detected characteristics,
-                    market benchmark and sustainable production
-                    cost.
-                  </p>
-                </div>
+                <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
 
-                <button
-                  type="button"
-                  onClick={copyPrice}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-muted"
-                >
-                  {copied ? (
-                    <>
-                      <Check className="h-4 w-4" />
-                      Copied
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-4 w-4" />
-                      Copy price
-                    </>
-                  )}
-                </button>
-              </div>
+                  <div>
 
-              <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-                {/* Main price */}
-                <div className="rounded-3xl bg-primary/5 p-7 sm:p-9">
-                  <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                    Recommended selling price
-                  </p>
+                    <div className="mb-2 flex items-center gap-2">
 
-                  <div className="mt-3 flex items-baseline gap-2">
-                    <IndianRupee className="h-8 w-8 text-primary" />
+                      <IndianRupee className="h-5 w-5 text-primary" />
 
-                    <span className="text-5xl font-black tracking-tight text-foreground sm:text-6xl">
-                      {formatCurrency(
-                        priceResult.recommended,
-                      )}
-                    </span>
-                  </div>
+                      <span className="text-sm font-semibold uppercase tracking-[0.15em] text-primary">
+                        Step 3
+                      </span>
 
-                  <p className="mt-3 text-sm text-muted-foreground">
-                    Suggested range:
-                    <span className="ml-1 font-semibold text-foreground">
-                      ₹
-                      {formatCurrency(
-                        priceResult.low,
-                      )}{" "}
-                      – ₹
-                      {formatCurrency(
-                        priceResult.high,
-                      )}
-                    </span>
-                  </p>
-
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    <span className="rounded-full bg-background px-3 py-1.5 text-xs font-semibold text-foreground">
-                      {analysis.category}
-                    </span>
-
-                    <span className="rounded-full bg-background px-3 py-1.5 text-xs font-semibold text-foreground">
-                      {analysis.sizeLabel}
-                    </span>
-
-                    <span className="rounded-full bg-background px-3 py-1.5 text-xs font-semibold text-foreground">
-                      {analysis.finish} finish
-                    </span>
-                  </div>
-                </div>
-
-                {/* Market benchmark */}
-                <div className="rounded-3xl border border-border p-6">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                      <TrendingUp className="h-5 w-5" />
                     </div>
+
+                    <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
+                      Fair price recommendation
+                    </h2>
+
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Based on AI-detected characteristics, product-specific market benchmark and sustainable production cost.
+                    </p>
+
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={copyPrice}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-muted"
+                  >
+
+                    {copied ? (
+                      <>
+                        <Check className="h-4 w-4" />
+                        Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-4 w-4" />
+                        Copy price
+                      </>
+                    )}
+
+                  </button>
+
+                </div>
+
+                <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+
+                  {/* MAIN PRICE */}
+
+                  <div className="rounded-3xl bg-primary/5 p-7 sm:p-9">
+
+                    <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                      Recommended selling price
+                    </p>
+
+                    <div className="mt-3 flex items-baseline gap-2">
+
+                      <IndianRupee className="h-8 w-8 text-primary" />
+
+                      <span className="text-5xl font-black tracking-tight text-foreground sm:text-6xl">
+                        {formatCurrency(
+                          priceResult.recommended,
+                        )}
+                      </span>
+
+                    </div>
+
+                    <p className="mt-3 text-sm text-muted-foreground">
+
+                      Suggested range:
+
+                      <span className="ml-1 font-semibold text-foreground">
+                        ₹
+                        {formatCurrency(
+                          priceResult.low,
+                        )}{" "}
+                        – ₹
+                        {formatCurrency(
+                          priceResult.high,
+                        )}
+                      </span>
+
+                    </p>
+
+                    <div className="mt-6 flex flex-wrap gap-2">
+
+                      <span className="rounded-full bg-background px-3 py-1.5 text-xs font-semibold text-foreground">
+                        {analysis.category}
+                      </span>
+
+                      <span className="rounded-full bg-background px-3 py-1.5 text-xs font-semibold text-foreground">
+                        {analysis.sizeLabel}
+                      </span>
+
+                      <span className="rounded-full bg-background px-3 py-1.5 text-xs font-semibold text-foreground">
+                        {analysis.finish} finish
+                      </span>
+
+                      <span className="rounded-full bg-background px-3 py-1.5 text-xs font-semibold text-primary">
+                        {priceResult.confidence}% confidence
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                  {/* MARKET */}
+
+                  <div className="rounded-3xl border border-border p-6">
+
+                    <div className="flex items-center gap-3">
+
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                        <TrendingUp className="h-5 w-5" />
+                      </div>
+
+                      <div>
+
+                        <p className="text-sm font-semibold text-foreground">
+                          Market benchmark
+                        </p>
+
+                        <p className="text-xs text-muted-foreground">
+                          {marketData.matchLabel}
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                    <div className="mt-6 grid grid-cols-3 gap-3">
+
+                      <Metric
+                        label="Low"
+                        value={`₹${formatCurrency(
+                          marketData.low,
+                        )}`}
+                      />
+
+                      <Metric
+                        label="Median"
+                        value={`₹${formatCurrency(
+                          marketData.median,
+                        )}`}
+                        emphasized
+                      />
+
+                      <Metric
+                        label="High"
+                        value={`₹${formatCurrency(
+                          marketData.high,
+                        )}`}
+                      />
+
+                    </div>
+
+                    <div className="mt-5 rounded-2xl bg-muted/40 p-4">
+
+                      <div className="flex items-center justify-between gap-4">
+
+                        <span className="text-sm text-muted-foreground">
+                          Comparable products
+                        </span>
+
+                        <span className="font-bold text-foreground">
+                          {marketData.comparableCount}
+                        </span>
+
+                      </div>
+
+                      <div className="mt-3 flex items-center justify-between gap-4">
+
+                        <span className="text-sm text-muted-foreground">
+                          Demand trend
+                        </span>
+
+                        <span className="font-bold text-primary">
+                          {marketData.demandChange > 0
+                            ? "+"
+                            : ""}
+                          {marketData.demandChange}%
+                        </span>
+
+                      </div>
+
+                      <div className="mt-3 border-t border-border/60 pt-3">
+
+                        <p className="text-xs text-muted-foreground">
+                          Source: {marketData.sourceLabel}
+                        </p>
+
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          Updated: {formatDate(
+                            marketData.updatedAt,
+                          )}
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                {/* COST BREAKDOWN */}
+
+                <div className="mt-6">
+
+                  <h3 className="mb-4 text-lg font-bold text-foreground">
+                    Transparent cost breakdown
+                  </h3>
+
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+
+                    <CostItem
+                      label="Material reference"
+                      value={
+                        priceResult.materialCost
+                      }
+                    />
+
+                    <CostItem
+                      label="Labour estimate"
+                      value={
+                        priceResult.estimatedLabourCost
+                      }
+                      note={`₹${priceResult.labourBenchmark}/hr benchmark`}
+                    />
+
+                    <CostItem
+                      label="Packaging"
+                      value={
+                        priceResult.packaging
+                      }
+                    />
+
+                    <CostItem
+                      label="Overhead"
+                      value={
+                        priceResult.overhead
+                      }
+                    />
+
+                  </div>
+
+                </div>
+
+                {/* SUSTAINABLE FLOOR */}
+
+                <div className="mt-6 rounded-2xl border border-border p-5">
+
+                  <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
 
                     <div>
-                      <p className="text-sm font-semibold text-foreground">
-                        Market benchmark
+
+                      <div className="flex items-center gap-2">
+
+                        <PackageCheck className="h-4 w-4 text-primary" />
+
+                        <p className="font-semibold text-foreground">
+                          Sustainable production floor
+                        </p>
+
+                      </div>
+
+                      <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                        Minimum reference level required to cover estimated material, labour, packaging and overhead costs.
                       </p>
 
-                      <p className="text-xs text-muted-foreground">
-                        {marketData.matchLabel}
-                      </p>
                     </div>
+
+                    <div className="text-xl font-bold text-foreground">
+                      ₹
+                      {formatCurrency(
+                        priceResult.sustainableFloor,
+                      )}
+                    </div>
+
                   </div>
 
-                  <div className="mt-6 grid grid-cols-3 gap-3">
-                    <Metric
-                      label="Low"
-                      value={`₹${formatCurrency(
-                        marketData.low,
-                      )}`}
-                    />
-
-                    <Metric
-                      label="Median"
-                      value={`₹${formatCurrency(
-                        marketData.median,
-                      )}`}
-                      emphasized
-                    />
-
-                    <Metric
-                      label="High"
-                      value={`₹${formatCurrency(
-                        marketData.high,
-                      )}`}
-                    />
-                  </div>
-
-                  <div className="mt-5 rounded-2xl bg-muted/40 p-4">
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-sm text-muted-foreground">
-                        Comparable products
-                      </span>
-
-                      <span className="font-bold text-foreground">
-                        {marketData.comparableCount}
-                      </span>
-                    </div>
-
-                    <div className="mt-3 flex items-center justify-between gap-4">
-                      <span className="text-sm text-muted-foreground">
-                        Demand trend
-                      </span>
-
-                      <span className="font-bold text-primary">
-                        +{marketData.demandChange}%
-                      </span>
-                    </div>
-
-                    <div className="mt-3 border-t border-border/60 pt-3">
-                      <p className="text-xs text-muted-foreground">
-                        Source: {marketData.sourceLabel}
-                      </p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        Updated: {marketData.updatedAt}
-                      </p>
-                    </div>
-                  </div>
                 </div>
-              </div>
 
-              {/* Cost breakdown */}
-              <div className="mt-6">
-                <h3 className="mb-4 text-lg font-bold text-foreground">
-                  Transparent cost breakdown
-                </h3>
+                {/* METHODOLOGY */}
 
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                  <CostItem
-                    label="Material reference"
-                    value={priceResult.materialCost}
+                <div className="mt-6 grid gap-4 md:grid-cols-3">
+
+                  <InfoCard
+                    icon={Sparkles}
+                    title="AI visual analysis"
+                    text="Gemini analyzes the actual uploaded image to extract product characteristics. It does not directly decide the final price."
                   />
 
-                  <CostItem
-                    label="Labour estimate"
-                    value={priceResult.estimatedLabourCost}
-                    note={`₹${priceResult.labourBenchmark}/hr benchmark`}
+                  <InfoCard
+                    icon={TrendingUp}
+                    title="Product-specific market anchor"
+                    text="The system matches the detected product and material to the most relevant market segment before applying controlled craftsmanship adjustments."
                   />
 
-                  <CostItem
-                    label="Packaging"
-                    value={priceResult.packaging}
+                  <InfoCard
+                    icon={Landmark}
+                    title="Artisan protection"
+                    text="A sustainable production floor prevents the recommendation from falling below estimated material, labour, packaging and overhead requirements."
                   />
 
-                  <CostItem
-                    label="Overhead"
-                    value={priceResult.overhead}
-                  />
                 </div>
-              </div>
 
-              {/* Sustainable floor */}
-              <div className="mt-6 rounded-2xl border border-border p-5">
-                <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-                  <div>
-                    <p className="font-semibold text-foreground">
-                      Sustainable production floor
+                <div className="mt-6 rounded-2xl bg-muted/40 p-5">
+
+                  <p className="text-xs leading-6 text-muted-foreground">
+
+                    <strong className="text-foreground">
+                      Important:
+                    </strong>{" "}
+                    Material and labour figures are prototype reference values.
+                    They are not presented as universal government rates.
+                    Future production deployments can replace them with verified
+                    applicable datasets.
+
+                  </p>
+
+                </div>
+
+              </section>
+
+            </Reveal>
+
+          )}
+
+        {/* =====================================================
+            FUTURE PLANNER
+        ===================================================== */}
+
+        {priceResult &&
+          analysis &&
+          marketData && (
+
+            <Reveal>
+
+              <section className="mt-10 overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
+
+                {/* HEADER */}
+
+                <div className="border-b border-border bg-primary/5 p-6 sm:p-8">
+
+                  <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+
+                    <div>
+
+                      <div className="mb-2 flex items-center gap-2">
+
+                        <CalendarDays className="h-5 w-5 text-primary" />
+
+                        <span className="text-sm font-semibold uppercase tracking-[0.15em] text-primary">
+                          Step 4 · Future Planner
+                        </span>
+
+                      </div>
+
+                      <h2 className="font-display text-3xl text-foreground sm:text-4xl">
+                        Plan what to make next.
+                      </h2>
+
+                      <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
+                        NAVSHAKTHI converts available market, seasonal and
+                        government opportunity signals into a bounded
+                        production-planning outlook.
+                      </p>
+
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={
+                        handleGenerateFutureForecast
+                      }
+                      disabled={
+                        futureLoading
+                      }
+                      className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 font-semibold text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+
+                      {futureLoading ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 animate-spin" />
+                          Refreshing...
+                        </>
+                      ) : (
+                        <>
+                          <ArrowUpRight className="h-4 w-4" />
+                          Refresh outlook
+                        </>
+                      )}
+
+                    </button>
+
+                  </div>
+
+                </div>
+
+                {/* ERROR */}
+
+                {futureError && (
+
+                  <div className="m-6 rounded-2xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
+
+                    <strong>
+                      Future Planner:
+                    </strong>{" "}
+                    {futureError}
+
+                  </div>
+
+                )}
+
+                {/* EMPTY */}
+
+                {!futurePlanner &&
+                  !futureLoading &&
+                  !futureError && (
+
+                    <div className="p-8 text-center sm:p-12">
+
+                      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+
+                        <CalendarDays className="h-7 w-7" />
+
+                      </div>
+
+                      <h3 className="mt-4 text-lg font-semibold text-foreground">
+                        Plan your next production cycle
+                      </h3>
+
+                      <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-muted-foreground">
+                        Generate a 3-month and 6-month outlook using the same
+                        market evidence already used by Smart Pricing.
+                      </p>
+
+                    </div>
+
+                  )}
+
+                {/* LOADING */}
+
+                {futureLoading && (
+
+                  <div className="p-10 text-center">
+
+                    <RefreshCw className="mx-auto h-7 w-7 animate-spin text-primary" />
+
+                    <p className="mt-4 text-sm font-medium text-foreground">
+                      Building your future planning outlook...
                     </p>
 
-                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                      The minimum reference level required to
-                      cover estimated material, labour, packaging
-                      and overhead costs.
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Combining market reference, seasonal and government opportunity signals.
                     </p>
+
                   </div>
 
-                  <div className="text-xl font-bold text-foreground">
-                    ₹
-                    {formatCurrency(
-                      priceResult.sustainableFloor,
+                )}
+
+                {/* RESULT */}
+
+                {futurePlanner && (
+
+                  <div className="space-y-6 p-6 sm:p-8">
+
+                    {/* TOP METRICS */}
+
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+
+                      <PlannerMetric
+                        icon={
+                          <CalendarDays className="h-4 w-4" />
+                        }
+                        label="3-Month Outlook"
+                        value={`₹${formatCurrency(
+                          futurePlanner.threeMonth.central,
+                        )}`}
+                        note={`${futurePlanner.threeMonth.changePercent >= 0 ? "+" : ""}${futurePlanner.threeMonth.changePercent}% vs current`}
+                      />
+
+                      <PlannerMetric
+                        icon={
+                          <TrendingUp className="h-4 w-4" />
+                        }
+                        label="6-Month Outlook"
+                        value={`₹${formatCurrency(
+                          futurePlanner.sixMonth.central,
+                        )}`}
+                        note={`${futurePlanner.sixMonth.changePercent >= 0 ? "+" : ""}${futurePlanner.sixMonth.changePercent}% vs current`}
+                      />
+
+                      <PlannerMetric
+                        icon={
+                          demandDirection ===
+                          "decreasing"
+                            ? (
+                              <TrendingDown className="h-4 w-4" />
+                            )
+                            : (
+                              <TrendingUp className="h-4 w-4" />
+                            )
+                        }
+                        label="Demand Direction"
+                        value={formatDemandDirection(
+                          demandDirection,
+                        )}
+                        note={
+                          demandChange ===
+                          null
+                            ? "Signal unavailable"
+                            : `${demandChange > 0 ? "+" : ""}${demandChange}% observed signal`
+                        }
+                      />
+
+                      <PlannerMetric
+                        icon={
+                          <Target className="h-4 w-4" />
+                        }
+                        label="Opportunity"
+                        value={`${opportunityScore}/100`}
+                        note={
+                          futurePlanner.opportunityLevel
+                        }
+                      />
+
+                    </div>
+
+                    {/* THREE / SIX MONTH */}
+
+                    <div className="grid gap-6 lg:grid-cols-2">
+
+                      <OutlookCard
+                        eyebrow="NEXT 3 MONTHS"
+                        title="Price outlook"
+                        outlook={
+                          futurePlanner.threeMonth
+                        }
+                        icon={
+                          <CalendarDays className="h-5 w-5" />
+                        }
+                        current={
+                          futurePlanner.currentReference
+                        }
+                      />
+
+                      <OutlookCard
+                        eyebrow="NEXT 6 MONTHS"
+                        title="Price outlook"
+                        outlook={
+                          futurePlanner.sixMonth
+                        }
+                        icon={
+                          <CalendarDays className="h-5 w-5" />
+                        }
+                        current={
+                          futurePlanner.currentReference
+                        }
+                      />
+
+                    </div>
+
+                    {/* SIGNAL CARDS */}
+
+                    <div className="grid gap-4 md:grid-cols-3">
+
+                      <SignalCard
+                        icon={
+                          demandDirection ===
+                          "decreasing"
+                            ? (
+                              <TrendingDown className="h-5 w-5" />
+                            )
+                            : (
+                              <TrendingUp className="h-5 w-5" />
+                            )
+                        }
+                        title="Demand trend"
+                        value={formatDemandDirection(
+                          demandDirection,
+                        )}
+                        text={
+                          demandChange ===
+                          null
+                            ? "No normalized demand signal is available for this craft yet."
+                            : `Observed market signal: ${demandChange > 0 ? "+" : ""}${demandChange}%. This is a demand signal, not a direct price-growth percentage.`
+                        }
+                      />
+
+                      <SignalCard
+                        icon={
+                          <CalendarDays className="h-5 w-5" />
+                        }
+                        title="Seasonality"
+                        value={
+                          capitalize(
+                            futurePlanner.seasonalityLevel,
+                          )
+                        }
+                        text="Seasonal and event signals can influence production timing and market preparation."
+                      />
+
+                      <SignalCard
+                        icon={
+                          <Target className="h-5 w-5" />
+                        }
+                        title="Opportunity score"
+                        value={`${futurePlanner.opportunityScore}/100`}
+                        text="NAVSHAKTHI decision-support score combining the currently available opportunity signals."
+                      />
+
+                    </div>
+
+                    {/* WHAT SHOULD I MAKE */}
+
+                    <div className="rounded-3xl border border-primary/20 bg-primary/5 p-6 sm:p-8">
+
+                      <div className="flex flex-col gap-5 lg:flex-row lg:items-start">
+
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-background text-primary shadow-sm">
+
+                          <Sparkles className="h-6 w-6" />
+
+                        </div>
+
+                        <div>
+
+                          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
+                            Production recommendation
+                          </p>
+
+                          <h3 className="mt-2 font-display text-2xl text-foreground sm:text-3xl">
+                            What should I make next?
+                          </h3>
+
+                          <p className="mt-3 max-w-3xl text-sm leading-7 text-foreground/80">
+                            {futurePlanner.productionRecommendation}
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    {/* FORECAST SIGNALS */}
+
+                    {futurePlanner.forecast.length >
+                      0 && (
+
+                      <div>
+
+                        <div className="mb-4">
+
+                          <h3 className="text-lg font-bold text-foreground">
+                            Six-month signal path
+                          </h3>
+
+                          <p className="mt-1 text-sm text-muted-foreground">
+                            Relative demand and seasonality indicators used by the planning engine.
+                          </p>
+
+                        </div>
+
+                        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+                          {futurePlanner.forecast.map(
+                            (point) => (
+
+                              <div
+                                key={point.month}
+                                className="rounded-2xl border border-border p-4"
+                              >
+
+                                <div className="flex items-center justify-between">
+
+                                  <span className="text-sm font-semibold text-foreground">
+                                    {point.month}
+                                  </span>
+
+                                  <Activity className="h-4 w-4 text-primary" />
+
+                                </div>
+
+                                <div className="mt-4 grid grid-cols-2 gap-3">
+
+                                  <Metric
+                                    label="Demand"
+                                    value={`${point.demandScore}/100`}
+                                    emphasized
+                                  />
+
+                                  <Metric
+                                    label="Seasonality"
+                                    value={`${point.seasonalityIndex}/100`}
+                                  />
+
+                                </div>
+
+                              </div>
+
+                            ),
+                          )}
+
+                        </div>
+
+                      </div>
+
                     )}
+
+                    {/* GOVERNMENT EVENTS */}
+
+                    <div>
+
+                      <div className="mb-4">
+
+                        <div className="flex items-center gap-2">
+
+                          <Landmark className="h-5 w-5 text-primary" />
+
+                          <h3 className="text-lg font-bold text-foreground">
+                            Government market opportunities
+                          </h3>
+
+                        </div>
+
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          Upcoming official handicraft events detected for the planning horizon.
+                        </p>
+
+                      </div>
+
+                      {futurePlanner.governmentEvents.length >
+                        0 ? (
+
+                        <div className="grid gap-3 md:grid-cols-2">
+
+                          {futurePlanner.governmentEvents.map(
+                            (
+                              event,
+                              index,
+                            ) => (
+
+                              <div
+                                key={`${event.title}-${event.startDate}-${index}`}
+                                className="rounded-2xl border border-border bg-background p-5"
+                              >
+
+                                <div className="flex items-start gap-3">
+
+                                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+
+                                    <CalendarDays className="h-5 w-5" />
+
+                                  </div>
+
+                                  <div className="min-w-0">
+
+                                    <h4 className="font-semibold text-foreground">
+                                      {event.title}
+                                    </h4>
+
+                                    <p className="mt-1 text-xs text-muted-foreground">
+                                      {formatDate(
+                                        event.startDate,
+                                      )}{" "}
+                                      –{" "}
+                                      {formatDate(
+                                        event.endDate,
+                                      )}
+                                    </p>
+
+                                    <p className="mt-1 text-xs text-muted-foreground">
+                                      {event.location}
+                                    </p>
+
+                                  </div>
+
+                                </div>
+
+                                <div className="mt-4 flex items-center justify-between border-t border-border/60 pt-3">
+
+                                  <span className="text-xs text-muted-foreground">
+                                    Relevance
+                                  </span>
+
+                                  <span className="font-semibold text-primary">
+                                    {event.relevance}/100
+                                  </span>
+
+                                </div>
+
+                              </div>
+
+                            ),
+                          )}
+
+                        </div>
+
+                      ) : (
+
+                        <div className="rounded-2xl border border-dashed border-border p-6 text-sm text-muted-foreground">
+                          No upcoming government event signal was available for this planning window.
+                        </div>
+
+                      )}
+
+                    </div>
+
+                    {/* SOURCES */}
+
+                    <div className="rounded-2xl bg-muted/40 p-5">
+
+                      <div className="flex items-center gap-2">
+
+                        <ShieldCheck className="h-5 w-5 text-primary" />
+
+                        <h3 className="font-semibold text-foreground">
+                          Evidence & data quality
+                        </h3>
+
+                      </div>
+
+                      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+
+                        <DataQualityItem
+                          label="Market reference"
+                          available={
+                            futurePlanner.dataQuality
+                              .marketReferenceAvailable
+                          }
+                        />
+
+                        <DataQualityItem
+                          label="Government events"
+                          available={
+                            futurePlanner.dataQuality
+                              .governmentEventsAvailable
+                          }
+                        />
+
+                        <DataQualityItem
+                          label="TRADESTAT"
+                          available={
+                            futurePlanner.dataQuality
+                              .tradeDataAvailable
+                          }
+                        />
+
+                        <DataQualityItem
+                          label="ODOP"
+                          available={
+                            futurePlanner.dataQuality
+                              .odopDataAvailable
+                          }
+                        />
+
+                      </div>
+
+                      {futurePlanner.sources.length >
+                        0 && (
+
+                        <div className="mt-5 border-t border-border/60 pt-5">
+
+                          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                            Sources
+                          </p>
+
+                          <div className="mt-3 space-y-2">
+
+                            {futurePlanner.sources.map(
+                              (
+                                source,
+                                index,
+                              ) => (
+
+                                <div
+                                  key={`${source.label}-${index}`}
+                                  className="flex flex-col gap-1 text-xs sm:flex-row sm:items-center sm:justify-between"
+                                >
+
+                                  <span className="text-muted-foreground">
+                                    {source.label}
+                                  </span>
+
+                                  <span className="text-muted-foreground">
+
+                                    {source.updatedAt
+                                      ? `Updated ${formatDate(
+                                          source.updatedAt,
+                                        )}`
+                                      : source.type}
+
+                                  </span>
+
+                                </div>
+
+                              ),
+                            )}
+
+                          </div>
+
+                        </div>
+
+                      )}
+
+                      {futurePlanner.dataQuality.notes.length >
+                        0 && (
+
+                        <div className="mt-5 border-t border-border/60 pt-5">
+
+                          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                            Planning notes
+                          </p>
+
+                          <ul className="mt-3 space-y-2">
+
+                            {futurePlanner.dataQuality.notes.map(
+                              (
+                                note,
+                                index,
+                              ) => (
+
+                                <li
+                                  key={index}
+                                  className="text-xs leading-5 text-muted-foreground"
+                                >
+                                  • {note}
+                                </li>
+
+                              ),
+                            )}
+
+                          </ul>
+
+                        </div>
+
+                      )}
+
+                    </div>
+
+                    {/* DISCLAIMER */}
+
+                    <div className="rounded-2xl border border-border p-5">
+
+                      <p className="text-xs leading-6 text-muted-foreground">
+
+                        <strong className="text-foreground">
+                          Planning note:
+                        </strong>{" "}
+                        Future Planner provides bounded decision support from
+                        available market, seasonal and government opportunity
+                        signals. It does not guarantee future prices or demand.
+                        The artisan remains the final decision-maker.
+
+                      </p>
+
+                    </div>
+
                   </div>
-                </div>
-              </div>
 
-              {/* Methodology */}
-              <div className="mt-6 grid gap-4 md:grid-cols-3">
-                <InfoCard
-                  icon={Sparkles}
-                  title="AI visual analysis"
-                  text="Gemini analyzes the actual uploaded image to extract product characteristics. It does not directly decide the final price."
-                />
+                )}
 
-                <InfoCard
-                  icon={TrendingUp}
-                  title="Product-specific market anchor"
-                  text="The system matches the detected product and material to the most relevant market segment before applying controlled craftsmanship adjustments."
-                />
+              </section>
 
-                <InfoCard
-                  icon={Landmark}
-                  title="Artisan protection"
-                  text="A sustainable production floor prevents the recommendation from falling below estimated material, labour, packaging and overhead requirements."
-                />
-              </div>
+            </Reveal>
 
-              <div className="mt-6 rounded-2xl bg-muted/40 p-5">
-                <p className="text-xs leading-6 text-muted-foreground">
-                  <strong className="text-foreground">
-                    Important:
-                  </strong>{" "}
-                  Material and labour figures shown here are
-                  prototype reference values. They are not
-                  presented as universal government rates.
-                  In the production version, verified market
-                  and applicable official reference datasets
-                  can replace these values.
-                </p>
-              </div>
-            </section>
-          </Reveal>
-        )}
+          )}
 
-        {/* ------------------------------------------------------- */}
-        {/* CRAFT CATEGORIES                                        */}
-        {/* ------------------------------------------------------- */}
+        {/* =====================================================
+            SUPPORTED CRAFTS
+        ===================================================== */}
 
         <Reveal>
+
           <section className="mt-16">
+
             <div className="mx-auto max-w-2xl text-center">
+
               <p className="text-sm font-semibold uppercase tracking-[0.15em] text-primary">
                 Supported crafts
               </p>
@@ -1484,36 +2760,80 @@ function SmartPricingPage() {
               </h2>
 
               <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                The AI classification layer supports multiple
-                traditional craft categories rather than
-                assuming every handmade product is pottery.
+                The AI classification layer supports multiple traditional craft categories rather than assuming every handmade product is pottery.
               </p>
+
             </div>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
               {(
                 Object.keys(
                   CRAFT_PROFILES,
                 ) as CraftCategory[]
-              ).map((category) => (
-                <div
-                  key={category}
-                  className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4"
-                >
-                  <span className="text-2xl">
-                    {CATEGORY_ICONS[category]}
-                  </span>
+              ).map(
+                (category) => (
 
-                  <span className="text-sm font-semibold text-foreground">
-                    {category}
-                  </span>
-                </div>
-              ))}
+                  <div
+                    key={category}
+                    className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4"
+                  >
+
+                    <span className="text-2xl">
+                      {CATEGORY_ICONS[
+                        category
+                      ]}
+                    </span>
+
+                    <span className="text-sm font-semibold text-foreground">
+                      {category}
+                    </span>
+
+                  </div>
+
+                ),
+              )}
+
             </div>
+
           </section>
+
         </Reveal>
+
       </div>
     </PublicPage>
+  );
+}
+
+/* =========================================================
+   UI COMPONENTS
+========================================================= */
+
+function InfoCard({
+  icon: Icon,
+  title,
+  text,
+}: {
+  icon: typeof Landmark;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-5">
+
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        <Icon className="h-5 w-5" />
+      </div>
+
+      <h3 className="font-semibold text-foreground">
+        {title}
+      </h3>
+
+      <p className="mt-2 text-sm leading-6 text-muted-foreground">
+        {text}
+      </p>
+
+    </div>
   );
 }
 
@@ -1526,13 +2846,15 @@ function AnalysisItem({
 }) {
   return (
     <div className="rounded-2xl border border-border p-4">
+
       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
         {label}
       </p>
 
       <p className="mt-2 text-sm font-semibold leading-6 text-foreground">
-        {value}
+        {value || "Not provided"}
       </p>
+
     </div>
   );
 }
@@ -1548,6 +2870,7 @@ function Metric({
 }) {
   return (
     <div className="rounded-2xl bg-muted/40 p-3">
+
       <p className="text-xs text-muted-foreground">
         {label}
       </p>
@@ -1561,6 +2884,7 @@ function Metric({
       >
         {value}
       </p>
+
     </div>
   );
 }
@@ -1576,12 +2900,16 @@ function CostItem({
 }) {
   return (
     <div className="rounded-2xl border border-border p-4">
+
       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
         {label}
       </p>
 
       <p className="mt-2 text-xl font-bold text-foreground">
-        ₹{formatCurrency(value)}
+        ₹
+        {formatCurrency(
+          value,
+        )}
       </p>
 
       {note && (
@@ -1589,6 +2917,275 @@ function CostItem({
           {note}
         </p>
       )}
+
     </div>
+  );
+}
+
+function PlannerMetric({
+  icon,
+  label,
+  value,
+  note,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  note: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-border bg-background p-5">
+
+      <div className="flex items-start justify-between gap-3">
+
+        <div>
+
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            {label}
+          </p>
+
+          <p className="mt-2 text-xl font-bold text-foreground">
+            {value}
+          </p>
+
+        </div>
+
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          {icon}
+        </div>
+
+      </div>
+
+      <p className="mt-2 text-xs text-muted-foreground">
+        {note}
+      </p>
+
+    </div>
+  );
+}
+
+function OutlookCard({
+  eyebrow,
+  title,
+  outlook,
+  icon,
+  current,
+}: {
+  eyebrow: string;
+  title: string;
+  outlook: FutureOutlook;
+  icon: React.ReactNode;
+  current: number;
+}) {
+  return (
+    <div className="rounded-3xl border border-border p-6">
+
+      <div className="flex items-start justify-between gap-4">
+
+        <div>
+
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
+            {eyebrow}
+          </p>
+
+          <h3 className="mt-2 font-display text-2xl text-foreground">
+            {title}
+          </h3>
+
+        </div>
+
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          {icon}
+        </div>
+
+      </div>
+
+      <p className="mt-6 text-xs text-muted-foreground">
+        Central reference
+      </p>
+
+      <p className="mt-1 text-4xl font-black text-foreground">
+        ₹
+        {formatCurrency(
+          outlook.central,
+        )}
+      </p>
+
+      <p className="mt-2 text-sm text-muted-foreground">
+
+        Reference range:
+
+        <span className="ml-1 font-semibold text-foreground">
+          ₹
+          {formatCurrency(
+            outlook.low,
+          )}{" "}
+          – ₹
+          {formatCurrency(
+            outlook.high,
+          )}
+        </span>
+
+      </p>
+
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+
+        <div className="rounded-2xl bg-muted/40 p-4">
+
+          <p className="text-xs text-muted-foreground">
+            Change vs current
+          </p>
+
+          <p
+            className={`mt-1 text-lg font-bold ${
+              outlook.changePercent > 0
+                ? "text-primary"
+                : outlook.changePercent < 0
+                  ? "text-destructive"
+                  : "text-foreground"
+            }`}
+          >
+            {outlook.changePercent >= 0
+              ? "+"
+              : ""}
+            {outlook.changePercent}%
+          </p>
+
+        </div>
+
+        <div className="rounded-2xl bg-muted/40 p-4">
+
+          <p className="text-xs text-muted-foreground">
+            Current reference
+          </p>
+
+          <p className="mt-1 text-lg font-bold text-foreground">
+            ₹
+            {formatCurrency(
+              current,
+            )}
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+function SignalCard({
+  icon,
+  title,
+  value,
+  text,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  value: string;
+  text: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-border p-5">
+
+      <div className="flex items-center gap-3">
+
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          {icon}
+        </div>
+
+        <div>
+
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            {title}
+          </p>
+
+          <p className="mt-1 font-bold text-foreground">
+            {value}
+          </p>
+
+        </div>
+
+      </div>
+
+      <p className="mt-4 text-sm leading-6 text-muted-foreground">
+        {text}
+      </p>
+
+    </div>
+  );
+}
+
+function DataQualityItem({
+  label,
+  available,
+}: {
+  label: string;
+  available: boolean;
+}) {
+  return (
+    <div className="flex items-center justify-between rounded-xl bg-background px-4 py-3">
+
+      <span className="text-sm text-muted-foreground">
+        {label}
+      </span>
+
+      <span
+        className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
+          available
+            ? "bg-primary/10 text-primary"
+            : "bg-muted text-muted-foreground"
+        }`}
+      >
+        {available ? (
+          <>
+            <Check className="h-3 w-3" />
+            Available
+          </>
+        ) : (
+          "Not available"
+        )}
+      </span>
+
+    </div>
+  );
+}
+
+/* =========================================================
+   LABEL HELPERS
+========================================================= */
+
+function formatDemandDirection(
+  direction:
+    | "increasing"
+    | "stable"
+    | "decreasing"
+    | "insufficient_data",
+) {
+  switch (direction) {
+    case "increasing":
+      return "Increasing";
+
+    case "decreasing":
+      return "Decreasing";
+
+    case "stable":
+      return "Stable";
+
+    default:
+      return "Insufficient data";
+  }
+}
+
+function capitalize(
+  value: string,
+) {
+  if (!value) {
+    return "";
+  }
+
+  return (
+    value.charAt(0).toUpperCase() +
+    value.slice(1)
   );
 }

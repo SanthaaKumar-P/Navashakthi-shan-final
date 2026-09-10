@@ -54,6 +54,7 @@ import { Route as ApiAuthenticationAnalyzeRouteImport } from './routes/api/authe
 import { Route as ApiCatalogerGenerateRouteImport } from './routes/api/cataloger/generate'
 import { Route as ApiCatalogerTranscribeRouteImport } from './routes/api/cataloger/transcribe'
 import { Route as ApiPricingAnalyzeRouteImport } from './routes/api/pricing/analyze'
+import { Route as ApiPricingFuturePlannerRouteImport } from './routes/api/pricing/future-planner'
 import { Route as ApiPricingMarketRouteImport } from './routes/api/pricing/market'
 import { Route as PortalAdminIndexRouteImport } from './routes/portal.admin.index'
 import { Route as PortalAdminCatalogRouteImport } from './routes/portal.admin.catalog'
@@ -330,6 +331,11 @@ const ApiCatalogerTranscribeRoute = ApiCatalogerTranscribeRouteImport.update({
 const ApiPricingAnalyzeRoute = ApiPricingAnalyzeRouteImport.update({
   id: '/api/pricing/analyze',
   path: '/api/pricing/analyze',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPricingFuturePlannerRoute = ApiPricingFuturePlannerRouteImport.update({
+  id: '/api/pricing/future-planner',
+  path: '/api/pricing/future-planner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPricingMarketRoute = ApiPricingMarketRouteImport.update({
@@ -643,6 +649,7 @@ export interface FileRoutesByFullPath {
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
+  '/api/pricing/future-planner': typeof ApiPricingFuturePlannerRoute
   '/api/pricing/market': typeof ApiPricingMarketRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
   '/portal/admin/logs': typeof PortalAdminLogsRoute
@@ -735,6 +742,7 @@ export interface FileRoutesByTo {
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
+  '/api/pricing/future-planner': typeof ApiPricingFuturePlannerRoute
   '/api/pricing/market': typeof ApiPricingMarketRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
   '/portal/admin/logs': typeof PortalAdminLogsRoute
@@ -834,6 +842,7 @@ export interface FileRoutesById {
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
+  '/api/pricing/future-planner': typeof ApiPricingFuturePlannerRoute
   '/api/pricing/market': typeof ApiPricingMarketRoute
   '/portal/admin/catalog': typeof PortalAdminCatalogRoute
   '/portal/admin/logs': typeof PortalAdminLogsRoute
@@ -934,6 +943,7 @@ export interface FileRouteTypes {
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
     | '/api/pricing/analyze'
+    | '/api/pricing/future-planner'
     | '/api/pricing/market'
     | '/portal/admin/catalog'
     | '/portal/admin/logs'
@@ -1026,6 +1036,7 @@ export interface FileRouteTypes {
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
     | '/api/pricing/analyze'
+    | '/api/pricing/future-planner'
     | '/api/pricing/market'
     | '/portal/admin/catalog'
     | '/portal/admin/logs'
@@ -1124,6 +1135,7 @@ export interface FileRouteTypes {
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
     | '/api/pricing/analyze'
+    | '/api/pricing/future-planner'
     | '/api/pricing/market'
     | '/portal/admin/catalog'
     | '/portal/admin/logs'
@@ -1223,6 +1235,7 @@ export interface RootRouteChildren {
   ApiCatalogerGenerateRoute: typeof ApiCatalogerGenerateRoute
   ApiCatalogerTranscribeRoute: typeof ApiCatalogerTranscribeRoute
   ApiPricingAnalyzeRoute: typeof ApiPricingAnalyzeRoute
+  ApiPricingFuturePlannerRoute: typeof ApiPricingFuturePlannerRoute
   ApiPricingMarketRoute: typeof ApiPricingMarketRoute
 }
 
@@ -1541,6 +1554,13 @@ declare module '@tanstack/react-router' {
       path: '/api/pricing/analyze'
       fullPath: '/api/pricing/analyze'
       preLoaderRoute: typeof ApiPricingAnalyzeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/pricing/future-planner': {
+      id: '/api/pricing/future-planner'
+      path: '/api/pricing/future-planner'
+      fullPath: '/api/pricing/future-planner'
+      preLoaderRoute: typeof ApiPricingFuturePlannerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/pricing/market': {
@@ -2108,6 +2128,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCatalogerGenerateRoute: ApiCatalogerGenerateRoute,
   ApiCatalogerTranscribeRoute: ApiCatalogerTranscribeRoute,
   ApiPricingAnalyzeRoute: ApiPricingAnalyzeRoute,
+  ApiPricingFuturePlannerRoute: ApiPricingFuturePlannerRoute,
   ApiPricingMarketRoute: ApiPricingMarketRoute,
 }
 export const routeTree = rootRouteImport
