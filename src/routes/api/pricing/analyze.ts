@@ -60,6 +60,39 @@ const ANALYSIS_SCHEMA = {
         "Primary visible material used to make the product.",
     },
 
+    primaryColour: {
+      type: "string",
+      description:
+        "Dominant visible colour of the product. Describe the colour actually visible in the image. If colour cannot be determined reliably, return 'Not provided'.",
+    },
+
+    secondaryColours: {
+      type: "array",
+      items: {
+        type: "string",
+      },
+      description:
+        "Other clearly visible product colours. Return an empty array when no secondary colour can be identified reliably. Do not invent colours.",
+    },
+
+    shape: {
+      type: "string",
+      description:
+        "Visible overall physical shape or form of the product. If it cannot be determined reliably, return 'Not provided'.",
+    },
+
+    pattern: {
+      type: "string",
+      description:
+        "Visible repeated pattern, motif or surface arrangement. If no clear pattern is visible, return 'Not provided'.",
+    },
+
+    texture: {
+      type: "string",
+      description:
+        "Visible surface texture such as smooth, matte, glossy, rough, woven, grainy, ridged or hammered. If it cannot be determined reliably, return 'Not provided'.",
+    },
+
     finish: {
       type: "string",
       enum: FINISH_LEVELS,
@@ -107,6 +140,11 @@ const ANALYSIS_SCHEMA = {
     "category",
     "productType",
     "material",
+    "primaryColour",
+    "secondaryColours",
+    "shape",
+    "pattern",
+    "texture",
     "finish",
     "complexity",
     "decoration",
@@ -252,6 +290,41 @@ Examples:
 Do not make the description unnecessarily generic.
 
 =========================================================
+IMAGE-DERIVED VISUAL ATTRIBUTES
+=========================================================
+
+primaryColour:
+Identify the dominant visible colour from the actual pixels.
+Use a simple human-readable colour name such as:
+"terracotta red", "dark brown", "natural bamboo", "brass gold",
+"blue", "cream", "multicolour".
+Do not infer colour from craft tradition or filename.
+
+secondaryColours:
+List only additional colours that are clearly visible.
+Do not include speculative colours.
+If none are clearly visible, return [].
+
+shape:
+Describe the visible overall form, for example:
+"cylindrical vessel", "round basket", "rectangular textile",
+"elongated fish form", "human figurine".
+Do not claim hidden structure.
+
+pattern:
+Describe only clearly visible repeated motifs or surface patterns.
+If no reliable pattern is visible, return "Not provided".
+
+texture:
+Describe only visually observable surface texture, for example:
+"smooth glazed", "rough terracotta", "woven", "wood grain",
+"hammered metal", "matte".
+Do not infer tactile properties that cannot be supported visually.
+
+These five attributes must come from the actual image,
+not from the filename, product assumptions or craft category.
+
+=========================================================
 FINISH
 =========================================================
 
@@ -379,6 +452,37 @@ function isValidSize(
       value as (typeof SIZE_LEVELS)[number],
     )
   );
+}
+
+function getValidString(
+  value: unknown,
+  fallback = "Not provided",
+): string {
+  if (
+    typeof value !== "string" ||
+    !value.trim()
+  ) {
+    return fallback;
+  }
+
+  return value.trim();
+}
+
+function getValidStringArray(
+  value: unknown,
+): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter(
+      (item): item is string =>
+        typeof item === "string" &&
+        item.trim().length > 0,
+    )
+    .map((item) => item.trim())
+    .slice(0, 8);
 }
 
 function getValidInteger(
@@ -694,7 +798,36 @@ export const Route = createFileRoute(
           }
 
           /* -------------------------------------------------
-             14. VALIDATE FINISH
+             14. VALIDATE IMAGE-DERIVED VISUAL ATTRIBUTES
+             ------------------------------------------------- */
+
+          const primaryColour =
+            getValidString(
+              analysis.primaryColour,
+            );
+
+          const secondaryColours =
+            getValidStringArray(
+              analysis.secondaryColours,
+            );
+
+          const shape =
+            getValidString(
+              analysis.shape,
+            );
+
+          const pattern =
+            getValidString(
+              analysis.pattern,
+            );
+
+          const texture =
+            getValidString(
+              analysis.texture,
+            );
+
+          /* -------------------------------------------------
+             15. VALIDATE FINISH
              ------------------------------------------------- */
 
           if (!isValidFinish(analysis.finish)) {
@@ -785,6 +918,16 @@ export const Route = createFileRoute(
 
             material:
               analysis.material.trim(),
+
+            primaryColour,
+
+            secondaryColours,
+
+            shape,
+
+            pattern,
+
+            texture,
 
             finish: analysis.finish,
 

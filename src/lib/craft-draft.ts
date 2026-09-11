@@ -27,6 +27,8 @@
    Publish
 ========================================================= */
 
+import type { CraftDNA } from "@/lib/craft-dna/types";
+
 /* =========================================================
    IMAGE DRAFT
 ========================================================= */
@@ -398,6 +400,27 @@ export type CraftDraft = {
   pricing: CraftPricingDraft | null;
 
   /**
+   * =======================================================
+   * CRAFT DNA
+   * =======================================================
+   *
+   * Reusable structured identity of the craft.
+   *
+   * Generated primarily from image-derived attributes
+   * and reused by:
+   *
+   * - Smart Cataloger
+   * - Smart Pricing
+   * - Future Planner
+   * - Authentication
+   * - Voice Verification
+   * - Marketplace
+   *
+   * null means DNA has not been generated yet.
+   */
+  craftDNA: CraftDNA | null;
+
+  /**
    * The actual customer-facing selling price
    * chosen by the artisan.
    *
@@ -457,6 +480,11 @@ function createEmptyDraft(): CraftDraft {
 
     pricing: null,
 
+    /*
+     * New Craft DNA state.
+     */
+    craftDNA: null,
+
     finalSellingPrice: null,
 
     status: "draft",
@@ -492,11 +520,10 @@ export function getCraftDraft(): CraftDraft | null {
     /*
      * Backward-compatible migration.
      *
-     * Old drafts may not contain:
-     * - futurePlanner
-     * - finalSellingPrice
+     * Existing drafts created before Craft DNA
+     * was introduced are still valid.
      *
-     * Therefore we safely preserve them.
+     * Missing craftDNA simply becomes null.
      */
 
     return {
@@ -516,6 +543,10 @@ export function getCraftDraft(): CraftDraft | null {
 
       pricing:
         parsed.pricing ??
+        null,
+
+      craftDNA:
+        parsed.craftDNA ??
         null,
 
       finalSellingPrice:
@@ -607,6 +638,15 @@ export function saveCraftDraft(
         ? updates.pricing
         : current.pricing,
 
+    /*
+     * Preserve existing DNA unless a new DNA
+     * value is explicitly supplied.
+     */
+    craftDNA:
+      updates.craftDNA !== undefined
+        ? updates.craftDNA
+        : current.craftDNA,
+
     finalSellingPrice:
       updates.finalSellingPrice !==
       undefined
@@ -621,6 +661,16 @@ export function saveCraftDraft(
     localStorage.setItem(
       CRAFT_DRAFT_STORAGE_KEY,
       JSON.stringify(updated),
+    );
+
+    /*
+     * Let connected workflow modules know
+     * that the shared draft changed.
+     */
+    window.dispatchEvent(
+      new Event(
+        "navshakthi:craft-draft-updated",
+      ),
     );
   }
 
@@ -677,13 +727,17 @@ export function saveFuturePlanner(
     current.pricing;
 
   /*
-   * Future Planner can only exist meaningfully
-   * alongside a pricing result.
+   * Preserve every existing pricing field.
    *
-   * If pricing doesn't exist yet, we create a
-   * safe zero-state container and the planner
-   * will be populated later.
+   * Future Planner only updates the planner
+   * portion of the pricing state.
    */
+  if (!currentPricing) {
+    console.warn(
+      "Future Planner saved before pricing. Creating a safe pricing container.",
+    );
+  }
+
   const pricing: CraftPricingDraft = {
     materialCost:
       currentPricing?.materialCost ??
@@ -742,15 +796,52 @@ export function saveFuturePlanner(
 }
 
 /* =========================================================
+   SAVE CRAFT DNA
+========================================================= */
+
+/**
+ * Save the reusable Craft DNA profile
+ * into the shared Craft Draft.
+ *
+ * Craft DNA is intentionally stored at the
+ * top level of CraftDraft because it is not
+ * specific to pricing or catalog generation.
+ */
+export function saveCraftDNA(
+  craftDNA: CraftDNA,
+): CraftDraft {
+  return saveCraftDraft({
+    craftDNA,
+  });
+}
+
+/* =========================================================
+   GET CRAFT DNA
+========================================================= */
+
+/**
+ * Read the Craft DNA belonging to the
+ * currently active shared craft draft.
+ */
+export function getCraftDNAFromDraft():
+  CraftDNA | null {
+  return (
+    getCraftDraft()
+      ?.craftDNA ??
+    null
+  );
+}
+
+/* =========================================================
    SAVE FINAL SELLING PRICE
 ========================================================= */
 
 /**
- * Save ONLY the artisan-selected customer-facing
- * selling price.
+ * Save ONLY the artisan-selected
+ * customer-facing selling price.
  *
- * AI recommendations must never automatically
- * become the marketplace selling price.
+ * AI recommendation must never automatically
+ * become the final marketplace price.
  */
 export function saveFinalSellingPrice(
   price: number | null,
@@ -779,6 +870,15 @@ export function clearCraftDraft() {
 
   localStorage.removeItem(
     CRAFT_DRAFT_STORAGE_KEY,
+  );
+
+  /*
+   * Notify connected workflow components.
+   */
+  window.dispatchEvent(
+    new Event(
+      "navshakthi:craft-draft-cleared",
+    ),
   );
 }
 
@@ -837,8 +937,8 @@ export function publishCraftDraft():
   }
 
   /*
-   * NEVER publish an AI recommendation
-   * as the actual selling price.
+   * Final selling price MUST be selected
+   * by the artisan.
    */
   if (
     !draft.finalSellingPrice ||
@@ -851,6 +951,17 @@ export function publishCraftDraft():
     return null;
   }
 
+  /*
+   * The complete shared craft state is
+   * preserved in the published listing:
+   *
+   * image
+   * catalog
+   * pricing
+   * futurePlanner
+   * craftDNA
+   * finalSellingPrice
+   */
   const published: CraftDraft = {
     ...draft,
 
@@ -884,11 +995,14 @@ export function publishCraftDraft():
 
   localStorage.setItem(
     ARTISAN_LISTINGS_STORAGE_KEY,
-    JSON.stringify(listings),
+    JSON.stringify(
+      listings,
+    ),
   );
 
   /*
-   * Notify current-window subscribers.
+   * Notify marketplace/customer/admin
+   * listeners that a listing changed.
    */
   window.dispatchEvent(
     new Event(
@@ -903,11 +1017,17 @@ export function publishCraftDraft():
   );
 
   /*
-   * Draft is removed only after successful
-   * insertion into artisan listings.
+   * Remove active draft only after the
+   * published listing was successfully stored.
    */
   localStorage.removeItem(
     CRAFT_DRAFT_STORAGE_KEY,
+  );
+
+  window.dispatchEvent(
+    new Event(
+      "navshakthi:craft-draft-cleared",
+    ),
   );
 
   return published;
@@ -932,7 +1052,9 @@ export function deleteArtisanListing(
 
   localStorage.setItem(
     ARTISAN_LISTINGS_STORAGE_KEY,
-    JSON.stringify(listings),
+    JSON.stringify(
+      listings,
+    ),
   );
 
   window.dispatchEvent(

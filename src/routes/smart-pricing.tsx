@@ -4,6 +4,8 @@ import {
   useRef,
   useState,
   type ChangeEvent,
+  type ComponentType,
+  type ReactNode,
 } from "react";
 import { toast } from "sonner";
 import {
@@ -33,7 +35,12 @@ import {
   PageHero,
 } from "@/components/public-page";
 import { Reveal } from "@/components/section";
-import { saveCraftPricing } from "@/lib/craft-draft";
+import {
+  saveCraftDNA,
+  saveCraftPricing,
+} from "@/lib/craft-draft";
+
+import { buildCraftDNA } from "@/lib/craft-dna/build-dna";
 
 /* =========================================================
    ROUTE
@@ -78,6 +85,13 @@ interface Analysis {
   category: CraftCategory;
   productType: string;
   material: string;
+
+  primaryColour: string;
+  secondaryColours: string[];
+  shape: string;
+  pattern: string;
+  texture: string;
+
   finish: FinishLevel;
   complexity: number;
   decoration: string;
@@ -366,6 +380,27 @@ function formatDate(
       year: "numeric",
     },
   );
+}
+
+function createCraftDNAFromAnalysis(
+  detected: Analysis,
+) {
+  return buildCraftDNA({
+    category: detected.category,
+    productType: detected.productType,
+    material: detected.material,
+    primaryColour: detected.primaryColour,
+    secondaryColours: detected.secondaryColours,
+    shape: detected.shape,
+    pattern: detected.pattern,
+    texture: detected.texture,
+    finish: detected.finish,
+    complexity: detected.complexity,
+    decoration: detected.decoration,
+    sizeLabel: detected.sizeLabel,
+    dimensions: detected.dimensions,
+    confidence: detected.confidence,
+  });
 }
 
 function getDecorationMultiplier(
@@ -936,12 +971,37 @@ function SmartPricingPage() {
       const detected =
         data.analysis as Analysis;
 
+      /*
+       * =======================================================
+       * CRAFT DNA
+       * =======================================================
+       *
+       * The existing Gemini image analysis is the primary
+       * evidence. We convert that structured analysis into
+       * the reusable Craft DNA profile without making a
+       * second AI request.
+       */
+      const craftDNA =
+        createCraftDNAFromAnalysis(
+          detected,
+        );
+
+      /*
+       * Persist Craft DNA into the shared Craft Draft so
+       * Cataloger, Pricing, Future Planner and later
+       * verification workflows can reuse the same craft
+       * identity.
+       */
+      saveCraftDNA(
+        craftDNA,
+      );
+
       setAnalysis(
         detected,
       );
 
       toast.success(
-        "AI craft analysis completed.",
+        "AI craft analysis completed and Craft DNA created.",
       );
     } catch (error) {
       console.error(
@@ -1655,6 +1715,88 @@ function SmartPricingPage() {
                       label="AI confidence"
                       value={`${analysis.confidence}%`}
                     />
+
+                  </div>
+
+                  {/* CRAFT DNA */}
+
+                  <div className="rounded-2xl border border-primary/20 bg-primary/5 p-5">
+
+                    <div className="flex items-center gap-3">
+
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-background text-primary shadow-sm">
+                        <Sparkles className="h-5 w-5" />
+                      </div>
+
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                          Craft DNA
+                        </p>
+
+                        <h3 className="mt-1 text-lg font-bold text-foreground">
+                          Image-derived craft identity
+                        </h3>
+                      </div>
+
+                    </div>
+
+                    <div className="mt-5 grid gap-3 sm:grid-cols-2">
+
+                      <AnalysisItem
+                        label="Primary colour"
+                        value={
+                          analysis.primaryColour ||
+                          "Not provided"
+                        }
+                      />
+
+                      <AnalysisItem
+                        label="Secondary colours"
+                        value={
+                          analysis.secondaryColours?.length
+                            ? analysis.secondaryColours.join(", ")
+                            : "Not provided"
+                        }
+                      />
+
+                      <AnalysisItem
+                        label="Shape"
+                        value={
+                          analysis.shape ||
+                          "Not provided"
+                        }
+                      />
+
+                      <AnalysisItem
+                        label="Pattern"
+                        value={
+                          analysis.pattern ||
+                          "Not provided"
+                        }
+                      />
+
+                      <AnalysisItem
+                        label="Texture"
+                        value={
+                          analysis.texture ||
+                          "Not provided"
+                        }
+                      />
+
+                      <AnalysisItem
+                        label="Visual confidence"
+                        value={`${analysis.confidence}%`}
+                      />
+
+                    </div>
+
+                    <div className="mt-4 rounded-xl bg-background/70 p-4">
+                      <p className="text-xs leading-5 text-muted-foreground">
+                        These visual attributes are extracted from the uploaded
+                        product image and stored as the shared Craft DNA for
+                        downstream NAVSHAKTHI workflows.
+                      </p>
+                    </div>
 
                   </div>
 
@@ -2814,7 +2956,9 @@ function InfoCard({
   title,
   text,
 }: {
-  icon: typeof Landmark;
+  icon: ComponentType<{
+    className?: string;
+  }>;
   title: string;
   text: string;
 }) {
@@ -2928,7 +3072,7 @@ function PlannerMetric({
   value,
   note,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   value: string;
   note: string;
@@ -2974,7 +3118,7 @@ function OutlookCard({
   eyebrow: string;
   title: string;
   outlook: FutureOutlook;
-  icon: React.ReactNode;
+  icon: ReactNode;
   current: number;
 }) {
   return (
@@ -3080,7 +3224,7 @@ function SignalCard({
   value,
   text,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   value: string;
   text: string;
