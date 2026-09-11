@@ -1063,3 +1063,94 @@ export function deleteArtisanListing(
     ),
   );
 }
+/* =========================================================
+   CREATE NEW CRAFT DRAFT FROM CRAFT LAB PROTOTYPE
+========================================================= */
+
+/**
+ * Starts a fresh craft workflow from a Craft Lab
+ * visual prototype.
+ *
+ * The prototype becomes the new working image.
+ *
+ * Existing Craft DNA is preserved because the new
+ * design is still based on the artisan's craft identity.
+ *
+ * Existing catalog and pricing are intentionally cleared
+ * because the prototype is a NEW product experiment.
+ */
+export function createCraftDraftFromPrototype({
+  prototypeImage,
+  craftDNA,
+}: {
+  prototypeImage: string;
+  craftDNA: CraftDNA;
+}): CraftDraft {
+  const now =
+    new Date().toISOString();
+
+  const newDraft: CraftDraft = {
+    id:
+      crypto.randomUUID(),
+
+    image: {
+      originalImage:
+        prototypeImage,
+
+      enhancedImage:
+        prototypeImage,
+
+      imageScore: null,
+
+      afterImageScore: null,
+
+      backgroundRemovedPercent: 0,
+    },
+
+    /*
+     * New experiment means the previous catalog
+     * must not be reused automatically.
+     */
+    catalog: null,
+
+    /*
+     * New experiment also needs fresh pricing.
+     */
+    pricing: null,
+
+    /*
+     * Preserve the artisan's Craft DNA as the
+     * identity foundation for this experiment.
+     */
+    craftDNA,
+
+    /*
+     * Final selling price must ALWAYS be chosen
+     * by the artisan.
+     */
+    finalSellingPrice: null,
+
+    status: "draft",
+
+    createdAt: now,
+
+    updatedAt: now,
+  };
+
+  if (isBrowser()) {
+    localStorage.setItem(
+      CRAFT_DRAFT_STORAGE_KEY,
+      JSON.stringify(
+        newDraft,
+      ),
+    );
+
+    window.dispatchEvent(
+      new Event(
+        "navshakthi:craft-draft-updated",
+      ),
+    );
+  }
+
+  return newDraft;
+}

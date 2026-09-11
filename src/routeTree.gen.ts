@@ -18,6 +18,7 @@ import { Route as AiImageStudioRouteImport } from './routes/ai-image-studio'
 import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as CertificationCentreRouteImport } from './routes/certification-centre'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CraftLabRouteImport } from './routes/craft-lab'
 import { Route as CraftPassportRouteImport } from './routes/craft-passport'
 import { Route as DigitalTwinRouteImport } from './routes/digital-twin'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -53,6 +54,8 @@ import { Route as ProductsIdRouteImport } from './routes/products.$id'
 import { Route as ApiAuthenticationAnalyzeRouteImport } from './routes/api/authentication/analyze'
 import { Route as ApiCatalogerGenerateRouteImport } from './routes/api/cataloger/generate'
 import { Route as ApiCatalogerTranscribeRouteImport } from './routes/api/cataloger/transcribe'
+import { Route as ApiCraftLabGenerateRouteImport } from './routes/api/craft-lab/generate'
+import { Route as ApiCraftLabPrototypeRouteImport } from './routes/api/craft-lab/prototype'
 import { Route as ApiPricingAnalyzeRouteImport } from './routes/api/pricing/analyze'
 import { Route as ApiPricingFuturePlannerRouteImport } from './routes/api/pricing/future-planner'
 import { Route as ApiPricingMarketRouteImport } from './routes/api/pricing/market'
@@ -150,6 +153,11 @@ const CertificationCentreRoute = CertificationCentreRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftLabRoute = CraftLabRouteImport.update({
+  id: '/craft-lab',
+  path: '/craft-lab',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CraftPassportRoute = CraftPassportRouteImport.update({
@@ -326,6 +334,16 @@ const ApiCatalogerGenerateRoute = ApiCatalogerGenerateRouteImport.update({
 const ApiCatalogerTranscribeRoute = ApiCatalogerTranscribeRouteImport.update({
   id: '/api/cataloger/transcribe',
   path: '/api/cataloger/transcribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCraftLabGenerateRoute = ApiCraftLabGenerateRouteImport.update({
+  id: '/api/craft-lab/generate',
+  path: '/api/craft-lab/generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCraftLabPrototypeRoute = ApiCraftLabPrototypeRouteImport.update({
+  id: '/api/craft-lab/prototype',
+  path: '/api/craft-lab/prototype',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPricingAnalyzeRoute = ApiPricingAnalyzeRouteImport.update({
@@ -613,6 +631,7 @@ export interface FileRoutesByFullPath {
   '/certificates': typeof CertificatesRoute
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-lab': typeof CraftLabRoute
   '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
   '/faq': typeof FaqRoute
@@ -648,6 +667,8 @@ export interface FileRoutesByFullPath {
   '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
+  '/api/craft-lab/generate': typeof ApiCraftLabGenerateRoute
+  '/api/craft-lab/prototype': typeof ApiCraftLabPrototypeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
   '/api/pricing/future-planner': typeof ApiPricingFuturePlannerRoute
   '/api/pricing/market': typeof ApiPricingMarketRoute
@@ -712,6 +733,7 @@ export interface FileRoutesByTo {
   '/certificates': typeof CertificatesRoute
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-lab': typeof CraftLabRoute
   '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
   '/faq': typeof FaqRoute
@@ -741,6 +763,8 @@ export interface FileRoutesByTo {
   '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
+  '/api/craft-lab/generate': typeof ApiCraftLabGenerateRoute
+  '/api/craft-lab/prototype': typeof ApiCraftLabPrototypeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
   '/api/pricing/future-planner': typeof ApiPricingFuturePlannerRoute
   '/api/pricing/market': typeof ApiPricingMarketRoute
@@ -806,6 +830,7 @@ export interface FileRoutesById {
   '/certificates': typeof CertificatesRoute
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-lab': typeof CraftLabRoute
   '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
   '/faq': typeof FaqRoute
@@ -841,6 +866,8 @@ export interface FileRoutesById {
   '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
+  '/api/craft-lab/generate': typeof ApiCraftLabGenerateRoute
+  '/api/craft-lab/prototype': typeof ApiCraftLabPrototypeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
   '/api/pricing/future-planner': typeof ApiPricingFuturePlannerRoute
   '/api/pricing/market': typeof ApiPricingMarketRoute
@@ -907,6 +934,7 @@ export interface FileRouteTypes {
     | '/certificates'
     | '/certification-centre'
     | '/contact'
+    | '/craft-lab'
     | '/craft-passport'
     | '/digital-twin'
     | '/faq'
@@ -942,6 +970,8 @@ export interface FileRouteTypes {
     | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
+    | '/api/craft-lab/generate'
+    | '/api/craft-lab/prototype'
     | '/api/pricing/analyze'
     | '/api/pricing/future-planner'
     | '/api/pricing/market'
@@ -1006,6 +1036,7 @@ export interface FileRouteTypes {
     | '/certificates'
     | '/certification-centre'
     | '/contact'
+    | '/craft-lab'
     | '/craft-passport'
     | '/digital-twin'
     | '/faq'
@@ -1035,6 +1066,8 @@ export interface FileRouteTypes {
     | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
+    | '/api/craft-lab/generate'
+    | '/api/craft-lab/prototype'
     | '/api/pricing/analyze'
     | '/api/pricing/future-planner'
     | '/api/pricing/market'
@@ -1099,6 +1132,7 @@ export interface FileRouteTypes {
     | '/certificates'
     | '/certification-centre'
     | '/contact'
+    | '/craft-lab'
     | '/craft-passport'
     | '/digital-twin'
     | '/faq'
@@ -1134,6 +1168,8 @@ export interface FileRouteTypes {
     | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
+    | '/api/craft-lab/generate'
+    | '/api/craft-lab/prototype'
     | '/api/pricing/analyze'
     | '/api/pricing/future-planner'
     | '/api/pricing/market'
@@ -1199,6 +1235,7 @@ export interface RootRouteChildren {
   CertificatesRoute: typeof CertificatesRoute
   CertificationCentreRoute: typeof CertificationCentreRoute
   ContactRoute: typeof ContactRoute
+  CraftLabRoute: typeof CraftLabRoute
   CraftPassportRoute: typeof CraftPassportRoute
   DigitalTwinRoute: typeof DigitalTwinRoute
   FaqRoute: typeof FaqRoute
@@ -1234,6 +1271,8 @@ export interface RootRouteChildren {
   ApiAuthenticationAnalyzeRoute: typeof ApiAuthenticationAnalyzeRoute
   ApiCatalogerGenerateRoute: typeof ApiCatalogerGenerateRoute
   ApiCatalogerTranscribeRoute: typeof ApiCatalogerTranscribeRoute
+  ApiCraftLabGenerateRoute: typeof ApiCraftLabGenerateRoute
+  ApiCraftLabPrototypeRoute: typeof ApiCraftLabPrototypeRoute
   ApiPricingAnalyzeRoute: typeof ApiPricingAnalyzeRoute
   ApiPricingFuturePlannerRoute: typeof ApiPricingFuturePlannerRoute
   ApiPricingMarketRoute: typeof ApiPricingMarketRoute
@@ -1302,6 +1341,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/craft-lab': {
+      id: '/craft-lab'
+      path: '/craft-lab'
+      fullPath: '/craft-lab'
+      preLoaderRoute: typeof CraftLabRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/craft-passport': {
@@ -1547,6 +1593,20 @@ declare module '@tanstack/react-router' {
       path: '/api/cataloger/transcribe'
       fullPath: '/api/cataloger/transcribe'
       preLoaderRoute: typeof ApiCatalogerTranscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/craft-lab/generate': {
+      id: '/api/craft-lab/generate'
+      path: '/api/craft-lab/generate'
+      fullPath: '/api/craft-lab/generate'
+      preLoaderRoute: typeof ApiCraftLabGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/craft-lab/prototype': {
+      id: '/api/craft-lab/prototype'
+      path: '/api/craft-lab/prototype'
+      fullPath: '/api/craft-lab/prototype'
+      preLoaderRoute: typeof ApiCraftLabPrototypeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/pricing/analyze': {
@@ -2092,6 +2152,7 @@ const rootRouteChildren: RootRouteChildren = {
   CertificatesRoute: CertificatesRoute,
   CertificationCentreRoute: CertificationCentreRoute,
   ContactRoute: ContactRoute,
+  CraftLabRoute: CraftLabRoute,
   CraftPassportRoute: CraftPassportRoute,
   DigitalTwinRoute: DigitalTwinRoute,
   FaqRoute: FaqRoute,
@@ -2127,6 +2188,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthenticationAnalyzeRoute: ApiAuthenticationAnalyzeRoute,
   ApiCatalogerGenerateRoute: ApiCatalogerGenerateRoute,
   ApiCatalogerTranscribeRoute: ApiCatalogerTranscribeRoute,
+  ApiCraftLabGenerateRoute: ApiCraftLabGenerateRoute,
+  ApiCraftLabPrototypeRoute: ApiCraftLabPrototypeRoute,
   ApiPricingAnalyzeRoute: ApiPricingAnalyzeRoute,
   ApiPricingFuturePlannerRoute: ApiPricingFuturePlannerRoute,
   ApiPricingMarketRoute: ApiPricingMarketRoute,
