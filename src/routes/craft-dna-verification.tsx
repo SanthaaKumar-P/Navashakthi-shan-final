@@ -61,16 +61,46 @@ import {
 /* -------------------------------------------------------------------------- */
 
 const LANGUAGES = [
-  { label: "Auto Detect", value: "" },
-  { label: "Tamil", value: "Tamil" },
-  { label: "Hindi", value: "Hindi" },
-  { label: "Telugu", value: "Telugu" },
-  { label: "Kannada", value: "Kannada" },
-  { label: "Malayalam", value: "Malayalam" },
-  { label: "Bengali", value: "Bengali" },
-  { label: "Marathi", value: "Marathi" },
-  { label: "Gujarati", value: "Gujarati" },
-  { label: "English", value: "English" },
+  {
+    label: "Auto Detect",
+    value: "",
+  },
+  {
+    label: "Tamil",
+    value: "Tamil",
+  },
+  {
+    label: "Hindi",
+    value: "Hindi",
+  },
+  {
+    label: "Telugu",
+    value: "Telugu",
+  },
+  {
+    label: "Kannada",
+    value: "Kannada",
+  },
+  {
+    label: "Malayalam",
+    value: "Malayalam",
+  },
+  {
+    label: "Bengali",
+    value: "Bengali",
+  },
+  {
+    label: "Marathi",
+    value: "Marathi",
+  },
+  {
+    label: "Gujarati",
+    value: "Gujarati",
+  },
+  {
+    label: "English",
+    value: "English",
+  },
 ] as const;
 
 const PREFERRED_MIME_TYPES = [
@@ -85,18 +115,34 @@ const PREFERRED_MIME_TYPES = [
 
 function confidencePercent(
   value: number,
-) {
+): number {
   return Math.round(
     Math.min(
       1,
-      Math.max(0, value),
+      Math.max(
+        0,
+        value,
+      ),
     ) * 100,
+  );
+}
+
+function isMissing(
+  value: string,
+): boolean {
+  const normalized =
+    value.trim().toLowerCase();
+
+  return (
+    !normalized ||
+    normalized === "not provided" ||
+    normalized === "not mentioned"
   );
 }
 
 function statusLabel(
   status: CraftDNAVerificationCheck["status"],
-) {
+): string {
   switch (status) {
     case "match":
       return "Confirmed";
@@ -108,10 +154,10 @@ function statusLabel(
       return "New evidence";
 
     case "insufficient_evidence":
-      return "Not verified";
+      return "Not mentioned";
 
     default:
-      return "Not verified";
+      return "Not mentioned";
   }
 }
 
@@ -153,18 +199,8 @@ function statusClasses(
   }
 }
 
-function isMissing(
-  value: string,
-) {
-  return (
-    !value.trim() ||
-    value.trim().toLowerCase() ===
-      "not provided"
-  );
-}
-
 /* -------------------------------------------------------------------------- */
-/* Check Card                                                                 */
+/* Verification Check Card                                                    */
 /* -------------------------------------------------------------------------- */
 
 function VerificationCheckCard({
@@ -177,11 +213,18 @@ function VerificationCheckCard({
   onToggle: () => void;
 }) {
   const styles =
-    statusClasses(check.status);
+    statusClasses(
+      check.status,
+    );
 
   const canApply =
     check.status === "conflict" ||
     check.status === "new";
+
+  const hasRecommendedValue =
+    !isMissing(
+      check.recommendedValue,
+    );
 
   return (
     <div
@@ -193,18 +236,17 @@ function VerificationCheckCard({
             : "border-stone-200 bg-white"
       }`}
     >
+      {/* HEADER */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <div
-            className={`flex h-10 w-10 items-center justify-center rounded-xl ${styles.icon}`}
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${styles.icon}`}
           >
             {check.status === "match" ? (
               <Check className="h-5 w-5" />
-            ) : check.status ===
-              "conflict" ? (
+            ) : check.status === "conflict" ? (
               <AlertTriangle className="h-5 w-5" />
-            ) : check.status ===
-              "new" ? (
+            ) : check.status === "new" ? (
               <Sparkles className="h-5 w-5" />
             ) : (
               <CircleHelp className="h-5 w-5" />
@@ -234,11 +276,13 @@ function VerificationCheckCard({
               onChange={onToggle}
               className="h-4 w-4 rounded border-stone-300"
             />
+
             Apply
           </label>
         )}
       </div>
 
+      {/* COMPARISON */}
       <div className="mt-5 grid gap-3 md:grid-cols-2">
         <div className="rounded-xl bg-white p-4 ring-1 ring-stone-200">
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-400">
@@ -266,7 +310,8 @@ function VerificationCheckCard({
           <p
             className={`mt-2 text-sm leading-6 ${
               check.voiceClaim ===
-              "Not mentioned"
+                "Not mentioned" ||
+              !check.voiceClaim.trim()
                 ? "italic text-stone-400"
                 : "font-medium text-stone-800"
             }`}
@@ -276,9 +321,9 @@ function VerificationCheckCard({
         </div>
       </div>
 
+      {/* RECOMMENDATION */}
       {canApply &&
-        check.recommendedValue !==
-          "Not provided" && (
+        hasRecommendedValue && (
           <div className="mt-3 rounded-xl border border-stone-200 bg-stone-50 p-4">
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-400">
               Recommended update
@@ -290,6 +335,7 @@ function VerificationCheckCard({
           </div>
         )}
 
+      {/* EVIDENCE */}
       <div className="mt-4 flex items-start justify-between gap-4">
         <p className="text-xs leading-5 text-stone-500">
           {check.evidence}
@@ -307,15 +353,19 @@ function VerificationCheckCard({
 }
 
 /* -------------------------------------------------------------------------- */
-/* Page                                                                       */
+/* Main Page                                                                  */
 /* -------------------------------------------------------------------------- */
 
 function CraftDNAVerification() {
   const [craftDNA, setCraftDNA] =
-    useState<CraftDNA | null>(null);
+    useState<CraftDNA | null>(
+      null,
+    );
 
   const [image, setImage] =
-    useState<string | null>(null);
+    useState<string | null>(
+      null,
+    );
 
   const [language, setLanguage] =
     useState("");
@@ -327,10 +377,14 @@ function CraftDNAVerification() {
     useState(0);
 
   const [audioBlob, setAudioBlob] =
-    useState<Blob | null>(null);
+    useState<Blob | null>(
+      null,
+    );
 
   const [audioUrl, setAudioUrl] =
-    useState<string | null>(null);
+    useState<string | null>(
+      null,
+    );
 
   const [fileName, setFileName] =
     useState("");
@@ -376,15 +430,19 @@ function CraftDNAVerification() {
     > | null>(null);
 
   /* ---------------------------------------------------------------------- */
-  /* Load DNA                                                                */
+  /* Load shared Craft DNA                                                   */
   /* ---------------------------------------------------------------------- */
 
   const loadDNA = () => {
-    const draft = getCraftDraft();
+    const draft =
+      getCraftDraft();
+
+    const sharedDNA =
+      draft?.craftDNA ??
+      getStoredCraftDNA();
 
     setCraftDNA(
-      draft?.craftDNA ??
-        getStoredCraftDNA(),
+      sharedDNA,
     );
 
     setImage(
@@ -397,29 +455,35 @@ function CraftDNAVerification() {
   useEffect(() => {
     loadDNA();
 
-    const refresh = () => {
-      loadDNA();
-    };
+    const handleDNAUpdate =
+      () => {
+        loadDNA();
+      };
+
+    const handleDraftUpdate =
+      () => {
+        loadDNA();
+      };
 
     window.addEventListener(
       "navshakthi:craft-dna-updated",
-      refresh,
+      handleDNAUpdate,
     );
 
     window.addEventListener(
       "navshakthi:craft-draft-updated",
-      refresh,
+      handleDraftUpdate,
     );
 
     return () => {
       window.removeEventListener(
         "navshakthi:craft-dna-updated",
-        refresh,
+        handleDNAUpdate,
       );
 
       window.removeEventListener(
         "navshakthi:craft-draft-updated",
-        refresh,
+        handleDraftUpdate,
       );
     };
   }, []);
@@ -438,10 +502,20 @@ function CraftDNAVerification() {
 
       recorderRef.current?.stream
         .getTracks()
-        .forEach((track) =>
-          track.stop(),
+        .forEach(
+          (track) => {
+            track.stop();
+          },
         );
+    };
+  }, []);
 
+  /* ---------------------------------------------------------------------- */
+  /* Audio URL cleanup                                                       */
+  /* ---------------------------------------------------------------------- */
+
+  useEffect(() => {
+    return () => {
       if (audioUrl) {
         URL.revokeObjectURL(
           audioUrl,
@@ -451,200 +525,282 @@ function CraftDNAVerification() {
   }, [audioUrl]);
 
   /* ---------------------------------------------------------------------- */
-  /* Recording                                                               */
+  /* Start recording                                                         */
   /* ---------------------------------------------------------------------- */
 
-  const startRecording = async () => {
-    if (
-      !navigator.mediaDevices
-        ?.getUserMedia ||
-      typeof MediaRecorder ===
-        "undefined"
-    ) {
-      toast.error(
-        "Voice recording is not supported in this browser.",
-      );
-      return;
-    }
-
-    try {
-      const stream =
-        await navigator.mediaDevices.getUserMedia(
-          {
-            audio: true,
-          },
+  const startRecording =
+    async () => {
+      if (
+        !navigator.mediaDevices
+          ?.getUserMedia ||
+        typeof MediaRecorder ===
+          "undefined"
+      ) {
+        toast.error(
+          "Voice recording is not supported in this browser.",
         );
 
-      const mimeType =
-        PREFERRED_MIME_TYPES.find(
-          (type) =>
-            MediaRecorder.isTypeSupported(
-              type,
+        return;
+      }
+
+      try {
+        const stream =
+          await navigator.mediaDevices.getUserMedia(
+            {
+              audio: true,
+            },
+          );
+
+        const mimeType =
+          PREFERRED_MIME_TYPES.find(
+            (type) =>
+              MediaRecorder.isTypeSupported(
+                type,
+              ),
+          ) ?? "";
+
+        const recorder =
+          mimeType
+            ? new MediaRecorder(
+                stream,
+                {
+                  mimeType,
+                },
+              )
+            : new MediaRecorder(
+                stream,
+              );
+
+        chunksRef.current = [];
+
+        recorder.ondataavailable =
+          (event) => {
+            if (
+              event.data.size >
+              0
+            ) {
+              chunksRef.current.push(
+                event.data,
+              );
+            }
+          };
+
+        recorder.onstop = () => {
+          const blob =
+            new Blob(
+              chunksRef.current,
+              {
+                type:
+                  recorder.mimeType ||
+                  "audio/webm",
+              },
+            );
+
+          stream
+            .getTracks()
+            .forEach(
+              (track) => {
+                track.stop();
+              },
+            );
+
+          setAudioBlob(
+            blob,
+          );
+
+          setAudioUrl(
+            URL.createObjectURL(
+              blob,
             ),
-        ) ?? "";
+          );
 
-      const recorder = mimeType
-        ? new MediaRecorder(stream, {
-            mimeType,
-          })
-        : new MediaRecorder(stream);
+          setFileName(
+            `craft-verification.${
+              blob.type.includes(
+                "mp4",
+              )
+                ? "m4a"
+                : "webm"
+            }`,
+          );
 
-      chunksRef.current = [];
+          toast.success(
+            "Voice evidence captured.",
+          );
+        };
 
-      recorder.ondataavailable = (
-        event,
-      ) => {
-        if (event.data.size > 0) {
-          chunksRef.current.push(
-            event.data,
+        recorderRef.current =
+          recorder;
+
+        recorder.start(250);
+
+        setRecording(
+          true,
+        );
+
+        setStatus(
+          "idle",
+        );
+
+        setSeconds(
+          0,
+        );
+
+        setTranscript(
+          "",
+        );
+
+        setVerification(
+          null,
+        );
+
+        setSelectedFields(
+          new Set(),
+        );
+
+        setUpdatesApplied(
+          false,
+        );
+
+        if (
+          timerRef.current
+        ) {
+          clearInterval(
+            timerRef.current,
           );
         }
-      };
 
-      recorder.onstop = () => {
-        const blob = new Blob(
-          chunksRef.current,
-          {
-            type:
-              recorder.mimeType ||
-              "audio/webm",
-          },
-        );
-
-        stream
-          .getTracks()
-          .forEach((track) =>
-            track.stop(),
+        timerRef.current =
+          setInterval(
+            () => {
+              setSeconds(
+                (value) =>
+                  value + 1,
+              );
+            },
+            1000,
           );
-
-        if (audioUrl) {
-          URL.revokeObjectURL(
-            audioUrl,
-          );
-        }
-
-        setAudioBlob(blob);
-
-        setAudioUrl(
-          URL.createObjectURL(blob),
+      } catch (error) {
+        console.error(
+          "Microphone error:",
+          error,
         );
 
-        setFileName(
-          `craft-verification.${
-            blob.type.includes("mp4")
-              ? "m4a"
-              : "webm"
-          }`,
+        toast.error(
+          "Microphone access was blocked. Please allow microphone access and try again.",
         );
+      }
+    };
 
-        toast.success(
-          "Voice evidence captured.",
-        );
-      };
+  /* ---------------------------------------------------------------------- */
+  /* Stop recording                                                          */
+  /* ---------------------------------------------------------------------- */
+
+  const stopRecording =
+    () => {
+      if (
+        !recorderRef.current
+      ) {
+        return;
+      }
+
+      recorderRef.current.stop();
 
       recorderRef.current =
-        recorder;
+        null;
 
-      recorder.start(250);
-
-      setRecording(true);
-      setSeconds(0);
-      setTranscript("");
-      setVerification(null);
-      setSelectedFields(
-        new Set(),
-      );
-      setUpdatesApplied(false);
-
-      if (timerRef.current) {
+      if (
+        timerRef.current
+      ) {
         clearInterval(
           timerRef.current,
         );
+
+        timerRef.current =
+          null;
       }
 
-      timerRef.current =
-        setInterval(() => {
-          setSeconds(
-            (value) => value + 1,
-          );
-        }, 1000);
-    } catch {
-      toast.error(
-        "Microphone access was blocked. Please allow microphone access and try again.",
+      setRecording(
+        false,
       );
-    }
-  };
-
-  const stopRecording = () => {
-    if (!recorderRef.current) {
-      return;
-    }
-
-    recorderRef.current.stop();
-
-    recorderRef.current = null;
-
-    if (timerRef.current) {
-      clearInterval(
-        timerRef.current,
-      );
-
-      timerRef.current = null;
-    }
-
-    setRecording(false);
-  };
+    };
 
   /* ---------------------------------------------------------------------- */
-  /* Upload                                                                  */
+  /* Upload audio                                                             */
   /* ---------------------------------------------------------------------- */
 
-  const handleAudioUpload = (
-    file: File,
-  ) => {
-    if (
-      !file.type.startsWith(
-        "audio/",
-      )
-    ) {
-      toast.error(
-        "Please choose an audio file.",
-      );
-      return;
-    }
+  const handleAudioUpload =
+    (file: File) => {
+      if (
+        !file.type.startsWith(
+          "audio/",
+        )
+      ) {
+        toast.error(
+          "Please choose an audio file.",
+        );
 
-    if (
-      file.size >
-      8 * 1024 * 1024
-    ) {
-      toast.error(
-        "Audio file must be 8 MB or smaller.",
-      );
-      return;
-    }
+        return;
+      }
 
-    if (audioUrl) {
-      URL.revokeObjectURL(
-        audioUrl,
-      );
-    }
+      if (
+        file.size >
+        8 * 1024 * 1024
+      ) {
+        toast.error(
+          "Audio file must be 8 MB or smaller.",
+        );
 
-    setAudioBlob(file);
-    setAudioUrl(
-      URL.createObjectURL(file),
-    );
-    setFileName(file.name);
-    setTranscript("");
-    setVerification(null);
-    setSelectedFields(
-      new Set(),
-    );
-    setUpdatesApplied(false);
-    setSeconds(0);
-  };
+        return;
+      }
+
+      if (audioUrl) {
+        URL.revokeObjectURL(
+          audioUrl,
+        );
+      }
+
+      setAudioBlob(
+        file,
+      );
+
+      setAudioUrl(
+        URL.createObjectURL(
+          file,
+        ),
+      );
+
+      setFileName(
+        file.name,
+      );
+
+      setTranscript(
+        "",
+      );
+
+      setVerification(
+        null,
+      );
+
+      setSelectedFields(
+        new Set(),
+      );
+
+      setUpdatesApplied(
+        false,
+      );
+
+      setSeconds(
+        0,
+      );
+
+      setStatus(
+        "idle",
+      );
+    };
 
   /* ---------------------------------------------------------------------- */
-  /* Run verification                                                        */
+  /* Run transcription + verification                                       */
   /* ---------------------------------------------------------------------- */
 
   const runVerification =
@@ -653,6 +809,7 @@ function CraftDNAVerification() {
         toast.error(
           "Record or upload a voice note first.",
         );
+
         return;
       }
 
@@ -660,10 +817,15 @@ function CraftDNAVerification() {
         toast.error(
           "Craft DNA is required before verification.",
         );
+
         return;
       }
 
       try {
+        /* -------------------------------------------------------------- */
+        /* TRANSCRIPTION                                                  */
+        /* -------------------------------------------------------------- */
+
         setStatus(
           "transcribing",
         );
@@ -721,33 +883,42 @@ function CraftDNAVerification() {
           nextTranscript,
         );
 
-        setLanguageHint(
+        const detectedLanguage =
           String(
             transcriptionData.languageHint ||
               language ||
               "auto",
-          ),
+          );
+
+        setLanguageHint(
+          detectedLanguage,
         );
 
-        setStatus("verifying");
+        /* -------------------------------------------------------------- */
+        /* CRAFT DNA VERIFICATION                                         */
+        /* -------------------------------------------------------------- */
+
+        setStatus(
+          "verifying",
+        );
 
         const verificationResponse =
           await fetch(
             "/api/craft-dna/verify",
             {
               method: "POST",
+
               headers: {
                 "Content-Type":
                   "application/json",
               },
+
               body: JSON.stringify({
                 transcript:
                   nextTranscript,
 
                 language:
-                  transcriptionData.languageHint ||
-                  language ||
-                  "auto",
+                  detectedLanguage,
 
                 craftDNA: {
                   craftCategory:
@@ -843,12 +1014,13 @@ function CraftDNAVerification() {
         const savedResult: CraftDNAVerificationResult =
           {
             ...result,
+
             transcript:
               nextTranscript,
+
             language:
-              transcriptionData.languageHint ||
-              language ||
-              "auto",
+              detectedLanguage,
+
             verifiedAt:
               new Date().toISOString(),
           };
@@ -861,29 +1033,43 @@ function CraftDNAVerification() {
           savedResult,
         );
 
+        /* -------------------------------------------------------------- */
+        /* Auto-select only safe actionable changes                       */
+        /* -------------------------------------------------------------- */
+
+        const actionableFields =
+          savedResult.checks
+            .filter(
+              (check) =>
+                check.status ===
+                  "conflict" ||
+                check.status ===
+                  "new",
+            )
+            .filter(
+              (check) =>
+                !isMissing(
+                  check.recommendedValue,
+                ),
+            )
+            .map(
+              (check) =>
+                check.field,
+            );
+
         setSelectedFields(
           new Set(
-            savedResult.checks
-              .filter(
-                (check) =>
-                  check.status ===
-                    "conflict" ||
-                  check.status === "new",
-              )
-              .filter(
-                (check) =>
-                  check.recommendedValue !==
-                  "Not provided",
-              )
-              .map(
-                (check) =>
-                  check.field,
-              ),
+            actionableFields,
           ),
         );
 
-        setUpdatesApplied(false);
-        setStatus("done");
+        setUpdatesApplied(
+          false,
+        );
+
+        setStatus(
+          "done",
+        );
 
         toast.success(
           "Craft DNA voice verification completed.",
@@ -894,7 +1080,9 @@ function CraftDNAVerification() {
           error,
         );
 
-        setStatus("idle");
+        setStatus(
+          "idle",
+        );
 
         toast.error(
           error instanceof Error
@@ -913,361 +1101,632 @@ function CraftDNAVerification() {
   ) => {
     setSelectedFields(
       (current) => {
-        const next = new Set(
-          current,
-        );
+        const next =
+          new Set(
+            current,
+          );
 
-        if (next.has(field)) {
-          next.delete(field);
+        if (
+          next.has(field)
+        ) {
+          next.delete(
+            field,
+          );
         } else {
-          next.add(field);
+          next.add(
+            field,
+          );
         }
 
         return next;
       },
     );
 
-    setUpdatesApplied(false);
+    setUpdatesApplied(
+      false,
+    );
   };
 
   /* ---------------------------------------------------------------------- */
-  /* Apply voice evidence                                                    */
+  /* Apply voice-confirmed updates                                           */
   /* ---------------------------------------------------------------------- */
 
-  const applyUpdates = () => {
-    if (
-      !craftDNA ||
-      !verification
-    ) {
-      return;
-    }
-
-    const updated: CraftDNA =
-      {
-        ...craftDNA,
-      };
-
-    let appliedCount = 0;
-
-    for (const check of verification.checks) {
+  const applyUpdates =
+    () => {
       if (
-        !selectedFields.has(
-          check.field,
-        )
+        !craftDNA ||
+        !verification
       ) {
-        continue;
+        return;
       }
 
-      if (
-        check.status !==
-          "conflict" &&
-        check.status !== "new"
-      ) {
-        continue;
-      }
+      const updated: CraftDNA =
+        {
+          ...craftDNA,
+        };
 
-      if (
-        check.recommendedValue ===
-          "Not provided" ||
-        !check.recommendedValue.trim()
-      ) {
-        continue;
-      }
+      let appliedCount =
+        0;
 
-      const confidence =
-        Math.min(
-          1,
-          Math.max(
-            0,
-            check.confidence,
-          ),
-        );
+      const appliedFields =
+        new Set<CraftDNAVerificationField>();
 
-      switch (check.field) {
-        case "craftCategory":
-          updated.craftCategory =
-            {
-              ...updated.craftCategory,
-              value:
-                check.recommendedValue,
-              source:
-                "artisan_voice",
-              confidence,
-            };
-          appliedCount++;
-          break;
+      for (const check of verification.checks) {
+        if (
+          !selectedFields.has(
+            check.field,
+          )
+        ) {
+          continue;
+        }
 
-        case "productType":
-          updated.productType = {
-            ...updated.productType,
-            value:
-              check.recommendedValue,
-            source:
-              "artisan_voice",
-            confidence,
-          };
-          appliedCount++;
-          break;
+        if (
+          check.status !==
+            "conflict" &&
+          check.status !==
+            "new"
+        ) {
+          continue;
+        }
 
-        case "material":
-          updated.material = {
-            ...updated.material,
-            value:
-              check.recommendedValue,
-            source:
-              "artisan_voice",
-            confidence,
-          };
-          appliedCount++;
-          break;
+        const recommendedValue =
+          check.recommendedValue.trim();
 
-        case "primaryColour":
-          updated.primaryColour =
-            {
-              ...updated.primaryColour,
-              value:
-                check.recommendedValue,
-              source:
-                "artisan_voice",
-              confidence,
-            };
-          appliedCount++;
-          break;
+        if (
+          isMissing(
+            recommendedValue,
+          )
+        ) {
+          continue;
+        }
 
-        case "secondaryColours":
-          updated.secondaryColours =
-            {
-              ...updated.secondaryColours,
-              value:
-                check.recommendedValue
-                  .split(
-                    /[,;/|]+/,
-                  )
-                  .map(
-                    (value) =>
-                      value.trim(),
-                  )
-                  .filter(Boolean),
-              source:
-                "artisan_voice",
-              confidence,
-            };
-          appliedCount++;
-          break;
+        const confidence =
+          Math.min(
+            1,
+            Math.max(
+              0,
+              check.confidence,
+            ),
+          );
 
-        case "shape":
-          updated.shape = {
-            ...updated.shape,
-            value:
-              check.recommendedValue,
-            source:
-              "artisan_voice",
-            confidence,
-          };
-          appliedCount++;
-          break;
-
-        case "pattern":
-          updated.pattern = {
-            ...updated.pattern,
-            value:
-              check.recommendedValue,
-            source:
-              "artisan_voice",
-            confidence,
-          };
-          appliedCount++;
-          break;
-
-        case "texture":
-          updated.texture = {
-            ...updated.texture,
-            value:
-              check.recommendedValue,
-            source:
-              "artisan_voice",
-            confidence,
-          };
-          appliedCount++;
-          break;
-
-        case "finish":
-          updated.finish = {
-            ...updated.finish,
-            value:
-              check.recommendedValue,
-            source:
-              "artisan_voice",
-            confidence,
-          };
-          appliedCount++;
-          break;
-
-        case "decoration":
-          updated.decoration = {
-            ...updated.decoration,
-            value:
-              check.recommendedValue,
-            source:
-              "artisan_voice",
-            confidence,
-          };
-          appliedCount++;
-          break;
-
-        case "complexity": {
-          const numericValue =
-            Number(
-              check.recommendedValue,
-            );
-
-          if (
-            Number.isFinite(
-              numericValue,
-            )
-          ) {
-            updated.complexity =
+        switch (
+          check.field
+        ) {
+          case "craftCategory":
+            updated.craftCategory =
               {
-                ...updated.complexity,
-                value: Math.min(
-                  10,
-                  Math.max(
-                    1,
-                    numericValue,
-                  ),
-                ),
+                ...updated.craftCategory,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          case "productType":
+            updated.productType =
+              {
+                ...updated.productType,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          case "material":
+            updated.material =
+              {
+                ...updated.material,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          case "primaryColour":
+            updated.primaryColour =
+              {
+                ...updated.primaryColour,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          case "secondaryColours": {
+            const colours =
+              recommendedValue
+                .split(
+                  /[,;/|]+/,
+                )
+                .map(
+                  (value) =>
+                    value.trim(),
+                )
+                .filter(
+                  Boolean,
+                );
+
+            if (
+              colours.length ===
+              0
+            ) {
+              continue;
+            }
+
+            updated.secondaryColours =
+              {
+                ...updated.secondaryColours,
+                value:
+                  colours,
                 source:
                   "artisan_voice",
                 confidence,
               };
 
-            appliedCount++;
+            break;
           }
 
-          break;
+          case "shape":
+            updated.shape =
+              {
+                ...updated.shape,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          case "pattern":
+            updated.pattern =
+              {
+                ...updated.pattern,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          case "texture":
+            updated.texture =
+              {
+                ...updated.texture,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          case "finish":
+            updated.finish =
+              {
+                ...updated.finish,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          case "decoration":
+            updated.decoration =
+              {
+                ...updated.decoration,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          case "complexity": {
+            const numericValue =
+              Number(
+                recommendedValue,
+              );
+
+            if (
+              !Number.isFinite(
+                numericValue,
+              )
+            ) {
+              continue;
+            }
+
+            updated.complexity =
+              {
+                ...updated.complexity,
+
+                /*
+                 * Craft DNA complexity is 1–10.
+                 */
+                value:
+                  Math.min(
+                    10,
+                    Math.max(
+                      1,
+                      numericValue,
+                    ),
+                  ),
+
+                source:
+                  "artisan_voice",
+
+                confidence,
+              };
+
+            break;
+          }
+
+          case "size":
+            updated.size =
+              {
+                ...updated.size,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          case "dimensions":
+            updated.dimensions =
+              {
+                ...updated.dimensions,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          case "useCase":
+            updated.useCase =
+              {
+                ...updated.useCase,
+                value:
+                  recommendedValue,
+                source:
+                  "artisan_voice",
+                confidence,
+              };
+            break;
+
+          default:
+            continue;
         }
 
-        case "size":
-          updated.size = {
-            ...updated.size,
-            value:
-              check.recommendedValue,
-            source:
-              "artisan_voice",
-            confidence,
-          };
-          appliedCount++;
-          break;
+        appliedCount++;
 
-        case "dimensions":
-          updated.dimensions = {
-            ...updated.dimensions,
-            value:
-              check.recommendedValue,
-            source:
-              "artisan_voice",
-            confidence,
-          };
-          appliedCount++;
-          break;
-
-        case "useCase":
-          updated.useCase = {
-            ...updated.useCase,
-            value:
-              check.recommendedValue,
-            source:
-              "artisan_voice",
-            confidence,
-          };
-          appliedCount++;
-          break;
-
-        default:
-          break;
+        appliedFields.add(
+          check.field,
+        );
       }
-    }
 
-    if (appliedCount === 0) {
-      toast.info(
-        "No valid voice-confirmed changes were selected.",
+      if (
+        appliedCount === 0
+      ) {
+        toast.info(
+          "No valid voice-confirmed changes were selected.",
+        );
+
+        return;
+      }
+
+      /* -------------------------------------------------------------- */
+      /* Update metadata                                                 */
+      /* -------------------------------------------------------------- */
+
+      updated.overallConfidence =
+        Math.min(
+          1,
+          Math.max(
+            0,
+            verification.overallConfidence,
+          ),
+        );
+
+      updated.updatedAt =
+        new Date().toISOString();
+
+      /* -------------------------------------------------------------- */
+      /* Persist standalone Craft DNA                                   */
+      /* -------------------------------------------------------------- */
+
+      const storedDNA =
+        saveStoredCraftDNA(
+          updated,
+        );
+
+      /* -------------------------------------------------------------- */
+      /* Persist shared Craft Draft                                     */
+      /* -------------------------------------------------------------- */
+
+      saveDraftCraftDNA(
+        storedDNA,
       );
-      return;
-    }
 
-    updated.overallConfidence =
-      Math.min(
-        1,
-        Math.max(
-          0,
-          verification.overallConfidence,
-        ),
+      /* -------------------------------------------------------------- */
+      /* Update current UI Craft DNA                                    */
+      /* -------------------------------------------------------------- */
+
+      setCraftDNA(
+        storedDNA,
       );
 
-    updated.updatedAt =
-      new Date().toISOString();
+      /* -------------------------------------------------------------- */
+      /* Update verification cards                                      */
+      /* -------------------------------------------------------------- */
 
-    const storedDNA =
-      saveStoredCraftDNA(
-        updated,
+      const updatedChecks =
+        verification.checks.map(
+          (check) => {
+            if (
+              !appliedFields.has(
+                check.field,
+              )
+            ) {
+              return check;
+            }
+
+            return {
+              ...check,
+
+              /*
+               * The approved value is now
+               * the current Craft DNA value.
+               */
+              currentValue:
+                check.recommendedValue,
+
+              /*
+               * IMPORTANT:
+               * Preserve the original artisan
+               * voice claim.
+               *
+               * We do NOT replace voiceClaim.
+               */
+
+              status:
+                "match" as const,
+
+              evidence:
+                "The artisan-approved voice evidence has been applied to Craft DNA.",
+
+              confidence:
+                check.confidence,
+            };
+          },
+        );
+
+      /* -------------------------------------------------------------- */
+      /* Recalculate verification status                                */
+      /* -------------------------------------------------------------- */
+
+      const remainingConflicts =
+        updatedChecks.filter(
+          (check) =>
+            check.status ===
+            "conflict",
+        ).length;
+
+      const remainingNewEvidence =
+        updatedChecks.filter(
+          (check) =>
+            check.status ===
+            "new",
+        ).length;
+
+      const remainingReviewItems =
+        remainingConflicts +
+        remainingNewEvidence;
+
+      const overallStatus =
+        remainingReviewItems ===
+        0
+          ? "aligned"
+          : "needs_review";
+
+      /* -------------------------------------------------------------- */
+      /* Recalculate summary                                            */
+      /* -------------------------------------------------------------- */
+
+      const confirmedCount =
+        updatedChecks.filter(
+          (check) =>
+            check.status ===
+            "match",
+        ).length;
+
+      const notMentionedCount =
+        updatedChecks.filter(
+          (check) =>
+            check.status ===
+            "insufficient_evidence",
+        ).length;
+
+      let summary: string;
+
+      if (
+        remainingReviewItems ===
+        0
+      ) {
+        if (
+          confirmedCount > 0 &&
+          notMentionedCount > 0
+        ) {
+          summary =
+            `The artisan voice confirms ${confirmedCount} Craft DNA attribute${
+              confirmedCount ===
+              1
+                ? ""
+                : "s"
+            }. ${notMentionedCount} attribute${
+              notMentionedCount ===
+              1
+                ? " has"
+                : "s have"
+            } no explicit voice evidence and were left unchanged.`;
+        } else if (
+          confirmedCount > 0
+        ) {
+          summary =
+            `The artisan voice confirms ${confirmedCount} Craft DNA attribute${
+              confirmedCount ===
+              1
+                ? ""
+                : "s"
+            }.`;
+        } else {
+          summary =
+            "The artisan voice did not provide enough explicit evidence to safely change the existing Craft DNA.";
+        }
+      } else {
+        summary =
+          `${confirmedCount} attribute${
+            confirmedCount ===
+            1
+              ? ""
+              : "s"
+          } confirmed, ${remainingConflicts} conflict${
+            remainingConflicts ===
+            1
+              ? ""
+              : "s"
+          } and ${remainingNewEvidence} new evidence item${
+            remainingNewEvidence ===
+            1
+              ? ""
+              : "s"
+          } remain for artisan review.`;
+      }
+
+      /* -------------------------------------------------------------- */
+      /* Save updated verification                                     */
+      /* -------------------------------------------------------------- */
+
+      const updatedVerification: CraftDNAVerificationResult =
+        {
+          ...verification,
+
+          checks:
+            updatedChecks,
+
+          overallStatus:
+            overallStatus,
+
+          summary:
+            summary,
+
+          verifiedAt:
+            new Date().toISOString(),
+        };
+
+      saveCraftDNAVerification(
+        updatedVerification,
       );
 
-    saveDraftCraftDNA(
-      storedDNA,
-    );
+      setVerification(
+        updatedVerification,
+      );
 
-    setCraftDNA(
-      storedDNA,
-    );
+      /* -------------------------------------------------------------- */
+      /* Clear selections                                               */
+      /* -------------------------------------------------------------- */
 
-    setSelectedFields(
-      new Set(),
-    );
+      setSelectedFields(
+        new Set(),
+      );
 
-    setUpdatesApplied(true);
+      setUpdatesApplied(
+        true,
+      );
 
-    toast.success(
-      `${appliedCount} voice-confirmed ${
-        appliedCount === 1
-          ? "update"
-          : "updates"
-      } applied to Craft DNA.`,
-    );
-  };
+      toast.success(
+        `${appliedCount} voice-confirmed ${
+          appliedCount === 1
+            ? "update"
+            : "updates"
+        } applied to Craft DNA.`,
+      );
+    };
 
   /* ---------------------------------------------------------------------- */
   /* Reset                                                                   */
   /* ---------------------------------------------------------------------- */
 
-  const resetVerification = () => {
-    if (recording) {
-      stopRecording();
-    }
+  const resetVerification =
+    () => {
+      if (recording) {
+        stopRecording();
+      }
 
-    setAudioBlob(null);
-    setTranscript("");
-    setVerification(null);
-    setSelectedFields(
-      new Set(),
-    );
-    setStatus("idle");
-    setSeconds(0);
-    setUpdatesApplied(false);
-    setLanguageHint("auto");
-
-    if (audioUrl) {
-      URL.revokeObjectURL(
-        audioUrl,
+      setAudioBlob(
+        null,
       );
 
-      setAudioUrl(null);
-    }
+      setTranscript(
+        "",
+      );
 
-    setFileName("");
-  };
+      setVerification(
+        null,
+      );
+
+      setSelectedFields(
+        new Set(),
+      );
+
+      setStatus(
+        "idle",
+      );
+
+      setSeconds(
+        0,
+      );
+
+      setUpdatesApplied(
+        false,
+      );
+
+      setLanguageHint(
+        "auto",
+      );
+
+      if (audioUrl) {
+        URL.revokeObjectURL(
+          audioUrl,
+        );
+
+        setAudioUrl(
+          null,
+        );
+      }
+
+      setFileName(
+        "",
+      );
+    };
 
   /* ---------------------------------------------------------------------- */
-  /* Empty DNA                                                               */
+  /* Empty Craft DNA                                                         */
   /* ---------------------------------------------------------------------- */
 
   if (!craftDNA) {
@@ -1313,19 +1772,22 @@ function CraftDNAVerification() {
   const matchCount =
     verification?.checks.filter(
       (check) =>
-        check.status === "match",
+        check.status ===
+        "match",
     ).length ?? 0;
 
   const conflictCount =
     verification?.checks.filter(
       (check) =>
-        check.status === "conflict",
+        check.status ===
+        "conflict",
     ).length ?? 0;
 
   const newEvidenceCount =
     verification?.checks.filter(
       (check) =>
-        check.status === "new",
+        check.status ===
+        "new",
     ).length ?? 0;
 
   const insufficientCount =
@@ -1348,15 +1810,14 @@ function CraftDNAVerification() {
         (check.status ===
           "conflict" ||
           check.status === "new") &&
-        check.recommendedValue !==
-          "Not provided" &&
-        Boolean(
-          check.recommendedValue.trim(),
+        !isMissing(
+          check.recommendedValue,
         ),
     ).length ?? 0;
 
   const hasApplicableUpdates =
-    selectedApplicableCount > 0;
+    selectedApplicableCount >
+    0;
 
   return (
     <PublicPage>
@@ -1409,11 +1870,10 @@ function CraftDNAVerification() {
                 </h2>
 
                 <p className="mt-2 text-sm leading-6 text-stone-500">
-                  Voice verification does
-                  not replace the existing
-                  profile. It checks the
-                  artisan's statements against
-                  it.
+                  Voice verification does not
+                  replace the existing profile. It
+                  checks the artisan's statements
+                  against it.
                 </p>
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -1477,16 +1937,16 @@ function CraftDNAVerification() {
                 </h2>
 
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
-                  Speak naturally. Mention
-                  material, colours, technique,
-                  dimensions, finish or anything
-                  that should be corrected in the
-                  current Craft DNA.
+                  Speak naturally. Mention material,
+                  colours, technique, dimensions,
+                  finish or anything that should be
+                  corrected in the current Craft DNA.
                 </p>
               </div>
 
               <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-stone-300 bg-white px-4 py-2.5 text-sm font-semibold text-stone-700 hover:bg-stone-50">
                 <Upload className="h-4 w-4" />
+
                 Upload Audio
 
                 <input
@@ -1527,7 +1987,9 @@ function CraftDNAVerification() {
 
                 <select
                   value={language}
-                  onChange={(event) =>
+                  onChange={(
+                    event,
+                  ) =>
                     setLanguage(
                       event.target.value,
                     )
@@ -1571,7 +2033,7 @@ function CraftDNAVerification() {
                       status ===
                         "verifying"
                     }
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-stone-950 px-6 py-3 text-sm font-semibold text-white hover:bg-stone-800 lg:w-auto"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-stone-950 px-6 py-3 text-sm font-semibold text-white hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-60 lg:w-auto"
                   >
                     <Mic className="h-4 w-4" />
                     Record Voice
@@ -1743,10 +2205,7 @@ function CraftDNAVerification() {
               </div>
             </div>
 
-            {/* ---------------------------------------------------------------- */
-            /* RESULT SUMMARY                                                   */
-            /* ---------------------------------------------------------------- */}
-
+            {/* SUMMARY */}
             <div className="mb-6 rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
               <div className="flex items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-stone-950 text-white">
@@ -1764,7 +2223,7 @@ function CraftDNAVerification() {
                 </div>
               </div>
 
-              {/* SUMMARY COUNTERS */}
+              {/* COUNTS */}
               <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
                   <div className="flex items-center justify-between">
@@ -1839,7 +2298,7 @@ function CraftDNAVerification() {
                 </div>
               </div>
 
-              {/* INTERPRETATION */}
+              {/* ACTION STATUS */}
               <div className="mt-5 rounded-2xl border border-stone-200 bg-stone-50 p-4">
                 {updatesApplied ? (
                   <div className="flex items-start gap-3">
@@ -1851,9 +2310,9 @@ function CraftDNAVerification() {
                       </p>
 
                       <p className="mt-1 text-xs leading-5 text-stone-500">
-                        The selected artisan evidence is now
-                        stored in the shared Craft DNA and can
-                        be reused by downstream NAVSHAKTHI modules.
+                        The approved artisan evidence is now stored
+                        in the shared Craft DNA and is available to
+                        downstream NAVSHAKTHI modules.
                       </p>
                     </div>
                   </div>
@@ -1864,16 +2323,16 @@ function CraftDNAVerification() {
                     <div>
                       <p className="text-sm font-semibold text-amber-800">
                         {reviewCount}{" "}
-                        {reviewCount === 1
+                        {reviewCount ===
+                        1
                           ? "change needs"
                           : "changes need"}{" "}
                         artisan review
                       </p>
 
                       <p className="mt-1 text-xs leading-5 text-stone-500">
-                        Conflicts and new evidence are
-                        pre-selected. Nothing changes in Craft
-                        DNA until the artisan explicitly approves it.
+                        Select the conflict or new-evidence items
+                        you want the artisan to approve.
                       </p>
                     </div>
                   </div>
@@ -1887,8 +2346,8 @@ function CraftDNAVerification() {
                       </p>
 
                       <p className="mt-1 text-xs leading-5 text-stone-500">
-                        The spoken evidence either confirms the
-                        existing profile or does not provide enough
+                        The spoken evidence confirms the existing
+                        profile or does not provide enough explicit
                         information to safely change it.
                       </p>
                     </div>
@@ -1897,13 +2356,17 @@ function CraftDNAVerification() {
               </div>
             </div>
 
-            {/* FIELD CARDS */}
+            {/* FIELD COMPARISONS */}
             <div className="space-y-4">
               {verification.checks.map(
                 (check) => (
                   <VerificationCheckCard
-                    key={check.field}
-                    check={check}
+                    key={
+                      check.field
+                    }
+                    check={
+                      check
+                    }
                     selected={selectedFields.has(
                       check.field,
                     )}
@@ -1921,7 +2384,8 @@ function CraftDNAVerification() {
             <div className="sticky bottom-4 z-20 mt-8 rounded-2xl border border-stone-200 bg-white/95 p-4 shadow-lg backdrop-blur">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  {selectedApplicableCount > 0 ? (
+                  {selectedApplicableCount >
+                  0 ? (
                     <>
                       <p className="text-sm font-semibold text-stone-900">
                         {selectedApplicableCount}{" "}
@@ -1933,23 +2397,23 @@ function CraftDNAVerification() {
                       </p>
 
                       <p className="mt-1 text-xs text-stone-500">
-                        Review the selected conflict/new evidence
-                        before updating Craft DNA.
+                        Only selected conflict/new evidence will
+                        modify Craft DNA.
                       </p>
                     </>
                   ) : reviewCount > 0 ? (
                     <>
                       <p className="text-sm font-semibold text-stone-900">
                         {reviewCount}{" "}
-                        {reviewCount === 1
+                        {reviewCount ===
+                        1
                           ? "review item"
                           : "review items"}{" "}
                         available
                       </p>
 
                       <p className="mt-1 text-xs text-stone-500">
-                        Select a conflict or new evidence item to
-                        approve an update.
+                        Select an item above to approve an update.
                       </p>
                     </>
                   ) : (
@@ -2007,13 +2471,11 @@ function CraftDNAVerification() {
                 </h3>
 
                 <p className="mt-1 text-xs leading-5 text-stone-500">
-                  NAVSHAKTHI compares the artisan's
-                  spoken statements with the existing
-                  Craft DNA. A voice match does not
-                  constitute legal authentication,
-                  certification or proof of origin.
-                  Updates are only applied after
-                  explicit artisan review.
+                  NAVSHAKTHI compares the artisan's spoken
+                  statements with the existing Craft DNA. A voice
+                  match does not constitute legal authentication,
+                  certification or proof of origin. Updates are
+                  only applied after explicit artisan review.
                 </p>
               </div>
             </div>
@@ -2028,23 +2490,24 @@ function CraftDNAVerification() {
 /* Route                                                                      */
 /* -------------------------------------------------------------------------- */
 
-export const Route = createFileRoute(
-  "/craft-dna-verification",
-)({
-  head: () => ({
-    meta: [
-      {
-        title:
-          "Craft DNA Voice Re-verification — NAVSHAKTHI",
-      },
-      {
-        name: "description",
-        content:
-          "Compare artisan voice evidence against the existing NAVSHAKTHI Craft DNA profile.",
-      },
-    ],
-  }),
+export const Route =
+  createFileRoute(
+    "/craft-dna-verification",
+  )({
+    head: () => ({
+      meta: [
+        {
+          title:
+            "Craft DNA Voice Re-verification — NAVSHAKTHI",
+        },
+        {
+          name: "description",
+          content:
+            "Compare artisan voice evidence against the existing NAVSHAKTHI Craft DNA profile.",
+        },
+      ],
+    }),
 
-  component:
-    CraftDNAVerification,
-});
+    component:
+      CraftDNAVerification,
+  });

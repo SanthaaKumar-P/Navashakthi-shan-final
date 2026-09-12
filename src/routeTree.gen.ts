@@ -56,6 +56,7 @@ import { Route as ProductsIdRouteImport } from './routes/products.$id'
 import { Route as ApiAuthenticationAnalyzeRouteImport } from './routes/api/authentication/analyze'
 import { Route as ApiCatalogerGenerateRouteImport } from './routes/api/cataloger/generate'
 import { Route as ApiCatalogerTranscribeRouteImport } from './routes/api/cataloger/transcribe'
+import { Route as ApiCraftDnaAnalyzeRouteImport } from './routes/api/craft-dna/analyze'
 import { Route as ApiCraftDnaVerifyRouteImport } from './routes/api/craft-dna/verify'
 import { Route as ApiCraftLabGenerateRouteImport } from './routes/api/craft-lab/generate'
 import { Route as ApiCraftLabPrototypeRouteImport } from './routes/api/craft-lab/prototype'
@@ -347,6 +348,11 @@ const ApiCatalogerGenerateRoute = ApiCatalogerGenerateRouteImport.update({
 const ApiCatalogerTranscribeRoute = ApiCatalogerTranscribeRouteImport.update({
   id: '/api/cataloger/transcribe',
   path: '/api/cataloger/transcribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCraftDnaAnalyzeRoute = ApiCraftDnaAnalyzeRouteImport.update({
+  id: '/api/craft-dna/analyze',
+  path: '/api/craft-dna/analyze',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiCraftDnaVerifyRoute = ApiCraftDnaVerifyRouteImport.update({
@@ -687,6 +693,7 @@ export interface FileRoutesByFullPath {
   '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
+  '/api/craft-dna/analyze': typeof ApiCraftDnaAnalyzeRoute
   '/api/craft-dna/verify': typeof ApiCraftDnaVerifyRoute
   '/api/craft-lab/generate': typeof ApiCraftLabGenerateRoute
   '/api/craft-lab/prototype': typeof ApiCraftLabPrototypeRoute
@@ -786,6 +793,7 @@ export interface FileRoutesByTo {
   '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
+  '/api/craft-dna/analyze': typeof ApiCraftDnaAnalyzeRoute
   '/api/craft-dna/verify': typeof ApiCraftDnaVerifyRoute
   '/api/craft-lab/generate': typeof ApiCraftLabGenerateRoute
   '/api/craft-lab/prototype': typeof ApiCraftLabPrototypeRoute
@@ -892,6 +900,7 @@ export interface FileRoutesById {
   '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
+  '/api/craft-dna/analyze': typeof ApiCraftDnaAnalyzeRoute
   '/api/craft-dna/verify': typeof ApiCraftDnaVerifyRoute
   '/api/craft-lab/generate': typeof ApiCraftLabGenerateRoute
   '/api/craft-lab/prototype': typeof ApiCraftLabPrototypeRoute
@@ -999,6 +1008,7 @@ export interface FileRouteTypes {
     | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
+    | '/api/craft-dna/analyze'
     | '/api/craft-dna/verify'
     | '/api/craft-lab/generate'
     | '/api/craft-lab/prototype'
@@ -1098,6 +1108,7 @@ export interface FileRouteTypes {
     | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
+    | '/api/craft-dna/analyze'
     | '/api/craft-dna/verify'
     | '/api/craft-lab/generate'
     | '/api/craft-lab/prototype'
@@ -1203,6 +1214,7 @@ export interface FileRouteTypes {
     | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
+    | '/api/craft-dna/analyze'
     | '/api/craft-dna/verify'
     | '/api/craft-lab/generate'
     | '/api/craft-lab/prototype'
@@ -1309,6 +1321,7 @@ export interface RootRouteChildren {
   ApiAuthenticationAnalyzeRoute: typeof ApiAuthenticationAnalyzeRoute
   ApiCatalogerGenerateRoute: typeof ApiCatalogerGenerateRoute
   ApiCatalogerTranscribeRoute: typeof ApiCatalogerTranscribeRoute
+  ApiCraftDnaAnalyzeRoute: typeof ApiCraftDnaAnalyzeRoute
   ApiCraftDnaVerifyRoute: typeof ApiCraftDnaVerifyRoute
   ApiCraftLabGenerateRoute: typeof ApiCraftLabGenerateRoute
   ApiCraftLabPrototypeRoute: typeof ApiCraftLabPrototypeRoute
@@ -1646,6 +1659,13 @@ declare module '@tanstack/react-router' {
       path: '/api/cataloger/transcribe'
       fullPath: '/api/cataloger/transcribe'
       preLoaderRoute: typeof ApiCatalogerTranscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/craft-dna/analyze': {
+      id: '/api/craft-dna/analyze'
+      path: '/api/craft-dna/analyze'
+      fullPath: '/api/craft-dna/analyze'
+      preLoaderRoute: typeof ApiCraftDnaAnalyzeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/craft-dna/verify': {
@@ -2250,6 +2270,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthenticationAnalyzeRoute: ApiAuthenticationAnalyzeRoute,
   ApiCatalogerGenerateRoute: ApiCatalogerGenerateRoute,
   ApiCatalogerTranscribeRoute: ApiCatalogerTranscribeRoute,
+  ApiCraftDnaAnalyzeRoute: ApiCraftDnaAnalyzeRoute,
   ApiCraftDnaVerifyRoute: ApiCraftDnaVerifyRoute,
   ApiCraftLabGenerateRoute: ApiCraftLabGenerateRoute,
   ApiCraftLabPrototypeRoute: ApiCraftLabPrototypeRoute,

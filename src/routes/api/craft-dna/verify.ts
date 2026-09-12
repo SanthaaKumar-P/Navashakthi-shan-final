@@ -51,62 +51,20 @@ const MODELS = [
 ] as const;
 
 const FIELD_DEFINITIONS = [
-  {
-    field: "craftCategory",
-    label: "Craft Category",
-  },
-  {
-    field: "productType",
-    label: "Product Type",
-  },
-  {
-    field: "material",
-    label: "Material",
-  },
-  {
-    field: "primaryColour",
-    label: "Primary Colour",
-  },
-  {
-    field: "secondaryColours",
-    label: "Secondary Colours",
-  },
-  {
-    field: "shape",
-    label: "Shape",
-  },
-  {
-    field: "pattern",
-    label: "Pattern",
-  },
-  {
-    field: "texture",
-    label: "Texture",
-  },
-  {
-    field: "finish",
-    label: "Finish",
-  },
-  {
-    field: "decoration",
-    label: "Decoration",
-  },
-  {
-    field: "complexity",
-    label: "Complexity",
-  },
-  {
-    field: "size",
-    label: "Size",
-  },
-  {
-    field: "dimensions",
-    label: "Dimensions",
-  },
-  {
-    field: "useCase",
-    label: "Use Case",
-  },
+  ["craftCategory", "Craft Category"],
+  ["productType", "Product Type"],
+  ["material", "Material"],
+  ["primaryColour", "Primary Colour"],
+  ["secondaryColours", "Secondary Colours"],
+  ["shape", "Shape"],
+  ["pattern", "Pattern"],
+  ["texture", "Texture"],
+  ["finish", "Finish"],
+  ["decoration", "Decoration"],
+  ["complexity", "Complexity"],
+  ["size", "Size"],
+  ["dimensions", "Dimensions"],
+  ["useCase", "Use Case"],
 ] as const;
 
 /* -------------------------------------------------------------------------- */
@@ -115,7 +73,6 @@ const FIELD_DEFINITIONS = [
 
 const VERIFICATION_SCHEMA = {
   type: "object",
-
   properties: {
     overallStatus: {
       type: "string",
@@ -136,10 +93,8 @@ const VERIFICATION_SCHEMA = {
 
     checks: {
       type: "array",
-
       items: {
         type: "object",
-
         properties: {
           field: {
             type: "string",
@@ -206,9 +161,7 @@ const VERIFICATION_SCHEMA = {
 /* Helpers                                                                    */
 /* -------------------------------------------------------------------------- */
 
-function getErrorMessage(
-  error: unknown,
-): string {
+function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
   }
@@ -224,9 +177,7 @@ function getErrorMessage(
   }
 }
 
-function isQuotaError(
-  message: string,
-) {
+function isQuotaError(message: string): boolean {
   const lower = message.toLowerCase();
 
   return (
@@ -236,9 +187,7 @@ function isQuotaError(
   );
 }
 
-function isUnavailableError(
-  message: string,
-) {
+function isUnavailableError(message: string): boolean {
   const lower = message.toLowerCase();
 
   return (
@@ -250,9 +199,7 @@ function isUnavailableError(
   );
 }
 
-function clampConfidence(
-  value: unknown,
-) {
+function clampConfidence(value: unknown): number {
   if (
     typeof value !== "number" ||
     !Number.isFinite(value)
@@ -260,15 +207,15 @@ function clampConfidence(
     return 0;
   }
 
-  return Math.min(
-    1,
-    Math.max(0, value),
-  );
+  return Math.min(1, Math.max(0, value));
 }
 
 function normalizeCheck(
   raw: unknown,
-  fallback: (typeof FIELD_DEFINITIONS)[number],
+  fallback: {
+    field: string;
+    label: string;
+  },
 ): VerificationCheck {
   const item =
     raw &&
@@ -276,25 +223,23 @@ function normalizeCheck(
       ? (raw as Record<string, unknown>)
       : {};
 
-  const allowedStatuses: VerificationStatus[] =
-    [
-      "match",
-      "conflict",
-      "new",
-      "insufficient_evidence",
-    ];
+  const allowedStatuses: VerificationStatus[] = [
+    "match",
+    "conflict",
+    "new",
+    "insufficient_evidence",
+  ];
 
   const rawStatus =
     typeof item.status === "string"
       ? item.status
       : "insufficient_evidence";
 
-  const status =
-    allowedStatuses.includes(
-      rawStatus as VerificationStatus,
-    )
-      ? (rawStatus as VerificationStatus)
-      : "insufficient_evidence";
+  const status = allowedStatuses.includes(
+    rawStatus as VerificationStatus,
+  )
+    ? (rawStatus as VerificationStatus)
+    : "insufficient_evidence";
 
   return {
     field:
@@ -310,8 +255,7 @@ function normalizeCheck(
     status,
 
     currentValue:
-      typeof item.currentValue ===
-      "string"
+      typeof item.currentValue === "string"
         ? item.currentValue
         : "Not provided",
 
@@ -321,15 +265,13 @@ function normalizeCheck(
         : "Not mentioned",
 
     recommendedValue:
-      typeof item.recommendedValue ===
-      "string"
+      typeof item.recommendedValue === "string"
         ? item.recommendedValue
         : "Not provided",
 
-    confidence:
-      clampConfidence(
-        item.confidence,
-      ),
+    confidence: clampConfidence(
+      item.confidence,
+    ),
 
     evidence:
       typeof item.evidence === "string"
@@ -347,53 +289,45 @@ function normalizeResult(
       ? (raw as Record<string, unknown>)
       : {};
 
-  const rawChecks = Array.isArray(
-    value.checks,
-  )
+  const rawChecks = Array.isArray(value.checks)
     ? value.checks
     : [];
 
-  const checks =
-    FIELD_DEFINITIONS.map(
-      (definition) => {
-        const found = rawChecks.find(
-          (item) =>
-            item &&
-            typeof item === "object" &&
-            (item as Record<string, unknown>)
-              .field ===
-              definition.field,
-        );
+  const checks = FIELD_DEFINITIONS.map(
+    ([field, label]) => {
+      const found = rawChecks.find(
+        (item) =>
+          item &&
+          typeof item === "object" &&
+          (item as Record<string, unknown>)
+            .field === field,
+      );
 
-        return normalizeCheck(
-          found,
-          definition,
-        );
-      },
-    );
+      return normalizeCheck(found, {
+        field,
+        label,
+      });
+    },
+  );
 
   const rawOverallStatus =
-    typeof value.overallStatus ===
-    "string"
+    typeof value.overallStatus === "string"
       ? value.overallStatus
       : "insufficient_data";
 
   const overallStatus =
     rawOverallStatus === "aligned" ||
-    rawOverallStatus ===
-      "needs_review" ||
-    rawOverallStatus ===
-      "insufficient_data"
+    rawOverallStatus === "needs_review" ||
+    rawOverallStatus === "insufficient_data"
       ? rawOverallStatus
       : "insufficient_data";
 
   return {
     overallStatus,
 
-    overallConfidence:
-      clampConfidence(
-        value.overallConfidence,
-      ),
+    overallConfidence: clampConfidence(
+      value.overallConfidence,
+    ),
 
     summary:
       typeof value.summary === "string"
@@ -410,21 +344,38 @@ function normalizeResult(
 
 function buildPrompt(
   body: CraftDNAVerificationRequest,
-) {
+): string {
   const dna = body.craftDNA;
 
   return `
 You are NAVSHAKTHI's Craft DNA Voice Re-verification AI.
 
-Your task is NOT to create a marketplace listing.
+IMPORTANT SOURCE-OF-TRUTH RULE:
 
-Your task is to compare an EXISTING structured Craft DNA profile
-against an ARTISAN'S OWN VOICE TRANSCRIPT.
+The EXISTING CRAFT DNA supplied below was derived from
+IMAGE INTELLIGENCE.
 
-The purpose is evidence-based re-verification.
+Therefore:
+
+IMAGE-DERIVED CRAFT DNA = VISUAL BASELINE
+ARTISAN VOICE = VERIFICATION / ADDITIONAL EVIDENCE
+
+The voice transcript must NEVER automatically replace the
+image-derived Craft DNA.
+
+Your task is ONLY to compare the artisan's explicit spoken
+claims against the existing image-derived Craft DNA.
+
+Do NOT create a new visual identity from the transcript.
+
+Do NOT modify Craft DNA.
+
+Do NOT automatically accept voice claims.
+
+A conflict must be surfaced for human/artisan review.
 
 =========================================================
-EXISTING CRAFT DNA
+EXISTING IMAGE-DERIVED CRAFT DNA
 =========================================================
 
 Craft Category:
@@ -470,7 +421,7 @@ Use Case:
 ${dna.useCase}
 
 =========================================================
-ARTISAN VOICE
+ARTISAN VOICE TRANSCRIPT
 =========================================================
 
 Language:
@@ -482,16 +433,18 @@ ${body.transcript}
 """
 
 =========================================================
-CORE EVIDENCE RULES
+EVIDENCE RULES
 =========================================================
 
-The transcript is the ONLY source of voice evidence.
+The transcript is ONLY a source of artisan statements.
 
-Do NOT invent facts.
+Only explicit statements in the transcript are evidence.
 
-Do NOT infer facts that are not explicitly supported.
+Do NOT infer facts.
 
-Do NOT treat professional wording as evidence.
+Do NOT guess.
+
+Do NOT use general knowledge to fill missing information.
 
 Do NOT assume traditional techniques.
 
@@ -507,86 +460,114 @@ Do NOT assume GI status.
 
 Do NOT assume government approval.
 
-Do NOT assume origin unless explicitly stated.
-
 Do NOT assume authenticity.
+
+Do NOT assume origin.
+
+Do NOT assume proof of provenance.
 
 =========================================================
 STATUS DEFINITIONS
 =========================================================
 
-For every field:
+MATCH:
 
-"match"
-- The artisan explicitly supports the existing DNA value.
-- Equivalent wording is acceptable.
+Use "match" when the artisan explicitly confirms or states
+a value equivalent to the existing Craft DNA value.
 
-"conflict"
-- The artisan explicitly states something inconsistent
-  with the existing DNA value.
+CONFLICT:
 
-"new"
-- The existing DNA is missing / "Not provided",
-  but the artisan explicitly provides a value.
+Use "conflict" when the artisan explicitly states a value
+that conflicts with the existing Craft DNA.
 
-"insufficient_evidence"
-- The transcript does not provide enough explicit evidence
-  to verify or change the field.
+NEW:
+
+Use "new" when the existing Craft DNA value is missing or
+"Not provided" and the artisan explicitly supplies a value.
+
+INSUFFICIENT_EVIDENCE:
+
+Use "insufficient_evidence" when the artisan does not
+explicitly provide enough information for that field.
 
 =========================================================
 RECOMMENDED VALUE
 =========================================================
 
-For MATCH:
-Return the existing value.
+MATCH:
+Return the existing Craft DNA value.
 
-For CONFLICT:
-Return the explicitly stated artisan value.
+CONFLICT:
+Return ONLY the explicitly stated artisan value.
 
-For NEW:
-Return the explicitly stated artisan value.
+NEW:
+Return ONLY the explicitly stated artisan value.
 
-For INSUFFICIENT_EVIDENCE:
+INSUFFICIENT_EVIDENCE:
 Return "Not provided".
 
-Never create a recommendation from inference.
+Never infer a recommended value.
 
 =========================================================
-COMPLEXITY
+VISUAL ATTRIBUTE RULE
 =========================================================
 
-Complexity is only a numeric field if the artisan explicitly
-states a complexity/detail score.
+For visual attributes such as:
 
-If the artisan describes the craft as "very detailed" or
-"complex" without a numeric score, do NOT invent a number.
+- material
+- colour
+- shape
+- pattern
+- texture
+- finish
+- decoration
 
-Return "Not provided" unless an explicit numeric value exists.
+the existing image-derived Craft DNA remains the visual
+baseline.
+
+If the artisan says something different, report CONFLICT.
+
+Do not silently replace the image-derived value.
+
+=========================================================
+COMPLEXITY RULE
+=========================================================
+
+Complexity must remain "Not provided" unless the artisan
+explicitly provides a numeric complexity/detail score.
+
+Words such as:
+
+"very detailed"
+"complex"
+"highly intricate"
+
+are not numeric evidence.
+
+Do not invent a number.
 
 =========================================================
 OVERALL STATUS
 =========================================================
 
-"aligned":
-No meaningful conflicts and enough evidence exists.
+Use "aligned" when there are no meaningful conflicts.
 
-"needs_review":
-At least one meaningful conflict exists.
+Use "needs_review" when at least one meaningful conflict
+or new evidence requires artisan review.
 
-"insufficient_data":
-The transcript contains too little useful information
-to verify the profile.
+Use "insufficient_data" when the transcript contains too
+little useful evidence to perform meaningful verification.
 
 =========================================================
 CONFIDENCE
 =========================================================
 
-Return confidence between 0 and 1.
+Return a value between 0 and 1.
 
-Confidence represents the strength of the transcript evidence.
+Confidence measures explicit evidence strength.
 
-Do NOT make confidence high merely because the transcript
-sounds fluent.
+Do not give high confidence merely because the transcript
+is fluent or grammatically correct.
 
 =========================================================
 FINAL RULE
@@ -597,14 +578,14 @@ Return ONLY valid JSON matching the provided schema.
 }
 
 /* -------------------------------------------------------------------------- */
-/* Gemini call                                                                */
+/* Gemini                                                                     */
 /* -------------------------------------------------------------------------- */
 
 async function verifyWithModel(
   ai: GoogleGenAI,
   model: string,
   body: CraftDNAVerificationRequest,
-) {
+): Promise<VerificationResult> {
   const response =
     await ai.models.generateContent({
       model,
@@ -621,12 +602,8 @@ async function verifyWithModel(
       ],
 
       config: {
-        responseMimeType:
-          "application/json",
-
-        responseSchema:
-          VERIFICATION_SCHEMA,
-
+        responseMimeType: "application/json",
+        responseSchema: VERIFICATION_SCHEMA,
         maxOutputTokens: 5000,
       },
     });
@@ -668,8 +645,7 @@ export const Route = createFileRoute(
             (await request.json()) as Partial<CraftDNAVerificationRequest>;
 
           const transcript =
-            typeof body.transcript ===
-            "string"
+            typeof body.transcript === "string"
               ? body.transcript.trim()
               : "";
 
@@ -677,8 +653,7 @@ export const Route = createFileRoute(
             return Response.json(
               {
                 success: false,
-                error:
-                  "Transcript is required.",
+                error: "Transcript is required.",
               },
               {
                 status: 400,
@@ -704,14 +679,13 @@ export const Route = createFileRoute(
 
           if (
             !body.craftDNA ||
-            typeof body.craftDNA !==
-              "object"
+            typeof body.craftDNA !== "object"
           ) {
             return Response.json(
               {
                 success: false,
                 error:
-                  "Existing Craft DNA is required.",
+                  "Existing image-derived Craft DNA is required.",
               },
               {
                 status: 400,
@@ -735,34 +709,23 @@ export const Route = createFileRoute(
             );
           }
 
-          const ai =
-            new GoogleGenAI({
-              apiKey,
-            });
+          const ai = new GoogleGenAI({
+            apiKey,
+          });
 
           const verificationBody: CraftDNAVerificationRequest =
             {
               transcript,
               language:
-                typeof body.language ===
-                "string"
+                typeof body.language === "string"
                   ? body.language
                   : "auto",
-              craftDNA:
-                body.craftDNA,
+              craftDNA: body.craftDNA,
             };
 
-          let lastError: unknown =
-            null;
+          let lastError: unknown = null;
 
-          for (
-            let index = 0;
-            index < MODELS.length;
-            index += 1
-          ) {
-            const model =
-              MODELS[index];
-
+          for (const model of MODELS) {
             try {
               const result =
                 await verifyWithModel(
@@ -787,9 +750,7 @@ export const Route = createFileRoute(
                 message,
               );
 
-              if (
-                isQuotaError(message)
-              ) {
+              if (isQuotaError(message)) {
                 return Response.json(
                   {
                     success: false,
@@ -802,11 +763,7 @@ export const Route = createFileRoute(
                 );
               }
 
-              if (
-                isUnavailableError(
-                  message,
-                )
-              ) {
+              if (isUnavailableError(message)) {
                 continue;
               }
 
@@ -815,9 +772,7 @@ export const Route = createFileRoute(
           }
 
           const finalMessage =
-            getErrorMessage(
-              lastError,
-            );
+            getErrorMessage(lastError);
 
           return Response.json(
             {
