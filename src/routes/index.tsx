@@ -13,6 +13,7 @@ import {
   Wand2,
   Languages,
   IndianRupee,
+  FlaskConical,
 } from "lucide-react";
 import { PublicLayout } from "@/components/layout/public-layout";
 import {
@@ -54,6 +55,7 @@ function Home() {
       <ProblemSolution />
       <ImpactStats />
       <PlatformFeatures />
+      <CraftLabCTA />
       <Testimonials />
       <CTA />
     </PublicLayout>
@@ -479,6 +481,64 @@ function PlatformFeatures() {
           ))}
         </div>
       </div>
+    </section>
+  );
+}
+
+/* =========================================================
+   CRAFT LAB ENTRY
+========================================================= */
+
+function CraftLabCTA() {
+  return (
+    <section className="container-x py-24">
+      <Reveal>
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-border/60 bg-card p-8 shadow-sm lg:p-12">
+          <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-gold/10 blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+
+          <div className="relative grid items-center gap-10 lg:grid-cols-[1fr_auto]">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-earth">
+                <FlaskConical className="h-4 w-4 text-primary" />
+                Craft Lab
+              </div>
+
+              <h2 className="mt-6 font-display text-4xl leading-tight text-foreground sm:text-5xl">
+                Experiment with the future of your craft.
+              </h2>
+
+              <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
+                Use your Craft DNA to explore new product variants, design
+                experiments and new product concepts while preserving the
+                identity of your original craft.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <div className="rounded-full border border-border/60 bg-background px-4 py-2 text-xs font-medium text-muted-foreground">
+                  Craft DNA guided
+                </div>
+
+                <div className="rounded-full border border-border/60 bg-background px-4 py-2 text-xs font-medium text-muted-foreground">
+                  3 design experiments
+                </div>
+
+                <div className="rounded-full border border-border/60 bg-background px-4 py-2 text-xs font-medium text-muted-foreground">
+                  Visual prototype
+                </div>
+              </div>
+            </div>
+
+            <Link
+              to="/craft-lab"
+              className="group inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-primary px-7 py-4 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
+            >
+              Open Craft Lab
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </div>
+      </Reveal>
     </section>
   );
 }

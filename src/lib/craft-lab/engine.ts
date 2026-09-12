@@ -12,6 +12,10 @@ import type {
   CraftLabPrototypeResult,
 } from "@/lib/craft-lab/types";
 
+import {
+  generateLocalCraftLabPrototype,
+} from "@/lib/craft-lab/local-prototype";
+
 /* =========================================================
    FUTURE PLANNER API RESPONSE
 ========================================================= */
@@ -183,19 +187,14 @@ function mapSavedPlannerContext(
 
     seasonalityLevel:
       mapSeasonalityLevel(
-        planner.seasonalOpportunity.level,
+        planner
+          .seasonalOpportunity
+          .level,
       ),
 
     productionRecommendation:
       planner.recommendation,
 
-    /*
-     * Saved Future Planner stores the outlook under
-     * outlook3Month / outlook6Month.
-     *
-     * Do not fabricate changePercent when the saved
-     * structure does not contain it.
-     */
     threeMonth:
       undefined,
 
@@ -225,13 +224,10 @@ function mapSavedPlannerContext(
         "limited",
 
       governmentEventsAvailable:
-        planner.governmentOpportunity.events
-          .length > 0,
+        planner
+          .governmentOpportunity
+          .events.length > 0,
 
-      /*
-       * Saved Future Planner does not expose these
-       * independently, so don't invent availability.
-       */
       tradeDataAvailable:
         false,
 
@@ -357,7 +353,7 @@ function hasValidPricingRange(
 }
 
 /* =========================================================
-   CRAFT LAB API RESPONSE
+   CRAFT LAB GENERATION RESPONSE
 ========================================================= */
 
 type CraftLabExperimentResponse = {
@@ -372,26 +368,8 @@ type CraftLabExperimentResponse = {
 type CraftLabGenerateResponse = {
   success?: boolean;
 
-  /*
-   * CURRENT API RESPONSE
-   *
-   * {
-   *   success: true,
-   *   experiments: [...]
-   * }
-   */
   experiments?: CraftLabExperimentResponse[];
 
-  /*
-   * BACKWARD-COMPATIBLE RESPONSE
-   *
-   * {
-   *   success: true,
-   *   result: {
-   *     experiments: [...]
-   *   }
-   * }
-   */
   result?: {
     experiments?: CraftLabExperimentResponse[];
     generatedAt?: string;
@@ -414,11 +392,7 @@ async function getFuturePlannerContext(
   const draft =
     getCraftDraft();
 
-  /*
-   * -------------------------------------------------------
-   * FIRST: reuse existing Future Planner
-   * -------------------------------------------------------
-   */
+  /* Reuse saved Future Planner */
 
   const savedPlanner =
     draft?.pricing?.futurePlanner;
@@ -429,11 +403,7 @@ async function getFuturePlannerContext(
     );
   }
 
-  /*
-   * -------------------------------------------------------
-   * SECOND: generate Future Planner if pricing exists
-   * -------------------------------------------------------
-   */
+  /* Generate planner only when pricing exists */
 
   const low =
     draft?.pricing?.low;
@@ -511,16 +481,13 @@ async function getFuturePlannerContext(
       data.result,
     );
   } catch {
-    /*
-     * Craft Lab can still generate ideas even if
-     * Future Planner is temporarily unavailable.
-     */
     return undefined;
   }
 }
 
 /* =========================================================
-   GEMINI TEXT EXPERIMENT GENERATION
+   GENERATE CRAFT LAB IDEAS
+   GEMINI FREE TIER
 ========================================================= */
 
 export async function generateCraftLabIdeas(
@@ -567,9 +534,7 @@ export async function generateCraftLabIdeas(
       },
     );
 
-  /* -------------------------------------------------------
-     HANDLE HTTP ERRORS
-  ------------------------------------------------------- */
+  /* HTTP ERROR */
 
   if (!response.ok) {
     let message =
@@ -590,10 +555,7 @@ export async function generateCraftLabIdeas(
           errorData.error.trim();
       }
     } catch {
-      /*
-       * Response was not JSON.
-       * Keep the clean fallback message.
-       */
+      /* Keep fallback message */
     }
 
     throw new Error(
@@ -601,20 +563,27 @@ export async function generateCraftLabIdeas(
     );
   }
 
-  /* -------------------------------------------------------
-     READ RESPONSE
-  ------------------------------------------------------- */
+  /* RESPONSE */
 
   const data =
     (await response.json()) as CraftLabGenerateResponse;
 
   /*
-   * The corrected API returns experiments
-   * directly at the top level.
+   * Current API:
+   * {
+   *   success: true,
+   *   experiments: [...]
+   * }
    *
-   * We also support the old nested result shape
-   * for compatibility.
+   * Backward compatibility:
+   * {
+   *   success: true,
+   *   result: {
+   *     experiments: [...]
+   *   }
+   * }
    */
+
   const experiments =
     data.experiments ??
     data.result?.experiments;
@@ -629,10 +598,6 @@ export async function generateCraftLabIdeas(
     );
   }
 
-  /* -------------------------------------------------------
-     VALIDATE EXPERIMENT COUNT
-  ------------------------------------------------------- */
-
   if (
     experiments.length !== 3
   ) {
@@ -641,14 +606,13 @@ export async function generateCraftLabIdeas(
     );
   }
 
-  /* -------------------------------------------------------
-     CREATE CRAFT LAB EXPERIMENT OBJECTS
-  ------------------------------------------------------- */
+  /* CREATE DOMAIN OBJECTS */
 
   const now =
     new Date().toISOString();
 
-  const generatedExperiments: CraftExperiment[] =
+  const generatedExperiments:
+    CraftExperiment[] =
     experiments.map(
       (experiment) => ({
         id:
@@ -691,10 +655,6 @@ export async function generateCraftLabIdeas(
       }),
     );
 
-  /* -------------------------------------------------------
-     FINAL RESULT
-  ------------------------------------------------------- */
-
   return {
     experiments:
       generatedExperiments,
@@ -709,7 +669,7 @@ export async function generateCraftLabIdeas(
 }
 
 /* =========================================================
-   GEMINI VISUAL PROTOTYPE GENERATION
+   LOCAL VISUAL PROTOTYPE
 ========================================================= */
 
 export async function generateCraftLabPrototype(
@@ -717,93 +677,21 @@ export async function generateCraftLabPrototype(
   craftDNA: CraftDNA,
   baseImage?: string,
 ): Promise<CraftLabPrototypeResult> {
-  const response =
-    await fetch(
-      "/api/craft-lab/prototype",
-      {
-        method:
-          "POST",
+  /*
+   * IMPORTANT:
+   *
+   * This function does NOT call Gemini image generation.
+   *
+   * Gemini Free Tier is used only for structured
+   * Craft Lab experiment generation.
+   *
+   * The visual prototype is rendered locally in
+   * the browser using Canvas.
+   */
 
-        headers: {
-          "Content-Type":
-            "application/json",
-        },
-
-        body: JSON.stringify({
-          experiment,
-
-          craftDNA,
-
-          baseImage,
-        }),
-      },
-    );
-
-  /* -------------------------------------------------------
-     HANDLE HTTP ERRORS
-  ------------------------------------------------------- */
-
-  if (!response.ok) {
-    let message =
-      "Visual prototype generation failed.";
-
-    try {
-      const errorData =
-        (await response.json()) as {
-          error?: string;
-        };
-
-      if (
-        typeof errorData.error ===
-          "string" &&
-        errorData.error.trim()
-      ) {
-        message =
-          errorData.error.trim();
-      }
-    } catch {
-      /*
-       * Keep fallback message when
-       * server response isn't JSON.
-       */
-    }
-
-    throw new Error(
-      message,
-    );
-  }
-
-  /* -------------------------------------------------------
-     READ RESPONSE
-  ------------------------------------------------------- */
-
-  const data =
-    (await response.json()) as {
-      success?: boolean;
-
-      result?: {
-        imageDataUrl: string;
-        generatedAt: string;
-      };
-
-      error?: string;
-    };
-
-  if (
-    !data.success ||
-    !data.result
-  ) {
-    throw new Error(
-      data.error ||
-        "Gemini did not return a visual prototype.",
-    );
-  }
-
-  return {
-    imageDataUrl:
-      data.result.imageDataUrl,
-
-    generatedAt:
-      data.result.generatedAt,
-  };
+  return generateLocalCraftLabPrototype(
+    experiment,
+    craftDNA,
+    baseImage,
+  );
 }

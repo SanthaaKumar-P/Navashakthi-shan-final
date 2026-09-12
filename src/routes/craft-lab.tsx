@@ -35,7 +35,9 @@ import type {
   CraftLabMode,
 } from "@/lib/craft-lab/types";
 
-export const Route = createFileRoute("/craft-lab")({
+export const Route = createFileRoute(
+  "/craft-lab",
+)({
   component: CraftLabPage,
 });
 
@@ -80,22 +82,22 @@ function CraftLabPage() {
   useEffect(() => {
     function loadCraftLabData() {
       /*
-       * Smart Cataloger and the shared artisan workflow
-       * keep the current Craft DNA inside CraftDraft.
+       * The shared Craft Draft represents the active
+       * artisan workflow.
        *
-       * Prefer the shared draft because it represents
-       * the current active craft workflow.
-       *
-       * Fall back to the dedicated Craft DNA storage
-       * so previously saved DNA continues to work.
+       * Prefer Craft Draft DNA first and fall back to
+       * dedicated Craft DNA storage.
        */
-      const draft = getCraftDraft();
+      const draft =
+        getCraftDraft();
 
       const sharedDNA =
         draft?.craftDNA ??
         getCraftDNA();
 
-      setCraftDNA(sharedDNA);
+      setCraftDNA(
+        sharedDNA,
+      );
 
       setExperiments(
         getCraftLabExperiments(),
@@ -108,7 +110,8 @@ function CraftLabPage() {
     loadCraftLabData();
 
     /*
-     * Smart Cataloger / Craft DNA updates.
+     * Craft DNA updates from Smart Cataloger /
+     * Image Intelligence.
      */
     function handleCraftDNAUpdate() {
       loadCraftLabData();
@@ -145,18 +148,23 @@ function CraftLabPage() {
   }, []);
 
   /* =======================================================
-     SORT
+     SORT EXPERIMENTS
   ======================================================= */
 
-  const sortedExperiments = useMemo(
-    () =>
-      [...experiments].sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() -
-          new Date(a.createdAt).getTime(),
-      ),
-    [experiments],
-  );
+  const sortedExperiments =
+    useMemo(
+      () =>
+        [...experiments].sort(
+          (a, b) =>
+            new Date(
+              b.createdAt,
+            ).getTime() -
+            new Date(
+              a.createdAt,
+            ).getTime(),
+        ),
+      [experiments],
+    );
 
   /* =======================================================
      GENERATE EXPERIMENTS
@@ -171,10 +179,17 @@ function CraftLabPage() {
       return;
     }
 
-    setIsGenerating(true);
+    setIsGenerating(
+      true,
+    );
+
     setError(null);
 
     try {
+      /*
+       * Gemini Free Tier is used here only for
+       * structured experiment generation.
+       */
       const result =
         await generateCraftLabIdeas({
           mode,
@@ -186,6 +201,9 @@ function CraftLabPage() {
         result.marketContext,
       );
 
+      /*
+       * Save all generated experiments.
+       */
       result.experiments.forEach(
         (experiment) => {
           saveCraftLabExperiment(
@@ -197,19 +215,23 @@ function CraftLabPage() {
       setExperiments(
         getCraftLabExperiments(),
       );
-    } catch (generationError) {
+    } catch (
+      generationError
+    ) {
       setError(
         generationError instanceof Error
           ? generationError.message
           : "Unable to generate Craft Lab experiments.",
       );
     } finally {
-      setIsGenerating(false);
+      setIsGenerating(
+        false,
+      );
     }
   }
 
   /* =======================================================
-     GENERATE VISUAL PROTOTYPE
+     CREATE LOCAL VISUAL PROTOTYPE
   ======================================================= */
 
   async function handleGeneratePrototype(
@@ -217,7 +239,7 @@ function CraftLabPage() {
   ) {
     if (!craftDNA) {
       setError(
-        "Craft DNA is required before generating a prototype.",
+        "Craft DNA is required before creating a prototype.",
       );
 
       return;
@@ -230,19 +252,27 @@ function CraftLabPage() {
     setError(null);
 
     try {
-      const draft = getCraftDraft();
+      const draft =
+        getCraftDraft();
 
       /*
-       * Prefer the enhanced image from the shared
-       * craft workflow.
+       * Prefer enhanced image.
        *
-       * If unavailable, fall back to the original image.
+       * If enhanced image is unavailable,
+       * use the original craft image.
        */
       const baseImage =
         draft?.image?.enhancedImage ??
         draft?.image?.originalImage ??
         undefined;
 
+      /*
+       * IMPORTANT:
+       *
+       * This now calls the LOCAL prototype engine.
+       *
+       * No Gemini image-generation model is used.
+       */
       const result =
         await generateCraftLabPrototype(
           experiment,
@@ -250,10 +280,12 @@ function CraftLabPage() {
           baseImage,
         );
 
-      const updated: CraftExperiment = {
+      const updated:
+        CraftExperiment = {
         ...experiment,
 
-        status: "selected",
+        status:
+          "selected",
 
         prototypeImage:
           result.imageDataUrl,
@@ -272,14 +304,18 @@ function CraftLabPage() {
       setExperiments(
         getCraftLabExperiments(),
       );
-    } catch (prototypeError) {
+    } catch (
+      prototypeError
+    ) {
       setError(
         prototypeError instanceof Error
           ? prototypeError.message
-          : "Unable to generate visual prototype.",
+          : "Unable to create visual prototype.",
       );
     } finally {
-      setPrototypeLoadingId(null);
+      setPrototypeLoadingId(
+        null,
+      );
     }
   }
 
@@ -292,7 +328,7 @@ function CraftLabPage() {
   ) {
     if (!experiment.prototypeImage) {
       setError(
-        "Generate a visual prototype before using this design.",
+        "Create a visual prototype before using this design.",
       );
 
       return;
@@ -316,11 +352,12 @@ function CraftLabPage() {
       /*
        * Create a completely fresh craft draft.
        *
-       * Prototype becomes the new craft image.
+       * Prototype image becomes the new craft image.
+       *
        * Existing Craft DNA is preserved.
-       * Catalog is reset.
-       * Pricing is reset.
-       * Final selling price is reset.
+       *
+       * Catalog, pricing and final selling price
+       * are intentionally reset.
        */
       createCraftDraftFromPrototype({
         prototypeImage:
@@ -330,12 +367,14 @@ function CraftLabPage() {
       });
 
       /*
-       * Mark experiment as selected.
+       * Mark the experiment as selected.
        */
-      const updated: CraftExperiment = {
+      const updated:
+        CraftExperiment = {
         ...experiment,
 
-        status: "selected",
+        status:
+          "selected",
 
         updatedAt:
           new Date().toISOString(),
@@ -352,34 +391,40 @@ function CraftLabPage() {
       /*
        * Continue into Smart Cataloger.
        *
-       * Smart Cataloger will now work on the
-       * new prototype image.
+       * Smart Cataloger now works with the
+       * newly created prototype image.
        */
       window.location.assign(
         "/smart-cataloger",
       );
-    } catch (useDesignError) {
+    } catch (
+      useDesignError
+    ) {
       setError(
         useDesignError instanceof Error
           ? useDesignError.message
           : "Unable to create the new craft draft.",
       );
     } finally {
-      setUsingDesignId(null);
+      setUsingDesignId(
+        null,
+      );
     }
   }
 
   /* =======================================================
-     SELECT
+     SELECT EXPERIMENT
   ======================================================= */
 
   function handleSelect(
     experiment: CraftExperiment,
   ) {
-    const updated: CraftExperiment = {
+    const updated:
+      CraftExperiment = {
       ...experiment,
 
-      status: "selected",
+      status:
+        "selected",
 
       updatedAt:
         new Date().toISOString(),
@@ -395,13 +440,15 @@ function CraftLabPage() {
   }
 
   /* =======================================================
-     DELETE
+     DELETE EXPERIMENT
   ======================================================= */
 
   function handleDelete(
     id: string,
   ) {
-    deleteCraftLabExperiment(id);
+    deleteCraftLabExperiment(
+      id,
+    );
 
     setExperiments(
       getCraftLabExperiments(),
@@ -444,7 +491,10 @@ function CraftLabPage() {
     }
 
     return level
-      .replaceAll("_", " ")
+      .replaceAll(
+        "_",
+        " ",
+      )
       .replace(
         /\b\w/g,
         (character) =>
@@ -460,7 +510,10 @@ function CraftLabPage() {
     <main className="min-h-screen bg-[#f7f4ee] px-6 py-10">
       <div className="mx-auto max-w-7xl">
 
-        {/* HEADER */}
+        {/* =================================================
+            HEADER
+        ================================================= */}
+
         <section className="mb-8">
           <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-amber-700">
             NAVSHAKTHI
@@ -477,9 +530,13 @@ function CraftLabPage() {
           </p>
         </section>
 
-        {/* DNA */}
+        {/* =================================================
+            CURRENT CRAFT DNA
+        ================================================= */}
+
         <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
             <div>
               <h2 className="text-lg font-semibold text-slate-900">
                 Current Craft DNA
@@ -506,39 +563,53 @@ function CraftLabPage() {
 
           {craftDNA && (
             <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+
               <DNAItem
                 label="Craft"
                 value={
-                  craftDNA.craftCategory.value
+                  craftDNA
+                    .craftCategory
+                    .value
                 }
               />
 
               <DNAItem
                 label="Product"
                 value={
-                  craftDNA.productType.value
+                  craftDNA
+                    .productType
+                    .value
                 }
               />
 
               <DNAItem
                 label="Material"
                 value={
-                  craftDNA.material.value
+                  craftDNA
+                    .material
+                    .value
                 }
               />
 
               <DNAItem
                 label="Primary Colour"
                 value={
-                  craftDNA.primaryColour.value
+                  craftDNA
+                    .primaryColour
+                    .value
                 }
               />
+
             </div>
           )}
         </section>
 
-        {/* GENERATOR */}
+        {/* =================================================
+            EXPERIMENT GENERATOR
+        ================================================= */}
+
         <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-slate-900">
               Design an Experiment
@@ -551,22 +622,33 @@ function CraftLabPage() {
             </p>
           </div>
 
+          {/* MODES */}
+
           <div className="grid gap-4 md:grid-cols-3">
+
             <ModeCard
-              active={mode === "variant"}
+              active={
+                mode === "variant"
+              }
               title="Variant Explorer"
               description="Keep the core craft identity and explore controlled variations."
               onClick={() =>
-                setMode("variant")
+                setMode(
+                  "variant",
+                )
               }
             />
 
             <ModeCard
-              active={mode === "design"}
+              active={
+                mode === "design"
+              }
               title="Design Experiment"
               description="Explore visual or functional design changes while retaining craft identity."
               onClick={() =>
-                setMode("design")
+                setMode(
+                  "design",
+                )
               }
             />
 
@@ -577,10 +659,15 @@ function CraftLabPage() {
               title="New Product"
               description="Explore a new product direction based on the same craft DNA."
               onClick={() =>
-                setMode("new_product")
+                setMode(
+                  "new_product",
+                )
               }
             />
+
           </div>
+
+          {/* ARTISAN PROMPT */}
 
           <div className="mt-6">
             <label
@@ -592,8 +679,12 @@ function CraftLabPage() {
 
             <textarea
               id="artisan-prompt"
-              value={artisanPrompt}
-              onChange={(event) =>
+              value={
+                artisanPrompt
+              }
+              onChange={(
+                event,
+              ) =>
                 setArtisanPrompt(
                   event.target.value,
                 )
@@ -603,10 +694,15 @@ function CraftLabPage() {
             />
           </div>
 
+          {/* GENERATE */}
+
           <div className="mt-6 flex flex-wrap items-center gap-4">
+
             <button
               type="button"
-              onClick={handleGenerate}
+              onClick={
+                handleGenerate
+              }
               disabled={
                 isGenerating ||
                 !craftDNA
@@ -623,18 +719,26 @@ function CraftLabPage() {
                 Complete Craft DNA before using Craft Lab.
               </p>
             )}
+
           </div>
+
+          {/* ERROR */}
 
           {error && (
             <div className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {error}
             </div>
           )}
+
         </section>
 
-        {/* FUTURE PLANNER */}
+        {/* =================================================
+            FUTURE PLANNER
+        ================================================= */}
+
         {marketContext && (
           <section className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 p-6">
+
             <div className="mb-5">
               <h2 className="text-xl font-semibold text-slate-900">
                 Future Planner Context
@@ -647,36 +751,44 @@ function CraftLabPage() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+
               <PlannerMetric
                 label="Demand"
                 value={formatDemand(
-                  marketContext.demandDirection,
+                  marketContext
+                    .demandDirection,
                 )}
               />
 
               <PlannerMetric
                 label="Opportunity"
                 value={`${formatLevel(
-                  marketContext.opportunityLevel,
+                  marketContext
+                    .opportunityLevel,
                 )} · ${Math.round(
-                  marketContext.opportunityScore,
+                  marketContext
+                    .opportunityScore,
                 )}/100`}
               />
 
               <PlannerMetric
                 label="Seasonality"
                 value={formatLevel(
-                  marketContext.seasonalityLevel,
+                  marketContext
+                    .seasonalityLevel,
                 )}
               />
 
               <PlannerMetric
                 label="3-Month Outlook"
                 value={
-                  marketContext.threeMonth
+                  marketContext
+                    .threeMonth
                     ? `${
-                        marketContext.threeMonth
-                          .changePercent >= 0
+                        marketContext
+                          .threeMonth
+                          .changePercent >=
+                        0
                           ? "+"
                           : ""
                       }${marketContext.threeMonth.changePercent.toFixed(
@@ -689,47 +801,66 @@ function CraftLabPage() {
               <PlannerMetric
                 label="Production"
                 value={formatLevel(
-                  marketContext.productionRecommendation,
+                  marketContext
+                    .productionRecommendation,
                 )}
               />
+
             </div>
 
-            {marketContext.governmentEvents.length >
-              0 && (
+            {/* GOVERNMENT EVENTS */}
+
+            {marketContext
+              .governmentEvents
+              .length > 0 && (
               <div className="mt-5 rounded-xl border border-amber-200 bg-white p-4">
+
                 <h3 className="text-sm font-semibold text-slate-900">
                   Relevant Government / Market Events
                 </h3>
 
                 <ul className="mt-3 space-y-2">
-                  {marketContext.governmentEvents
+                  {marketContext
+                    .governmentEvents
                     .slice(0, 5)
                     .map(
-                      (event, index) => (
+                      (
+                        event,
+                        index,
+                      ) => (
                         <li
                           key={`${event.title}-${index}`}
                           className="text-sm text-slate-600"
                         >
                           <span className="font-medium text-slate-800">
-                            {event.title}
+                            {
+                              event.title
+                            }
                           </span>
 
                           {event.location && (
                             <span>
                               {" "}
                               ·{" "}
-                              {event.location}
+                              {
+                                event.location
+                              }
                             </span>
                           )}
                         </li>
                       ),
                     )}
                 </ul>
+
               </div>
             )}
 
-            {marketContext.dataQuality
-              ?.notes?.length ? (
+            {/* DATA NOTES */}
+
+            {marketContext
+              .dataQuality
+              ?.notes
+              ?.length ? (
               <p className="mt-4 text-xs leading-5 text-slate-500">
                 Data note:{" "}
                 {marketContext.dataQuality.notes.join(
@@ -737,12 +868,18 @@ function CraftLabPage() {
                 )}
               </p>
             ) : null}
+
           </section>
         )}
 
-        {/* EXPERIMENTS */}
+        {/* =================================================
+            EXPERIMENTS
+        ================================================= */}
+
         <section>
+
           <div className="mb-5 flex items-center justify-between">
+
             <div>
               <h2 className="text-2xl font-semibold text-slate-900">
                 Your Experiments
@@ -755,15 +892,23 @@ function CraftLabPage() {
             </div>
 
             <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-600">
-              {sortedExperiments.length}{" "}
-              {sortedExperiments.length === 1
+              {
+                sortedExperiments.length
+              }{" "}
+              {sortedExperiments.length ===
+              1
                 ? "experiment"
                 : "experiments"}
             </span>
+
           </div>
 
-          {sortedExperiments.length === 0 ? (
+          {/* EMPTY STATE */}
+
+          {sortedExperiments.length ===
+          0 ? (
             <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
+
               <h3 className="text-lg font-semibold text-slate-900">
                 No experiments yet
               </h3>
@@ -772,14 +917,22 @@ function CraftLabPage() {
                 Generate structured ideas based on your
                 Craft DNA and Future Planner context.
               </p>
+
             </div>
           ) : (
             <div className="grid gap-6 lg:grid-cols-3">
+
               {sortedExperiments.map(
-                (experiment) => (
+                (
+                  experiment,
+                ) => (
                   <ExperimentCard
-                    key={experiment.id}
-                    experiment={experiment}
+                    key={
+                      experiment.id
+                    }
+                    experiment={
+                      experiment
+                    }
                     onSelect={() =>
                       handleSelect(
                         experiment,
@@ -811,9 +964,12 @@ function CraftLabPage() {
                   />
                 ),
               )}
+
             </div>
           )}
+
         </section>
+
       </div>
     </main>
   );
@@ -832,6 +988,7 @@ function DNAItem({
 }) {
   return (
     <div className="rounded-xl bg-slate-50 p-4">
+
       <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
         {label}
       </p>
@@ -839,6 +996,7 @@ function DNAItem({
       <p className="mt-1 text-sm font-semibold text-slate-900">
         {value}
       </p>
+
     </div>
   );
 }
@@ -861,14 +1019,18 @@ function ModeCard({
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={
+        onClick
+      }
       className={`rounded-2xl border p-5 text-left transition ${
         active
           ? "border-amber-500 bg-amber-50 ring-2 ring-amber-100"
           : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
       }`}
     >
+
       <div className="flex items-start justify-between gap-3">
+
         <h3 className="font-semibold text-slate-900">
           {title}
         </h3>
@@ -880,11 +1042,13 @@ function ModeCard({
               : "bg-slate-200"
           }`}
         />
+
       </div>
 
       <p className="mt-2 text-sm leading-6 text-slate-600">
         {description}
       </p>
+
     </button>
   );
 }
@@ -902,6 +1066,7 @@ function PlannerMetric({
 }) {
   return (
     <div className="rounded-xl border border-amber-100 bg-white p-4">
+
       <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
         {label}
       </p>
@@ -909,6 +1074,7 @@ function PlannerMetric({
       <p className="mt-1 text-sm font-semibold text-slate-900">
         {value}
       </p>
+
     </div>
   );
 }
@@ -937,9 +1103,14 @@ function ExperimentCard({
   return (
     <article className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
 
-      {/* TITLE */}
+      {/* =================================================
+          TITLE
+      ================================================= */}
+
       <div className="flex items-start justify-between gap-3">
+
         <div>
+
           <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
             {experiment.mode.replace(
               "_",
@@ -950,19 +1121,26 @@ function ExperimentCard({
           <h3 className="mt-3 text-lg font-semibold text-slate-900">
             {experiment.title}
           </h3>
+
         </div>
 
-        {experiment.status === "selected" && (
+        {experiment.status ===
+          "selected" && (
           <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
             Selected
           </span>
         )}
+
       </div>
 
-      {/* CONTENT */}
+      {/* =================================================
+          CONTENT
+      ================================================= */}
+
       <div className="mt-5 flex-1">
 
         {/* CONCEPT */}
+
         <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500">
           Concept
         </h4>
@@ -972,6 +1150,7 @@ function ExperimentCard({
         </p>
 
         {/* RATIONALE */}
+
         <h4 className="mt-5 text-xs font-semibold uppercase tracking-wide text-slate-500">
           Why this experiment?
         </h4>
@@ -981,7 +1160,9 @@ function ExperimentCard({
         </p>
 
         {/* RETAINED */}
-        {experiment.retainedAttributes
+
+        {experiment
+          .retainedAttributes
           .length > 0 && (
           <>
             <h4 className="mt-5 text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -990,12 +1171,18 @@ function ExperimentCard({
 
             <div className="mt-2 flex flex-wrap gap-2">
               {experiment.retainedAttributes.map(
-                (attribute) => (
+                (
+                  attribute,
+                ) => (
                   <span
-                    key={attribute}
+                    key={
+                      attribute
+                    }
                     className="rounded-full bg-emerald-50 px-3 py-1 text-xs text-emerald-700"
                   >
-                    {attribute}
+                    {
+                      attribute
+                    }
                   </span>
                 ),
               )}
@@ -1004,7 +1191,9 @@ function ExperimentCard({
         )}
 
         {/* CHANGED */}
-        {experiment.changedAttributes
+
+        {experiment
+          .changedAttributes
           .length > 0 && (
           <>
             <h4 className="mt-5 text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -1013,12 +1202,18 @@ function ExperimentCard({
 
             <div className="mt-2 flex flex-wrap gap-2">
               {experiment.changedAttributes.map(
-                (attribute) => (
+                (
+                  attribute,
+                ) => (
                   <span
-                    key={attribute}
+                    key={
+                      attribute
+                    }
                     className="rounded-full bg-amber-50 px-3 py-1 text-xs text-amber-700"
                   >
-                    {attribute}
+                    {
+                      attribute
+                    }
                   </span>
                 ),
               )}
@@ -1027,7 +1222,9 @@ function ExperimentCard({
         )}
 
         {/* PRODUCTION */}
-        {experiment.productionNotes
+
+        {experiment
+          .productionNotes
           .length > 0 && (
           <>
             <h4 className="mt-5 text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -1036,12 +1233,17 @@ function ExperimentCard({
 
             <ul className="mt-2 space-y-2">
               {experiment.productionNotes.map(
-                (note) => (
+                (
+                  note,
+                ) => (
                   <li
-                    key={note}
+                    key={
+                      note
+                    }
                     className="text-sm leading-5 text-slate-600"
                   >
-                    • {note}
+                    •{" "}
+                    {note}
                   </li>
                 ),
               )}
@@ -1049,36 +1251,54 @@ function ExperimentCard({
           </>
         )}
 
-        {/* PROTOTYPE */}
+        {/* =================================================
+            LOCAL VISUAL PROTOTYPE
+        ================================================= */}
+
         {experiment.prototypeImage && (
           <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+
             <img
-              src={experiment.prototypeImage}
-              alt={`AI visual prototype for ${experiment.title}`}
+              src={
+                experiment.prototypeImage
+              }
+              alt={`Craft Lab visual prototype for ${experiment.title}`}
               className="aspect-square w-full object-cover"
             />
 
             <div className="border-t border-slate-200 bg-white px-4 py-3">
+
               <p className="text-xs font-medium text-slate-500">
-                AI Visual Prototype
+                Craft Lab Visual Prototype
               </p>
 
               <p className="mt-1 text-xs leading-5 text-slate-400">
-                Concept visualization for experimentation,
-                not a claim that the product already exists.
+                Local concept visualization based on
+                the existing craft image, Craft DNA,
+                and selected experiment. It is a design
+                prototype, not a claim that the product
+                already exists.
               </p>
+
             </div>
           </div>
         )}
+
       </div>
 
-      {/* ACTIONS */}
+      {/* =================================================
+          ACTIONS
+      ================================================= */}
+
       <div className="mt-6 flex flex-col gap-3 border-t border-slate-100 pt-5">
 
-        {/* GENERATE PROTOTYPE */}
+        {/* LOCAL PROTOTYPE */}
+
         <button
           type="button"
-          onClick={onGeneratePrototype}
+          onClick={
+            onGeneratePrototype
+          }
           disabled={
             prototypeLoading ||
             usingDesign
@@ -1086,17 +1306,20 @@ function ExperimentCard({
           className="w-full rounded-xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-800 transition hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {prototypeLoading
-            ? "Generating Visual Prototype..."
+            ? "Creating Visual Prototype..."
             : experiment.prototypeImage
               ? "Regenerate Prototype"
-              : "Generate Visual Prototype"}
+              : "Create Visual Prototype"}
         </button>
 
-        {/* USE THIS DESIGN */}
+        {/* USE DESIGN */}
+
         {experiment.prototypeImage && (
           <button
             type="button"
-            onClick={onUseThisDesign}
+            onClick={
+              onUseThisDesign
+            }
             disabled={
               usingDesign ||
               prototypeLoading
@@ -1110,10 +1333,14 @@ function ExperimentCard({
         )}
 
         {/* SELECT + DELETE */}
+
         <div className="flex gap-3">
+
           <button
             type="button"
-            onClick={onSelect}
+            onClick={
+              onSelect
+            }
             disabled={
               experiment.status ===
                 "selected" ||
@@ -1129,14 +1356,21 @@ function ExperimentCard({
 
           <button
             type="button"
-            onClick={onDelete}
-            disabled={usingDesign}
+            onClick={
+              onDelete
+            }
+            disabled={
+              usingDesign
+            }
             className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
           >
             Delete
           </button>
+
         </div>
+
       </div>
+
     </article>
   );
 }
