@@ -19,6 +19,7 @@ import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as CertificationCentreRouteImport } from './routes/certification-centre'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CraftDnaRouteImport } from './routes/craft-dna'
+import { Route as CraftDnaVerificationRouteImport } from './routes/craft-dna-verification'
 import { Route as CraftLabRouteImport } from './routes/craft-lab'
 import { Route as CraftPassportRouteImport } from './routes/craft-passport'
 import { Route as DigitalTwinRouteImport } from './routes/digital-twin'
@@ -55,6 +56,7 @@ import { Route as ProductsIdRouteImport } from './routes/products.$id'
 import { Route as ApiAuthenticationAnalyzeRouteImport } from './routes/api/authentication/analyze'
 import { Route as ApiCatalogerGenerateRouteImport } from './routes/api/cataloger/generate'
 import { Route as ApiCatalogerTranscribeRouteImport } from './routes/api/cataloger/transcribe'
+import { Route as ApiCraftDnaVerifyRouteImport } from './routes/api/craft-dna/verify'
 import { Route as ApiCraftLabGenerateRouteImport } from './routes/api/craft-lab/generate'
 import { Route as ApiCraftLabPrototypeRouteImport } from './routes/api/craft-lab/prototype'
 import { Route as ApiPricingAnalyzeRouteImport } from './routes/api/pricing/analyze'
@@ -159,6 +161,11 @@ const ContactRoute = ContactRouteImport.update({
 const CraftDnaRoute = CraftDnaRouteImport.update({
   id: '/craft-dna',
   path: '/craft-dna',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftDnaVerificationRoute = CraftDnaVerificationRouteImport.update({
+  id: '/craft-dna-verification',
+  path: '/craft-dna-verification',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CraftLabRoute = CraftLabRouteImport.update({
@@ -340,6 +347,11 @@ const ApiCatalogerGenerateRoute = ApiCatalogerGenerateRouteImport.update({
 const ApiCatalogerTranscribeRoute = ApiCatalogerTranscribeRouteImport.update({
   id: '/api/cataloger/transcribe',
   path: '/api/cataloger/transcribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCraftDnaVerifyRoute = ApiCraftDnaVerifyRouteImport.update({
+  id: '/api/craft-dna/verify',
+  path: '/api/craft-dna/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiCraftLabGenerateRoute = ApiCraftLabGenerateRouteImport.update({
@@ -638,6 +650,7 @@ export interface FileRoutesByFullPath {
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
   '/craft-dna': typeof CraftDnaRoute
+  '/craft-dna-verification': typeof CraftDnaVerificationRoute
   '/craft-lab': typeof CraftLabRoute
   '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
@@ -674,6 +687,7 @@ export interface FileRoutesByFullPath {
   '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
+  '/api/craft-dna/verify': typeof ApiCraftDnaVerifyRoute
   '/api/craft-lab/generate': typeof ApiCraftLabGenerateRoute
   '/api/craft-lab/prototype': typeof ApiCraftLabPrototypeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
@@ -741,6 +755,7 @@ export interface FileRoutesByTo {
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
   '/craft-dna': typeof CraftDnaRoute
+  '/craft-dna-verification': typeof CraftDnaVerificationRoute
   '/craft-lab': typeof CraftLabRoute
   '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
@@ -771,6 +786,7 @@ export interface FileRoutesByTo {
   '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
+  '/api/craft-dna/verify': typeof ApiCraftDnaVerifyRoute
   '/api/craft-lab/generate': typeof ApiCraftLabGenerateRoute
   '/api/craft-lab/prototype': typeof ApiCraftLabPrototypeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
@@ -839,6 +855,7 @@ export interface FileRoutesById {
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
   '/craft-dna': typeof CraftDnaRoute
+  '/craft-dna-verification': typeof CraftDnaVerificationRoute
   '/craft-lab': typeof CraftLabRoute
   '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
@@ -875,6 +892,7 @@ export interface FileRoutesById {
   '/api/authentication/analyze': typeof ApiAuthenticationAnalyzeRoute
   '/api/cataloger/generate': typeof ApiCatalogerGenerateRoute
   '/api/cataloger/transcribe': typeof ApiCatalogerTranscribeRoute
+  '/api/craft-dna/verify': typeof ApiCraftDnaVerifyRoute
   '/api/craft-lab/generate': typeof ApiCraftLabGenerateRoute
   '/api/craft-lab/prototype': typeof ApiCraftLabPrototypeRoute
   '/api/pricing/analyze': typeof ApiPricingAnalyzeRoute
@@ -944,6 +962,7 @@ export interface FileRouteTypes {
     | '/certification-centre'
     | '/contact'
     | '/craft-dna'
+    | '/craft-dna-verification'
     | '/craft-lab'
     | '/craft-passport'
     | '/digital-twin'
@@ -980,6 +999,7 @@ export interface FileRouteTypes {
     | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
+    | '/api/craft-dna/verify'
     | '/api/craft-lab/generate'
     | '/api/craft-lab/prototype'
     | '/api/pricing/analyze'
@@ -1047,6 +1067,7 @@ export interface FileRouteTypes {
     | '/certification-centre'
     | '/contact'
     | '/craft-dna'
+    | '/craft-dna-verification'
     | '/craft-lab'
     | '/craft-passport'
     | '/digital-twin'
@@ -1077,6 +1098,7 @@ export interface FileRouteTypes {
     | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
+    | '/api/craft-dna/verify'
     | '/api/craft-lab/generate'
     | '/api/craft-lab/prototype'
     | '/api/pricing/analyze'
@@ -1144,6 +1166,7 @@ export interface FileRouteTypes {
     | '/certification-centre'
     | '/contact'
     | '/craft-dna'
+    | '/craft-dna-verification'
     | '/craft-lab'
     | '/craft-passport'
     | '/digital-twin'
@@ -1180,6 +1203,7 @@ export interface FileRouteTypes {
     | '/api/authentication/analyze'
     | '/api/cataloger/generate'
     | '/api/cataloger/transcribe'
+    | '/api/craft-dna/verify'
     | '/api/craft-lab/generate'
     | '/api/craft-lab/prototype'
     | '/api/pricing/analyze'
@@ -1248,6 +1272,7 @@ export interface RootRouteChildren {
   CertificationCentreRoute: typeof CertificationCentreRoute
   ContactRoute: typeof ContactRoute
   CraftDnaRoute: typeof CraftDnaRoute
+  CraftDnaVerificationRoute: typeof CraftDnaVerificationRoute
   CraftLabRoute: typeof CraftLabRoute
   CraftPassportRoute: typeof CraftPassportRoute
   DigitalTwinRoute: typeof DigitalTwinRoute
@@ -1284,6 +1309,7 @@ export interface RootRouteChildren {
   ApiAuthenticationAnalyzeRoute: typeof ApiAuthenticationAnalyzeRoute
   ApiCatalogerGenerateRoute: typeof ApiCatalogerGenerateRoute
   ApiCatalogerTranscribeRoute: typeof ApiCatalogerTranscribeRoute
+  ApiCraftDnaVerifyRoute: typeof ApiCraftDnaVerifyRoute
   ApiCraftLabGenerateRoute: typeof ApiCraftLabGenerateRoute
   ApiCraftLabPrototypeRoute: typeof ApiCraftLabPrototypeRoute
   ApiPricingAnalyzeRoute: typeof ApiPricingAnalyzeRoute
@@ -1361,6 +1387,13 @@ declare module '@tanstack/react-router' {
       path: '/craft-dna'
       fullPath: '/craft-dna'
       preLoaderRoute: typeof CraftDnaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/craft-dna-verification': {
+      id: '/craft-dna-verification'
+      path: '/craft-dna-verification'
+      fullPath: '/craft-dna-verification'
+      preLoaderRoute: typeof CraftDnaVerificationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/craft-lab': {
@@ -1613,6 +1646,13 @@ declare module '@tanstack/react-router' {
       path: '/api/cataloger/transcribe'
       fullPath: '/api/cataloger/transcribe'
       preLoaderRoute: typeof ApiCatalogerTranscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/craft-dna/verify': {
+      id: '/api/craft-dna/verify'
+      path: '/api/craft-dna/verify'
+      fullPath: '/api/craft-dna/verify'
+      preLoaderRoute: typeof ApiCraftDnaVerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/craft-lab/generate': {
@@ -2173,6 +2213,7 @@ const rootRouteChildren: RootRouteChildren = {
   CertificationCentreRoute: CertificationCentreRoute,
   ContactRoute: ContactRoute,
   CraftDnaRoute: CraftDnaRoute,
+  CraftDnaVerificationRoute: CraftDnaVerificationRoute,
   CraftLabRoute: CraftLabRoute,
   CraftPassportRoute: CraftPassportRoute,
   DigitalTwinRoute: DigitalTwinRoute,
@@ -2209,6 +2250,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthenticationAnalyzeRoute: ApiAuthenticationAnalyzeRoute,
   ApiCatalogerGenerateRoute: ApiCatalogerGenerateRoute,
   ApiCatalogerTranscribeRoute: ApiCatalogerTranscribeRoute,
+  ApiCraftDnaVerifyRoute: ApiCraftDnaVerifyRoute,
   ApiCraftLabGenerateRoute: ApiCraftLabGenerateRoute,
   ApiCraftLabPrototypeRoute: ApiCraftLabPrototypeRoute,
   ApiPricingAnalyzeRoute: ApiPricingAnalyzeRoute,

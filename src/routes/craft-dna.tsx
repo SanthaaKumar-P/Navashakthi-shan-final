@@ -73,7 +73,7 @@ type DNAFieldProps = {
 };
 
 /* -------------------------------------------------------------------------- */
-/* Constants                                                                  */
+/* Source configuration                                                       */
 /* -------------------------------------------------------------------------- */
 
 const SOURCE_LABELS: Record<
@@ -104,22 +104,32 @@ const SOURCE_STYLES: Record<
 /* Helpers                                                                    */
 /* -------------------------------------------------------------------------- */
 
-function clampConfidence(value: number) {
+function clampConfidence(
+  value: number,
+) {
   if (!Number.isFinite(value)) {
     return 0;
   }
 
-  return Math.min(1, Math.max(0, value));
+  return Math.min(
+    1,
+    Math.max(0, value),
+  );
 }
 
-function confidencePercent(value: number) {
+function confidencePercent(
+  value: number,
+) {
   return Math.round(
     clampConfidence(value) * 100,
   );
 }
 
-function confidenceLabel(value: number) {
-  const percent = confidencePercent(value);
+function confidenceLabel(
+  value: number,
+) {
+  const percent =
+    confidencePercent(value);
 
   if (percent >= 85) {
     return "High confidence";
@@ -141,7 +151,9 @@ function sourceLabel(
   );
 }
 
-function isMissingValue(value: string) {
+function isMissingValue(
+  value: string,
+) {
   return (
     !value.trim() ||
     value.trim().toLowerCase() ===
@@ -160,13 +172,13 @@ function AttributeCard({
   editing,
   onChange,
 }: DNAFieldProps) {
-  const percent = confidencePercent(
-    attribute.confidence,
-  );
+  const percent =
+    confidencePercent(
+      attribute.confidence,
+    );
 
-  const missing = isMissingValue(
-    attribute.value,
-  );
+  const missing =
+    isMissingValue(attribute.value);
 
   return (
     <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
@@ -187,16 +199,21 @@ function AttributeCard({
           <span
             className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold ${SOURCE_STYLES[attribute.source]}`}
           >
-            {sourceLabel(attribute.source)}
+            {sourceLabel(
+              attribute.source,
+            )}
           </span>
         )}
       </div>
 
       {editing ? (
         <input
+          type="text"
           value={attribute.value}
           onChange={(event) =>
-            onChange(event.target.value)
+            onChange(
+              event.target.value,
+            )
           }
           className="w-full rounded-xl border border-stone-300 bg-stone-50 px-3 py-2.5 text-sm font-medium text-stone-900 outline-none transition focus:border-stone-500 focus:bg-white"
           placeholder="Enter value"
@@ -285,6 +302,7 @@ function ListAttributeCard({
 
       {editing ? (
         <input
+          type="text"
           value={values.join(", ")}
           onChange={(event) =>
             onChange(
@@ -391,12 +409,19 @@ function CraftDNA() {
     useState(false);
 
   /* ---------------------------------------------------------------------- */
-  /* Load shared Craft DNA                                                  */
+  /* Load DNA                                                                */
   /* ---------------------------------------------------------------------- */
 
   const loadDNA = () => {
-    const draft = getCraftDraft();
+    const draft =
+      getCraftDraft();
 
+    /*
+     * Shared Craft Draft has priority because it is the
+     * common workflow state used by the other modules.
+     *
+     * Standalone Craft DNA is the fallback.
+     */
     const nextDNA =
       draft?.craftDNA ??
       getStoredCraftDNA();
@@ -414,13 +439,15 @@ function CraftDNA() {
   useEffect(() => {
     loadDNA();
 
-    const handleDNAUpdate = () => {
-      loadDNA();
-    };
+    const handleDNAUpdate =
+      () => {
+        loadDNA();
+      };
 
-    const handleDraftUpdate = () => {
-      loadDNA();
-    };
+    const handleDraftUpdate =
+      () => {
+        loadDNA();
+      };
 
     window.addEventListener(
       "navshakthi:craft-dna-updated",
@@ -460,7 +487,7 @@ function CraftDNA() {
     }, [workingDNA]);
 
   /* ---------------------------------------------------------------------- */
-  /* Update string attribute                                                */
+  /* Update text attribute                                                  */
   /* ---------------------------------------------------------------------- */
 
   const updateTextAttribute = (
@@ -509,7 +536,7 @@ function CraftDNA() {
   };
 
   /* ---------------------------------------------------------------------- */
-  /* Update visual characteristics                                           */
+  /* Update visual characteristics                                          */
   /* ---------------------------------------------------------------------- */
 
   const updateVisualCharacteristics = (
@@ -522,7 +549,8 @@ function CraftDNA() {
 
       return {
         ...current,
-        visualCharacteristics: values,
+        visualCharacteristics:
+          values,
       };
     });
 
@@ -572,21 +600,16 @@ function CraftDNA() {
     };
 
     /*
-     * Keep both storage layers synchronized.
-     *
-     * Standalone Craft DNA:
-     * navshakthi_craft_dna_v1
-     *
-     * Shared Craft Draft:
-     * navshakthi_craft_draft_v1
+     * Synchronize BOTH Craft DNA stores.
      */
-
     const storedDNA =
       saveStoredCraftDNA(
         updatedDNA,
       );
 
-    saveDraftCraftDNA(storedDNA);
+    saveDraftCraftDNA(
+      storedDNA,
+    );
 
     setDNA(storedDNA);
     setDraftDNA(storedDNA);
@@ -677,10 +700,7 @@ function CraftDNA() {
       />
 
       <main className="mx-auto max-w-7xl px-6 pb-20">
-        {/* ---------------------------------------------------------------- */}
-        {/* PROFILE HEADER                                                    */}
-        {/* ---------------------------------------------------------------- */}
-
+        {/* PROFILE HEADER */}
         <section className="mb-10">
           <div className="overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
             <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
@@ -830,10 +850,7 @@ function CraftDNA() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* IDENTITY                                                         */}
-        {/* ---------------------------------------------------------------- */}
-
+        {/* IDENTITY */}
         <section className="mb-12">
           <SectionHeading
             eyebrow="01 · Identity"
@@ -895,10 +912,7 @@ function CraftDNA() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* VISUAL ATTRIBUTES                                                */}
-        {/* ---------------------------------------------------------------- */}
-
+        {/* VISUAL ATTRIBUTES */}
         <section className="mb-12">
           <SectionHeading
             eyebrow="02 · Visual Attributes"
@@ -949,7 +963,9 @@ function CraftDNA() {
 
             <AttributeCard
               label="Shape"
-              attribute={workingDNA.shape}
+              attribute={
+                workingDNA.shape
+              }
               editing={editing}
               onChange={(value) =>
                 updateTextAttribute(
@@ -989,7 +1005,9 @@ function CraftDNA() {
 
             <AttributeCard
               label="Finish"
-              attribute={workingDNA.finish}
+              attribute={
+                workingDNA.finish
+              }
               editing={editing}
               onChange={(value) =>
                 updateTextAttribute(
@@ -1015,10 +1033,7 @@ function CraftDNA() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* PRODUCT PROFILE                                                  */}
-        {/* ---------------------------------------------------------------- */}
-
+        {/* PRODUCT PROFILE */}
         <section className="mb-12">
           <SectionHeading
             eyebrow="03 · Product Profile"
@@ -1055,7 +1070,9 @@ function CraftDNA() {
 
             <AttributeCard
               label="Use Case"
-              attribute={workingDNA.useCase}
+              attribute={
+                workingDNA.useCase
+              }
               editing={editing}
               onChange={(value) =>
                 updateTextAttribute(
@@ -1129,10 +1146,7 @@ function CraftDNA() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* VISUAL SIGNATURE                                                 */}
-        {/* ---------------------------------------------------------------- */}
-
+        {/* VISUAL SIGNATURE */}
         <section className="mb-12">
           <SectionHeading
             eyebrow="04 · Visual Signature"
@@ -1184,10 +1198,7 @@ function CraftDNA() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* VERIFICATION                                                     */}
-        {/* ---------------------------------------------------------------- */}
-
+        {/* VERIFICATION */}
         <section className="mb-12">
           <SectionHeading
             eyebrow="05 · Verification"
@@ -1213,12 +1224,11 @@ function CraftDNA() {
                       describe the material,
                       technique, colours,
                       dimensions and other
-                      important details. Smart
-                      Cataloger can use that
-                      evidence to enrich the
-                      same Craft DNA instead
-                      of creating a separate
-                      profile.
+                      important details. The
+                      verification layer compares
+                      that evidence against the
+                      existing Craft DNA before
+                      anything is changed.
                     </p>
                   </div>
                 </div>
@@ -1243,7 +1253,7 @@ function CraftDNA() {
 
               <div className="p-7 lg:pr-9">
                 <Link
-                  to="/smart-cataloger"
+                  to="/craft-dna-verification"
                   className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-stone-950 transition hover:bg-stone-100"
                 >
                   <Mic2 className="h-4 w-4" />
@@ -1255,10 +1265,7 @@ function CraftDNA() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* CONNECTED MODULES                                                */}
-        {/* ---------------------------------------------------------------- */}
-
+        {/* CONNECTED MODULES */}
         <section className="mb-12">
           <SectionHeading
             eyebrow="06 · Connected Intelligence"
@@ -1357,10 +1364,7 @@ function CraftDNA() {
           </div>
         </section>
 
-        {/* ---------------------------------------------------------------- */}
-        {/* TRANSPARENCY                                                     */}
-        {/* ---------------------------------------------------------------- */}
-
+        {/* TRANSPARENCY */}
         <section>
           <div className="rounded-2xl border border-stone-200 bg-stone-50 p-5">
             <div className="flex items-start gap-3">
@@ -1431,5 +1435,6 @@ export const Route = createFileRoute(
       },
     ],
   }),
+
   component: CraftDNA,
 });
