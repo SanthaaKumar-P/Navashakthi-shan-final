@@ -2,6 +2,7 @@ import {
   createFileRoute,
   Link,
 } from "@tanstack/react-router";
+
 import {
   AlertTriangle,
   ArrowLeft,
@@ -20,11 +21,13 @@ import {
   Upload,
   X,
 } from "lucide-react";
+
 import {
   useEffect,
   useRef,
   useState,
 } from "react";
+
 import { toast } from "sonner";
 
 import {
@@ -44,7 +47,6 @@ import {
 
 import type {
   CraftDNA,
-  CraftDNAAttribute,
 } from "@/lib/craft-dna/types";
 
 import {
@@ -357,6 +359,9 @@ function CraftDNAVerification() {
       Set<CraftDNAVerificationField>
     >(new Set());
 
+  const [updatesApplied, setUpdatesApplied] =
+    useState(false);
+
   const recorderRef =
     useRef<MediaRecorder | null>(
       null,
@@ -512,6 +517,12 @@ function CraftDNAVerification() {
             track.stop(),
           );
 
+        if (audioUrl) {
+          URL.revokeObjectURL(
+            audioUrl,
+          );
+        }
+
         setAudioBlob(blob);
 
         setAudioUrl(
@@ -519,7 +530,11 @@ function CraftDNAVerification() {
         );
 
         setFileName(
-          `craft-verification.${blob.type.includes("mp4") ? "m4a" : "webm"}`,
+          `craft-verification.${
+            blob.type.includes("mp4")
+              ? "m4a"
+              : "webm"
+          }`,
         );
 
         toast.success(
@@ -539,6 +554,13 @@ function CraftDNAVerification() {
       setSelectedFields(
         new Set(),
       );
+      setUpdatesApplied(false);
+
+      if (timerRef.current) {
+        clearInterval(
+          timerRef.current,
+        );
+      }
 
       timerRef.current =
         setInterval(() => {
@@ -617,6 +639,7 @@ function CraftDNAVerification() {
     setSelectedFields(
       new Set(),
     );
+    setUpdatesApplied(false);
     setSeconds(0);
   };
 
@@ -859,6 +882,7 @@ function CraftDNAVerification() {
           ),
         );
 
+        setUpdatesApplied(false);
         setStatus("done");
 
         toast.success(
@@ -902,6 +926,8 @@ function CraftDNAVerification() {
         return next;
       },
     );
+
+    setUpdatesApplied(false);
   };
 
   /* ---------------------------------------------------------------------- */
@@ -920,6 +946,8 @@ function CraftDNAVerification() {
       {
         ...craftDNA,
       };
+
+    let appliedCount = 0;
 
     for (const check of verification.checks) {
       if (
@@ -940,7 +968,8 @@ function CraftDNAVerification() {
 
       if (
         check.recommendedValue ===
-        "Not provided"
+          "Not provided" ||
+        !check.recommendedValue.trim()
       ) {
         continue;
       }
@@ -965,6 +994,7 @@ function CraftDNAVerification() {
                 "artisan_voice",
               confidence,
             };
+          appliedCount++;
           break;
 
         case "productType":
@@ -976,6 +1006,7 @@ function CraftDNAVerification() {
               "artisan_voice",
             confidence,
           };
+          appliedCount++;
           break;
 
         case "material":
@@ -987,6 +1018,7 @@ function CraftDNAVerification() {
               "artisan_voice",
             confidence,
           };
+          appliedCount++;
           break;
 
         case "primaryColour":
@@ -999,6 +1031,7 @@ function CraftDNAVerification() {
                 "artisan_voice",
               confidence,
             };
+          appliedCount++;
           break;
 
         case "secondaryColours":
@@ -1019,6 +1052,7 @@ function CraftDNAVerification() {
                 "artisan_voice",
               confidence,
             };
+          appliedCount++;
           break;
 
         case "shape":
@@ -1030,6 +1064,7 @@ function CraftDNAVerification() {
               "artisan_voice",
             confidence,
           };
+          appliedCount++;
           break;
 
         case "pattern":
@@ -1041,6 +1076,7 @@ function CraftDNAVerification() {
               "artisan_voice",
             confidence,
           };
+          appliedCount++;
           break;
 
         case "texture":
@@ -1052,6 +1088,7 @@ function CraftDNAVerification() {
               "artisan_voice",
             confidence,
           };
+          appliedCount++;
           break;
 
         case "finish":
@@ -1063,6 +1100,7 @@ function CraftDNAVerification() {
               "artisan_voice",
             confidence,
           };
+          appliedCount++;
           break;
 
         case "decoration":
@@ -1074,6 +1112,7 @@ function CraftDNAVerification() {
               "artisan_voice",
             confidence,
           };
+          appliedCount++;
           break;
 
         case "complexity": {
@@ -1091,9 +1130,9 @@ function CraftDNAVerification() {
               {
                 ...updated.complexity,
                 value: Math.min(
-                  100,
+                  10,
                   Math.max(
-                    0,
+                    1,
                     numericValue,
                   ),
                 ),
@@ -1101,6 +1140,8 @@ function CraftDNAVerification() {
                   "artisan_voice",
                 confidence,
               };
+
+            appliedCount++;
           }
 
           break;
@@ -1115,6 +1156,7 @@ function CraftDNAVerification() {
               "artisan_voice",
             confidence,
           };
+          appliedCount++;
           break;
 
         case "dimensions":
@@ -1126,6 +1168,7 @@ function CraftDNAVerification() {
               "artisan_voice",
             confidence,
           };
+          appliedCount++;
           break;
 
         case "useCase":
@@ -1137,11 +1180,19 @@ function CraftDNAVerification() {
               "artisan_voice",
             confidence,
           };
+          appliedCount++;
           break;
 
         default:
           break;
       }
+    }
+
+    if (appliedCount === 0) {
+      toast.info(
+        "No valid voice-confirmed changes were selected.",
+      );
+      return;
     }
 
     updated.overallConfidence =
@@ -1173,8 +1224,14 @@ function CraftDNAVerification() {
       new Set(),
     );
 
+    setUpdatesApplied(true);
+
     toast.success(
-      "Selected voice-confirmed updates applied to Craft DNA.",
+      `${appliedCount} voice-confirmed ${
+        appliedCount === 1
+          ? "update"
+          : "updates"
+      } applied to Craft DNA.`,
     );
   };
 
@@ -1183,6 +1240,10 @@ function CraftDNAVerification() {
   /* ---------------------------------------------------------------------- */
 
   const resetVerification = () => {
+    if (recording) {
+      stopRecording();
+    }
+
     setAudioBlob(null);
     setTranscript("");
     setVerification(null);
@@ -1191,6 +1252,8 @@ function CraftDNAVerification() {
     );
     setStatus("idle");
     setSeconds(0);
+    setUpdatesApplied(false);
+    setLanguageHint("auto");
 
     if (audioUrl) {
       URL.revokeObjectURL(
@@ -1244,19 +1307,56 @@ function CraftDNAVerification() {
   }
 
   /* ---------------------------------------------------------------------- */
-  /* Main UI                                                                 */
+  /* Result counts                                                           */
   /* ---------------------------------------------------------------------- */
 
-  const hasApplicableUpdates =
-    verification?.checks.some(
+  const matchCount =
+    verification?.checks.filter(
+      (check) =>
+        check.status === "match",
+    ).length ?? 0;
+
+  const conflictCount =
+    verification?.checks.filter(
+      (check) =>
+        check.status === "conflict",
+    ).length ?? 0;
+
+  const newEvidenceCount =
+    verification?.checks.filter(
+      (check) =>
+        check.status === "new",
+    ).length ?? 0;
+
+  const insufficientCount =
+    verification?.checks.filter(
+      (check) =>
+        check.status ===
+        "insufficient_evidence",
+    ).length ?? 0;
+
+  const reviewCount =
+    conflictCount +
+    newEvidenceCount;
+
+  const selectedApplicableCount =
+    verification?.checks.filter(
       (check) =>
         selectedFields.has(
           check.field,
         ) &&
         (check.status ===
           "conflict" ||
-          check.status === "new"),
-    ) ?? false;
+          check.status === "new") &&
+        check.recommendedValue !==
+          "Not provided" &&
+        Boolean(
+          check.recommendedValue.trim(),
+        ),
+    ).length ?? 0;
+
+  const hasApplicableUpdates =
+    selectedApplicableCount > 0;
 
   return (
     <PublicPage>
@@ -1377,16 +1477,18 @@ function CraftDNAVerification() {
                 </h2>
 
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-500">
-                  Speak naturally. Mention material,
-                  colours, technique, dimensions,
-                  finish or anything that should be
-                  corrected in the current Craft DNA.
+                  Speak naturally. Mention
+                  material, colours, technique,
+                  dimensions, finish or anything
+                  that should be corrected in the
+                  current Craft DNA.
                 </p>
               </div>
 
               <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-stone-300 bg-white px-4 py-2.5 text-sm font-semibold text-stone-700 hover:bg-stone-50">
                 <Upload className="h-4 w-4" />
                 Upload Audio
+
                 <input
                   type="file"
                   accept="audio/*"
@@ -1641,13 +1743,17 @@ function CraftDNAVerification() {
               </div>
             </div>
 
+            {/* ---------------------------------------------------------------- */
+            /* RESULT SUMMARY                                                   */
+            /* ---------------------------------------------------------------- */}
+
             <div className="mb-6 rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
               <div className="flex items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-stone-950 text-white">
                   <CheckCircle2 className="h-5 w-5" />
                 </div>
 
-                <div>
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-stone-950">
                     Verification summary
                   </p>
@@ -1657,8 +1763,141 @@ function CraftDNAVerification() {
                   </p>
                 </div>
               </div>
+
+              {/* SUMMARY COUNTERS */}
+              <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold text-emerald-700">
+                      Confirmed
+                    </p>
+
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                  </div>
+
+                  <p className="mt-2 text-2xl font-bold text-emerald-800">
+                    {matchCount}
+                  </p>
+
+                  <p className="mt-1 text-xs text-emerald-700/80">
+                    Voice supports current DNA
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-stone-200 bg-stone-50 p-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold text-stone-600">
+                      Not mentioned
+                    </p>
+
+                    <CircleHelp className="h-4 w-4 text-stone-400" />
+                  </div>
+
+                  <p className="mt-2 text-2xl font-bold text-stone-700">
+                    {insufficientCount}
+                  </p>
+
+                  <p className="mt-1 text-xs text-stone-500">
+                    No explicit voice evidence
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-amber-100 bg-amber-50 p-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold text-amber-700">
+                      Conflicts
+                    </p>
+
+                    <AlertTriangle className="h-4 w-4 text-amber-600" />
+                  </div>
+
+                  <p className="mt-2 text-2xl font-bold text-amber-800">
+                    {conflictCount}
+                  </p>
+
+                  <p className="mt-1 text-xs text-amber-700/80">
+                    Needs artisan review
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-sky-100 bg-sky-50 p-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold text-sky-700">
+                      New evidence
+                    </p>
+
+                    <Sparkles className="h-4 w-4 text-sky-600" />
+                  </div>
+
+                  <p className="mt-2 text-2xl font-bold text-sky-800">
+                    {newEvidenceCount}
+                  </p>
+
+                  <p className="mt-1 text-xs text-sky-700/80">
+                    New facts from artisan
+                  </p>
+                </div>
+              </div>
+
+              {/* INTERPRETATION */}
+              <div className="mt-5 rounded-2xl border border-stone-200 bg-stone-50 p-4">
+                {updatesApplied ? (
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
+
+                    <div>
+                      <p className="text-sm font-semibold text-emerald-800">
+                        Voice-confirmed updates applied
+                      </p>
+
+                      <p className="mt-1 text-xs leading-5 text-stone-500">
+                        The selected artisan evidence is now
+                        stored in the shared Craft DNA and can
+                        be reused by downstream NAVSHAKTHI modules.
+                      </p>
+                    </div>
+                  </div>
+                ) : reviewCount > 0 ? (
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+
+                    <div>
+                      <p className="text-sm font-semibold text-amber-800">
+                        {reviewCount}{" "}
+                        {reviewCount === 1
+                          ? "change needs"
+                          : "changes need"}{" "}
+                        artisan review
+                      </p>
+
+                      <p className="mt-1 text-xs leading-5 text-stone-500">
+                        Conflicts and new evidence are
+                        pre-selected. Nothing changes in Craft
+                        DNA until the artisan explicitly approves it.
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
+
+                    <div>
+                      <p className="text-sm font-semibold text-emerald-800">
+                        No Craft DNA changes are required
+                      </p>
+
+                      <p className="mt-1 text-xs leading-5 text-stone-500">
+                        The spoken evidence either confirms the
+                        existing profile or does not provide enough
+                        information to safely change it.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
+            {/* FIELD CARDS */}
             <div className="space-y-4">
               {verification.checks.map(
                 (check) => (
@@ -1678,21 +1917,53 @@ function CraftDNAVerification() {
               )}
             </div>
 
+            {/* ACTION BAR */}
             <div className="sticky bottom-4 z-20 mt-8 rounded-2xl border border-stone-200 bg-white/95 p-4 shadow-lg backdrop-blur">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-stone-900">
-                    {selectedFields.size} update
-                    {selectedFields.size ===
-                    1
-                      ? ""
-                      : "s"} selected
-                  </p>
+                  {selectedApplicableCount > 0 ? (
+                    <>
+                      <p className="text-sm font-semibold text-stone-900">
+                        {selectedApplicableCount}{" "}
+                        {selectedApplicableCount ===
+                        1
+                          ? "change"
+                          : "changes"}{" "}
+                        selected
+                      </p>
 
-                  <p className="mt-1 text-xs text-stone-500">
-                    Only selected conflict/new
-                    evidence will modify Craft DNA.
-                  </p>
+                      <p className="mt-1 text-xs text-stone-500">
+                        Review the selected conflict/new evidence
+                        before updating Craft DNA.
+                      </p>
+                    </>
+                  ) : reviewCount > 0 ? (
+                    <>
+                      <p className="text-sm font-semibold text-stone-900">
+                        {reviewCount}{" "}
+                        {reviewCount === 1
+                          ? "review item"
+                          : "review items"}{" "}
+                        available
+                      </p>
+
+                      <p className="mt-1 text-xs text-stone-500">
+                        Select a conflict or new evidence item to
+                        approve an update.
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm font-semibold text-emerald-700">
+                        No updates required
+                      </p>
+
+                      <p className="mt-1 text-xs text-stone-500">
+                        Existing Craft DNA is supported by the
+                        available artisan evidence.
+                      </p>
+                    </>
+                  )}
                 </div>
 
                 <button
@@ -1706,7 +1977,18 @@ function CraftDNAVerification() {
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-stone-950 px-5 py-3 text-sm font-semibold text-white hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <Save className="h-4 w-4" />
-                  Apply Voice-Confirmed Updates
+
+                  {selectedApplicableCount >
+                  0
+                    ? `Apply ${
+                        selectedApplicableCount
+                      } ${
+                        selectedApplicableCount ===
+                        1
+                          ? "Update"
+                          : "Updates"
+                      }`
+                    : "Apply Voice-Confirmed Updates"}
                 </button>
               </div>
             </div>

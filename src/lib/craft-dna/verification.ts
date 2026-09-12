@@ -1,11 +1,19 @@
 import type { CraftDNA } from "@/lib/craft-dna/types";
 
+/**
+ * Result of comparing one Craft DNA field
+ * against the artisan's spoken evidence.
+ */
 export type CraftDNAVerificationStatus =
   | "match"
   | "conflict"
   | "new"
   | "insufficient_evidence";
 
+/**
+ * Craft DNA fields that can be re-verified
+ * using artisan voice evidence.
+ */
 export type CraftDNAVerificationField =
   | "craftCategory"
   | "productType"
@@ -22,35 +30,97 @@ export type CraftDNAVerificationField =
   | "dimensions"
   | "useCase";
 
+/**
+ * Field-level verification result.
+ */
 export type CraftDNAVerificationCheck = {
   field: CraftDNAVerificationField;
+
   label: string;
+
   status: CraftDNAVerificationStatus;
+
+  /**
+   * Value currently stored in Craft DNA.
+   */
   currentValue: string;
+
+  /**
+   * Evidence extracted from artisan voice.
+   */
   voiceClaim: string;
+
+  /**
+   * Value that may be applied after
+   * explicit artisan review.
+   */
   recommendedValue: string;
+
+  /**
+   * Confidence from 0 to 1.
+   */
   confidence: number;
+
+  /**
+   * Short explanation of why the
+   * verification engine reached this result.
+   */
   evidence: string;
 };
 
+/**
+ * Overall verification state.
+ */
 export type CraftDNAVerificationOverallStatus =
   | "aligned"
   | "needs_review"
   | "insufficient_data";
 
+/**
+ * Complete voice verification result.
+ */
 export type CraftDNAVerificationResult = {
   overallStatus: CraftDNAVerificationOverallStatus;
+
+  /**
+   * Overall confidence from 0 to 1.
+   */
   overallConfidence: number;
+
+  /**
+   * Human-readable verification summary.
+   */
   summary: string;
+
+  /**
+   * Field-by-field comparison results.
+   */
   checks: CraftDNAVerificationCheck[];
+
+  /**
+   * Original artisan transcript.
+   */
   transcript: string;
+
+  /**
+   * Language used/detected for the transcript.
+   */
   language: string;
+
+  /**
+   * ISO timestamp.
+   */
   verifiedAt: string;
 };
 
+/**
+ * Request sent to the Craft DNA verification API.
+ */
 export type CraftDNAVerificationRequest = {
   transcript: string;
+
   language?: string;
+
   craftDNA: {
     craftCategory: string;
     productType: string;
@@ -69,12 +139,22 @@ export type CraftDNAVerificationRequest = {
   };
 };
 
+/**
+ * LocalStorage key for the latest verification result.
+ */
 export const CRAFT_DNA_VERIFICATION_STORAGE_KEY =
   "navashakthi_craft_dna_verification_v1";
 
+/**
+ * Browser event fired whenever verification
+ * data is saved or cleared.
+ */
 export const CRAFT_DNA_VERIFICATION_UPDATED_EVENT =
   "navshakthi:craft-dna-verification-updated";
 
+/**
+ * Get the most recent Craft DNA voice verification.
+ */
 export function getCraftDNAVerification():
   | CraftDNAVerificationResult
   | null {
@@ -85,9 +165,10 @@ export function getCraftDNAVerification():
   }
 
   try {
-    const raw = window.localStorage.getItem(
-      CRAFT_DNA_VERIFICATION_STORAGE_KEY,
-    );
+    const raw =
+      window.localStorage.getItem(
+        CRAFT_DNA_VERIFICATION_STORAGE_KEY,
+      );
 
     if (!raw) {
       return null;
@@ -101,6 +182,9 @@ export function getCraftDNAVerification():
   }
 }
 
+/**
+ * Save the latest Craft DNA voice verification.
+ */
 export function saveCraftDNAVerification(
   result: CraftDNAVerificationResult,
 ) {
@@ -124,6 +208,9 @@ export function saveCraftDNAVerification(
   return result;
 }
 
+/**
+ * Clear the stored verification result.
+ */
 export function clearCraftDNAVerification() {
   if (
     typeof window === "undefined"
@@ -142,6 +229,11 @@ export function clearCraftDNAVerification() {
   );
 }
 
+/**
+ * Convert a Craft DNA field into the
+ * string representation expected by
+ * the verification API/UI.
+ */
 export function getVerificationValue(
   dna: CraftDNA,
   field: CraftDNAVerificationField,
