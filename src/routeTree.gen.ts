@@ -18,6 +18,7 @@ import { Route as AiImageStudioRouteImport } from './routes/ai-image-studio'
 import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as CertificationCentreRouteImport } from './routes/certification-centre'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CraftDnaRouteImport } from './routes/craft-dna'
 import { Route as CraftLabRouteImport } from './routes/craft-lab'
 import { Route as CraftPassportRouteImport } from './routes/craft-passport'
 import { Route as DigitalTwinRouteImport } from './routes/digital-twin'
@@ -153,6 +154,11 @@ const CertificationCentreRoute = CertificationCentreRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftDnaRoute = CraftDnaRouteImport.update({
+  id: '/craft-dna',
+  path: '/craft-dna',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CraftLabRoute = CraftLabRouteImport.update({
@@ -631,6 +637,7 @@ export interface FileRoutesByFullPath {
   '/certificates': typeof CertificatesRoute
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-dna': typeof CraftDnaRoute
   '/craft-lab': typeof CraftLabRoute
   '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
@@ -733,6 +740,7 @@ export interface FileRoutesByTo {
   '/certificates': typeof CertificatesRoute
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-dna': typeof CraftDnaRoute
   '/craft-lab': typeof CraftLabRoute
   '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
@@ -830,6 +838,7 @@ export interface FileRoutesById {
   '/certificates': typeof CertificatesRoute
   '/certification-centre': typeof CertificationCentreRoute
   '/contact': typeof ContactRoute
+  '/craft-dna': typeof CraftDnaRoute
   '/craft-lab': typeof CraftLabRoute
   '/craft-passport': typeof CraftPassportRoute
   '/digital-twin': typeof DigitalTwinRoute
@@ -934,6 +943,7 @@ export interface FileRouteTypes {
     | '/certificates'
     | '/certification-centre'
     | '/contact'
+    | '/craft-dna'
     | '/craft-lab'
     | '/craft-passport'
     | '/digital-twin'
@@ -1036,6 +1046,7 @@ export interface FileRouteTypes {
     | '/certificates'
     | '/certification-centre'
     | '/contact'
+    | '/craft-dna'
     | '/craft-lab'
     | '/craft-passport'
     | '/digital-twin'
@@ -1132,6 +1143,7 @@ export interface FileRouteTypes {
     | '/certificates'
     | '/certification-centre'
     | '/contact'
+    | '/craft-dna'
     | '/craft-lab'
     | '/craft-passport'
     | '/digital-twin'
@@ -1235,6 +1247,7 @@ export interface RootRouteChildren {
   CertificatesRoute: typeof CertificatesRoute
   CertificationCentreRoute: typeof CertificationCentreRoute
   ContactRoute: typeof ContactRoute
+  CraftDnaRoute: typeof CraftDnaRoute
   CraftLabRoute: typeof CraftLabRoute
   CraftPassportRoute: typeof CraftPassportRoute
   DigitalTwinRoute: typeof DigitalTwinRoute
@@ -1341,6 +1354,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/craft-dna': {
+      id: '/craft-dna'
+      path: '/craft-dna'
+      fullPath: '/craft-dna'
+      preLoaderRoute: typeof CraftDnaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/craft-lab': {
@@ -2152,6 +2172,7 @@ const rootRouteChildren: RootRouteChildren = {
   CertificatesRoute: CertificatesRoute,
   CertificationCentreRoute: CertificationCentreRoute,
   ContactRoute: ContactRoute,
+  CraftDnaRoute: CraftDnaRoute,
   CraftLabRoute: CraftLabRoute,
   CraftPassportRoute: CraftPassportRoute,
   DigitalTwinRoute: DigitalTwinRoute,
